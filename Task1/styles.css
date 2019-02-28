@@ -15,3 +15,19 @@
 #submitNewLine {
     flex: 1 1 0;
 }
+
+#todoListBody{
+    margin: 10px 0;
+    padding: 0;
+}
+
+#todoListBody li{
+    display: block;
+    border: 1px dashed #ffa775;
+    padding: 4px;
+}
+
+#todoListBody li.resolved{
+    border: 1px dashed #3cff0f;
+    background: #ffffc0;
+}
