@@ -1,0 +1,17 @@
+.container{
+    width: 600px;
+    margin: 0 auto;
+}
+
+.addNewItem{
+    display: flex;
+    align-items: center;
+}
+
+#addNewTodoLine {
+    flex: 2 1 0;
+}
+
+#submitNewLine {
+    flex: 1 1 0;
+}
