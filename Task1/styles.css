@@ -24,7 +24,33 @@
 #todoListBody li{
     display: block;
     border: 1px dashed #ffa775;
-    padding: 4px;
+    padding: 10px;
+    position: relative;
+}
+
+#todoListBody li span {
+    display: block;
+    position: absolute;
+    right: 20px;
+    padding: 5px;
+    background: #000;
+    cursor: pointer;
+}
+
+#todoListBody li span.up{
+    top: 5px;
+}
+
+#todoListBody li span.down{
+    bottom: 5px;
+}
+
+#todoListBody li span:hover{
+    background: #3cff0f;
+}
+
+#todoListBody li:hover{
+    border-color: #3cff0f;
 }
 
 #todoListBody li.resolved{
