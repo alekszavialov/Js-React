@@ -133,37 +133,31 @@ window.onload = function () {
             item.append(arrowUp);
             item.append(arrowDown);
             arrowUp.addEventListener('click', function (e) {
-                e.stopPropagation();
-                let currentItem = this.parentNode;
-                let newArray = Array.from(todoBody.getElementsByTagName('li'));
-                for (let i = 0; i < newArray.length; i++){
-                    if (newArray[i] === currentItem && i > 0) {
-                        [newArray[i], newArray[i - 1]] = [newArray[i - 1], newArray[i]];
-                        todoBody.innerText = '';
-                        newArray.forEach(function (item) {
-                            todoBody.appendChild(item);
-                        });
-                        break;
-                    }
-                }
+                console.log(e.parentNode);
+                changePosition(e, this.parentNode, (a) => a > 0, -1);
             });
             arrowDown.addEventListener('click', function (e) {
-                e.stopPropagation();
-                let currentItem = this.parentNode;
-                let newArray = Array.from(todoBody.getElementsByTagName('li'));
-                for (let i = 0; i < newArray.length; i++){
-                    if (newArray[i] === currentItem && i < newArray.length - 1) {
-                        [newArray[i], newArray[i + 1]] = [newArray[i + 1], newArray[i]];
-                        todoBody.innerText = '';
-                        newArray.forEach(function (item) {
-                            todoBody.appendChild(item);
-                        });
-                        break;
-                    }
-                }
+                changePosition(e, this.parentNode, (a, b) => a < b.length - 1, 1);
             });
         });
+    }
 
+    function changePosition(e, node, compareFunction, value) {
+        e.stopPropagation();
+        let currentItem = node;
+        let newArray = Array.from(todoBody.getElementsByTagName('li'));
+        for (let i = 0; i < newArray.length; i++) {
+            console.log(currentItem);
+            console.log(newArray[i]);
+            if (newArray[i] === currentItem && compareFunction(i, newArray)) {
+                [newArray[i], newArray[i + value]] = [newArray[i + value], newArray[i]];
+                todoBody.innerText = '';
+                newArray.forEach(function (item) {
+                    todoBody.appendChild(item);
+                });
+                break;
+            }
+        }
     }
 
     /**

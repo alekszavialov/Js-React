@@ -1,9 +1,9 @@
-.container{
+.container {
     width: 600px;
     margin: 0 auto;
 }
 
-.addNewItem{
+.addNewItem {
     display: flex;
     align-items: center;
 }
@@ -16,12 +16,12 @@
     flex: 1 1 0;
 }
 
-#todoListBody{
+#todoListBody {
     margin: 10px 0;
     padding: 0;
 }
 
-#todoListBody li{
+#todoListBody li {
     display: block;
     border: 1px dashed #ffa775;
     padding: 10px;
@@ -37,23 +37,44 @@
     cursor: pointer;
 }
 
-#todoListBody li span.up{
+#todoListBody li span.up {
     top: 5px;
 }
 
-#todoListBody li span.down{
+#todoListBody li span.up:after {
+    border-width: 0 5px 5px 5px;
+    border-color: transparent transparent #007bff transparent;
+}
+
+#todoListBody li span.down {
     bottom: 5px;
 }
 
-#todoListBody li span:hover{
-    background: #3cff0f;
+#todoListBody li span.down:after {
+    border-width: 5px 5px 0 5px;
+    border-color: #007bff transparent transparent transparent;
 }
 
-#todoListBody li:hover{
+#todoListBody li span.down:after, #todoListBody li span.up:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    top: 3px;
+    left: 0;
+}
+
+#todoListBody li span:hover {
+    background: #e7ff85;
+}
+
+#todoListBody li:hover {
     border-color: #3cff0f;
 }
 
-#todoListBody li.resolved{
+#todoListBody li.resolved {
     border: 1px dashed #3cff0f;
     background: #ffffc0;
 }
