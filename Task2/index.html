@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>map, filter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>Task 2 (map, filter)</h1>
+    <p>
+        You have array of objects next structure<br>
+        <br>
+        {<br>
+        Name: string ,<br>
+        age: number,<br>
+        HaveAPet: boolean,<br>
+        HaveAlergies: boolean,<br>
+        }<br>
+        Display this data for user (via map and filter) and create filter functions for HaveAPet, HaveAlergies and age properties. HaveAPet and HaveAlergies will be simple checkboxes and age property will be filtered by range input.
+    </p>
+    <div id="task2">
+        <form id="sortedVar">
+            <input type="checkbox" name="haveAPet" value="HaveAPet" id="haveAPet"><label for="haveAPet">HaveAPet</label>
+            <input type="checkbox" name="HaveAlergies" value="HaveAlergies" id="haveAlergies"><label for="haveAlergies">HaveAlergies</label>
+            <input type="range" min="0" max="100" step="1" value="15" id="age"><label for="age">age 15</label>
+            <button>Submit</button>
+        </form>
+        <ul id="sortedList">
+
+        </ul>
+    </div>
+</div>
+<script src="common.js"></script>
+</body>
+</html>
