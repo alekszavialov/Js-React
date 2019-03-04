@@ -4,6 +4,7 @@ window.onload = function () {
     const todoBody = document.getElementById('todoListBody');
     const removeResolvedItemsButton = document.getElementById('removeResolved');
     const sortListSelect = document.getElementById('sortList');
+    const saveChanges = document.getElementById('saveChanges');
     const enterButtonKey = 'Enter';
     const escButtonKey = 'Escape';
     const localStorageKeyName = 'todoList';
@@ -20,6 +21,11 @@ window.onload = function () {
         while (elements.length > 0) {
             elements[0].parentNode.removeChild(elements[0]);
         }
+        getHtmlItems();
+    });
+
+    saveChanges.addEventListener('click', function (e) {
+        e.stopPropagation();
         getHtmlItems();
     });
 
@@ -85,7 +91,7 @@ window.onload = function () {
         let todoItems = todoBody.getElementsByTagName('li');
         let newArray = Array.from(todoItems).map(item => {
             if (item.innerText) {
-                return "<li" + (item.className ? ` class=${item.className}` : "") + ">" + item.innerText + "</li>";
+                return "<li" + (item.className ? ` class=${item.className}` : "") + "><p>" + item.innerText + "</p></li>";
             }
         }).filter(item => item !== undefined);
         let htmlItems = newArray.join('');
@@ -125,14 +131,21 @@ window.onload = function () {
         arrowUp.classList.add('up');
         let arrowDown = document.createElement('span');
         arrowDown.classList.add('down');
+        let removeButton = document.createElement('div');
+        removeButton.classList.add('remove');
         item.append(arrowUp);
         item.append(arrowDown);
+        item.append(removeButton);
         arrowUp.addEventListener('click', function (e) {
             console.log(e.parentNode);
             changePosition(e, this.parentNode, (a) => a > 0, -1);
         });
         arrowDown.addEventListener('click', function (e) {
             changePosition(e, this.parentNode, (a, b) => a < b.length - 1, 1);
+        });
+        removeButton.addEventListener('click', function (e) {
+            item.remove();
+            getHtmlItems();
         });
     }
 
@@ -152,8 +165,6 @@ window.onload = function () {
         let currentItem = node;
         let newArray = Array.from(todoBody.getElementsByTagName('li'));
         for (let i = 0; i < newArray.length; i++) {
-            console.log(currentItem);
-            console.log(newArray[i]);
             if (newArray[i] === currentItem && compareFunction(i, newArray)) {
                 [newArray[i], newArray[i + value]] = [newArray[i + value], newArray[i]];
                 todoBody.innerText = '';
@@ -189,7 +200,7 @@ window.onload = function () {
     todoBody.addEventListener('dblclick', function (e) {
         e.stopPropagation();
         let item = e.target;
-        if (item.tagName !== 'LI') {
+        if (item.tagName !== 'P') {
             return;
         }
         item.setAttribute('contentEditable', true);

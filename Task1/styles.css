@@ -24,7 +24,7 @@
 #todoListBody li {
     display: block;
     border: 1px dashed #ffa775;
-    padding: 10px;
+    padding: 10px 10px 10px 40px;
     position: relative;
 }
 
@@ -48,6 +48,10 @@
 
 #todoListBody li span.down {
     bottom: 5px;
+}
+
+#todoListBody li p{
+    margin: 0;
 }
 
 #todoListBody li span.down:after {
@@ -77,4 +81,32 @@
 #todoListBody li.resolved {
     border: 1px dashed #3cff0f;
     background: #ffffc0;
+}
+
+.remove {
+    position: absolute;
+    display: block;
+    width: 30px;
+    height: 30px;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: #007bff;
+}
+
+.remove:after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    content: '\d7';
+    font-size: 25px;
+    line-height: 25px;
+    color: #ffbb00;
+    text-align: center;
+}
+
+.remove:hover:after{
+    content: "\274c";
 }
