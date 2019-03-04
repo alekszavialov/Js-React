@@ -116,7 +116,24 @@ window.onload = function () {
         let newItem = document.createElement('li');
         newItem.innerText = itemText;
         todoBody.appendChild(newItem);
+        createNewTodoItemArrows(newItem);
         getHtmlItems();
+    }
+
+    function createNewTodoItemArrows(item) {
+        let arrowUp = document.createElement('span');
+        arrowUp.classList.add('up');
+        let arrowDown = document.createElement('span');
+        arrowDown.classList.add('down');
+        item.append(arrowUp);
+        item.append(arrowDown);
+        arrowUp.addEventListener('click', function (e) {
+            console.log(e.parentNode);
+            changePosition(e, this.parentNode, (a) => a > 0, -1);
+        });
+        arrowDown.addEventListener('click', function (e) {
+            changePosition(e, this.parentNode, (a, b) => a < b.length - 1, 1);
+        });
     }
 
     /**
@@ -126,19 +143,7 @@ window.onload = function () {
         let storageItems = localStorage.getItem(localStorageKeyName);
         todoBody.innerHTML = storageItems;
         Array.from(todoBody.getElementsByTagName('li')).forEach(function (item) {
-            let arrowUp = document.createElement('span');
-            arrowUp.classList.add('up');
-            let arrowDown = document.createElement('span');
-            arrowDown.classList.add('down');
-            item.append(arrowUp);
-            item.append(arrowDown);
-            arrowUp.addEventListener('click', function (e) {
-                console.log(e.parentNode);
-                changePosition(e, this.parentNode, (a) => a > 0, -1);
-            });
-            arrowDown.addEventListener('click', function (e) {
-                changePosition(e, this.parentNode, (a, b) => a < b.length - 1, 1);
-            });
+            createNewTodoItemArrows(item);
         });
     }
 
@@ -208,6 +213,5 @@ window.onload = function () {
     }
 
     loadFromStorage();
-
 
 };
