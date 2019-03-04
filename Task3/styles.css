@@ -1,0 +1,34 @@
+.container{
+    display: flex;
+    width: 600px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+#sortedVar{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#sortedVar > input{
+    flex: 2 1 0;
+}
+#sortedVar > label{
+    flex: 1 1 0;
+}
+#sortedVar > button{
+    flex: 0 100%;
+}
+
+#reduce-form{
+    margin: 10px 0;
+    padding: 0;
+}
+
+#sortedList > li{
+    display: block;
+    border: 1px dashed #ffa775;
+    padding: 10px;
+    position: relative;
+}
