@@ -11,7 +11,6 @@ function mixArrays(arr1, arr2) {
     let newArray = [];
     let item1 = arr1[Symbol.iterator]();
     let item2 = arr2[Symbol.iterator]();
-
     while (item1.hasNext() || item2.hasNext()) {
         if (item1.hasNext()) {
             newArray.push(item1.next().value)
@@ -20,7 +19,18 @@ function mixArrays(arr1, arr2) {
             newArray.push(item2.next().value)
         }
     }
-    return newArray.join(' ');
+    return {
+        [Symbol.iterator]: function () {
+            let i = 0;
+            return {
+                next: function () {
+                    return i < newArray.length ?
+                        {value: newArray[i++], done: false} :
+                        {done: true};
+                }
+            };
+        }
+    }
 }
 
 function iterator() {
@@ -28,16 +38,8 @@ function iterator() {
     let last = this.to;
     return {
         next() {
-            if (current <= last) {
-                return {
-                    done: false,
-                    value: current++
-                };
-            } else {
-                return {
-                    done: true
-                };
-            }
+            return current <= last ? {value: current++, done: false} :
+                {done: true};
         },
         hasNext() {
             return current <= last;
@@ -48,5 +50,5 @@ function iterator() {
 const mixedCards = mixArrays(cardsDeck1, cardsDeck2);
 const mixedCards1 = mixArrays(cardsDeck3, cardsDeck4);
 
-console.log(...[mixedCards]);
-console.log(...[mixedCards1]);
+console.log(...mixedCards);
+console.log(...mixedCards1);
