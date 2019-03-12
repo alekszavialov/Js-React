@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "question": "some test question",
+      "answers": [1, 2, 3, 4],
+      "correctAnswerIndex": 3,
+      "correctAnswerReference": "Nice job !",
+      "incorrectAnswerReference": "Bad boy!",
+      "done": false
+    },
+    {
+      "question": "some test question",
+      "answers": [1, 2, 3, 4],
+      "correctAnswerIndex": 3,
+      "correctAnswerReference": "Nice job !",
+      "incorrectAnswerReference": "Bad boy!",
+      "done": false
+    },
+    {
+      "question": "some test question",
+      "answers": [1, 2, 3, 4],
+      "correctAnswerIndex": 3,
+      "correctAnswerReference": "Nice job !",
+      "incorrectAnswerReference": "Bad boy!",
+      "done": true
+    }
+  ]
+}
