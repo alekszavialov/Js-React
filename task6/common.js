@@ -20,10 +20,10 @@ const questionsData =
             {
                 question: "some test question2",
                 answers: [1, 2],
-                correctAnswerIndex: 3,
+                correctAnswerIndex: 1,
                 correctAnswerReference: "Nice job !",
                 incorrectAnswerReference: "Bad boy!",
-                done: true
+                done: false
             },
             {
                 question: "some test question3",
@@ -54,18 +54,25 @@ const getUniqueId = (() => {
 
 window.onload = function () {
     const questionForm = document.getElementById('question');
+    const questionFormSubmitButton = document.getElementById('form-Submit');
+    const questionTextArea = questionForm.querySelector('div.questionTextArea');
+    const questionVariablesArea = questionForm.querySelector('div.questionVariablesArea');
+    const questionAnswerArea = questionForm.querySelector('div.questionAnswerArea');
 
-    let questionsStart = false;
-    let lastQuestion;
+    let questionsEnds = true;
+    let lastQuestion = {};
+    let answerReference = [];
 
     function generateNodes() {
-        let textField = document.createElement('p');
-        questionForm.appendChild(textField);
+        const textField = document.createElement('p');
+        questionTextArea.appendChild(textField);
+        const answerField = document.createElement('p');
+        questionAnswerArea.appendChild(answerField);
         for (let i = 0; i < inputsValue; i++) {
             addQuestionField(i);
             getUniqueId.increment();
         }
-        questionsStart = !questionsStart;
+        questionsEnds = false;
     }
 
     function addQuestionField(uniqueId) {
@@ -73,16 +80,16 @@ window.onload = function () {
         input.setAttribute('type', 'radio');
         input.setAttribute('id', 'answer' + uniqueId);
         input.setAttribute('name', 'answer');
-        questionForm.appendChild(input);
+        questionVariablesArea.appendChild(input);
         let label = document.createElement('label');
         label.setAttribute('for', 'answer' + uniqueId);
-        questionForm.appendChild(label);
+        questionVariablesArea.appendChild(label);
     }
 
     function removeLastQuestionField() {
         const lastId = getUniqueId.decrement();
         const removedInput = document.getElementById('answer' + lastId);
-        const removedLabel = questionForm.querySelector('label[for=answer' + lastId + ']');
+        const removedLabel = questionVariablesArea.querySelector('label[for=answer' + lastId + ']');
         removedInput.remove();
         removedLabel.remove();
     }
@@ -100,7 +107,7 @@ window.onload = function () {
     }
 
     function fillQuestion(currentQuestionData, questionFields) {
-        const questionTextField = this.querySelector('p');
+        const questionTextField = questionTextArea.querySelector('p');
         questionTextField.innerText = currentQuestionData.question;
         let label;
         questionFields.forEach(function (item, index) {
@@ -110,35 +117,42 @@ window.onload = function () {
         });
     }
 
+    function showAnswers() {
+        questionTextArea.remove();
+        questionFormSubmitButton.remove();
+        const answerText = answerReference.reduce((acc, item) => {
+            acc += `Question : ${item.question} <br/>Correct answer : ${item.correctAnswer}</br>Your answer : ${item.yourAnswer}<br/><br/>`;
+            return acc;
+        }, '');
+        const answerArea = questionAnswerArea.querySelector('p');
+        answerArea.innerHTML = answerText;
+    }
+
     questionForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        // const answerID = this.querySelector('input:checked').value;
-        // console.log(answerID);
-        // console.log(questions.next());
-        if (!questionsStart) {
-            generateNodes();
-        }
 
         const currentQuestion = questions.next();
-        if (currentQuestion.done) {
-            console.log('done!');
+        if (currentQuestion.done && questionsEnds) {
+            showAnswers();
             return;
         }
 
+        if (questionsEnds) {
+            generateNodes();
+        }
+
+        const answerArea = questionAnswerArea.querySelector('p');
         const currentQuestionData = currentQuestion.value;
         if (currentQuestionData instanceof Function) {
-            const userAnswer = Array.from(questionForm).reduce((acc, item) => {
-                console.log(item);
-                if (item.name){
-                    if (item.value === ''){
-                        return false;
-                    }
-                    acc[item.name] = item.value;
-                }
-                return acc;
-            }, {});
-            console.log('123231!!');
+            const answer = this.querySelector('input:checked');
+            answer.checked = false;
+            console.log(questionVariablesArea);
+            answerArea.innerText = currentQuestionData(parseInt(answer.value));
+            questionFormSubmitButton.value = !lastQuestion.done ? 'Next question' : 'Show results';
+            questionsEnds = lastQuestion.done;
+            questionForm.setAttribute('novalidate', '');
         } else {
+            answerArea.innerText = '';
             lastQuestion = currentQuestionData;
             let questionFields = questionForm.querySelectorAll('input[name=answer]');
             const lengthValue = currentQuestionData.answers.length - questionFields.length;
@@ -146,15 +160,21 @@ window.onload = function () {
                 correctQuestField(lengthValue);
                 questionFields = questionForm.querySelectorAll('input[name=answer]');
             }
+            questionForm.removeAttribute('novalidate');
             fillQuestion.call(this, currentQuestionData, questionFields);
-            console.log(currentQuestion.value);
+            questionFormSubmitButton.value = 'Make answer';
         }
-
-
     });
 
     function checkAnswer(currentAnswer) {
-        console.log('answer!');
+        answerReference.push({
+            question: lastQuestion.question,
+            correctAnswer: lastQuestion.correctAnswerIndex,
+            yourAnswer: currentAnswer
+        });
+        return lastQuestion.correctAnswerIndex === currentAnswer ?
+            lastQuestion.correctAnswerReference :
+            lastQuestion.incorrectAnswerReference;
     }
 
     const questions = (function* generateQuestions() {

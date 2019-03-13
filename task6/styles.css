@@ -1,0 +1,28 @@
+#question{
+    width: 500px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#question .questionVariablesArea {
+    display: block;
+}
+
+#question[novalidate] .questionVariablesArea{
+    display: none;
+}
+
+#question input, #question label{
+    cursor: pointer;
+}
+
+label:hover, input:hover+label{
+    color: #38ff00;
+}
+
+label:checked, input:checked+label{
+    color:red;
+}
