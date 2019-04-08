@@ -25,7 +25,7 @@ ReactDOM.render(
       <Route path="/main" component={Main}/>
       <Route path="/name" component={Name}/>
       <Route path="/todo" component={Todo}/>
-      <Redirect from="*" to="/main-page"/>
+      <Redirect from="*" to="/todo"/>
     </Router>
   </Provider>,
   document.getElementById('app')

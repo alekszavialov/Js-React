@@ -21,7 +21,7 @@ export default class NameComponent extends Component {
   render(){
     return (
       <Fragment>
-        <View>
+        <View count={this.props.count}>
           My name is: {this.props.count}
         </View>
         <Input onChange={this.props.onAdd}/>

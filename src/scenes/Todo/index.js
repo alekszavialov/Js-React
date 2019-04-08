@@ -1,37 +1,59 @@
 import React, {Component} from 'react';
 import TodoHead from './components/TodoHead';
-import TodoList from './components/TodoList';
+import {connect} from 'react-redux';
+import {addTodoItem, newTodoItemText} from '../../data/Todo/actions';
+import PropTypes from 'prop-types';
 
-export default class Todo extends Component {
+class Todo extends Component {
+
+  static propTypes = {
+    list: PropTypes.any,
+    text: PropTypes.any,
+    onAddItem: PropTypes.func,
+    onChangeNewItem: PropTypes.func,
+  };
 
   constructor(props) {
     super(props);
-
-    // this.handleSubtract = this.handleSubtract.bind(this);
-    // this.handleAdd = this.handleAdd.bind(this);
-
+    this.handleAddTodoItem = this.handleAddTodoItem.bind(this);
+    this.handleOnChangeNewItem = this.handleOnChangeNewItem.bind(this);
   }
 
-  // handleAdd() {
-  //   this.setState({
-  //     count: this.state.count + 1,
-  //   })
-  // }
-  //
-  // handleSubtract() {
-  //   this.setState({
-  //     count: this.state.count - 1,
-  //   })
-  // }
+  handleAddTodoItem() {
+    this.props.onAddItem(this.props.text);
+  }
+
+  handleOnChangeNewItem(item) {
+    this.props.onChangeNewItem(item);
+  }
 
   render(){
+    console.log(this.props);
     return (
       <div>
-        <h1>Worked</h1>
-        <TodoHead />
-        <TodoList list={[{value: '1234', active: true},{value: '12345', active: true}]} />
-      </div>
+        <h1>TodoList</h1>
+        <TodoHead text={this.props.text} onAddItem={this.handleAddTodoItem} onChangeNewItem={this.handleOnChangeNewItem}/>
 
+      </div>
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    list: state.Todo.list,
+    text: state.Todo.text,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddItem: (name) => {
+      // Todo.props.list.push({text: name});
+      dispatch(addTodoItem(name))
+    },
+    onChangeNewItem: (text) => dispatch(newTodoItemText(text))
+  };
+};
+
+export default connect((mapStateToProps), mapDispatchToProps)(Todo)
