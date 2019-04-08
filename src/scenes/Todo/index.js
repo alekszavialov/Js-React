@@ -20,7 +20,7 @@ class Todo extends Component {
   }
 
   handleAddTodoItem() {
-    this.props.onAddItem(this.props.text);
+    this.props.onAddItem(this.props.list.concat([{text: this.props.text}]));
   }
 
   handleOnChangeNewItem(item) {
@@ -48,10 +48,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddItem: (name) => {
-      // Todo.props.list.push({text: name});
-      dispatch(addTodoItem(name))
-    },
+    onAddItem: (name) => {dispatch(addTodoItem(name))},
     onChangeNewItem: (text) => dispatch(newTodoItemText(text))
   };
 };

@@ -7,9 +7,10 @@ const initialState = {
 export default function Todo(state = initialState, action) {
   switch (action.type) {
     case "ADD_ITEM":
+      localStorage.setItem('todoItems', JSON.stringify(action.items));
       return {
         ...state,
-        list: [].concat(...state.list, [{text: "worked"}])
+        list: action.items
       };
     case "NEW_ITEM_TEXT":
       return {
