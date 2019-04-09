@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import TodoHead from './components/TodoHead';
+import TodoList from './components/TodoList';
 import {connect} from 'react-redux';
 import {addTodoItem, newTodoItemText} from '../../data/Todo/actions';
 import PropTypes from 'prop-types';
@@ -28,12 +29,11 @@ class Todo extends Component {
   }
 
   render(){
-    console.log(this.props);
     return (
       <div>
         <h1>TodoList</h1>
         <TodoHead text={this.props.text} onAddItem={this.handleAddTodoItem} onChangeNewItem={this.handleOnChangeNewItem}/>
-
+        <TodoList list={this.props.list}/>
       </div>
     )
   }

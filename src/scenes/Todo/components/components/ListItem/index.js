@@ -5,14 +5,14 @@ export default class ListItem  extends Component {
 
   static propTypes = {
     active: PropTypes.bool,
-    value: PropTypes.string
+    text: PropTypes.string
   };
 
   constructor(props){
     super(props);
 
     this.state = {
-      value: this.props.value,
+      text: this.props.text,
       active: this.props.active
     }
     // this.handleChange = this.handleChange.bind(this);
@@ -25,7 +25,7 @@ export default class ListItem  extends Component {
   render(){
     return(
       <li>
-       <p>{this.state.value}</p>
+       <p>{this.state.text}</p>
       </li>
     )
   }

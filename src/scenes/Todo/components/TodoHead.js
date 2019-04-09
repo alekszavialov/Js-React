@@ -6,6 +6,7 @@ import Select from './components/Select';
 
 export default class MainComponent extends Component {
   static propTypes = {
+    text: PropTypes.string,
     onAddItem: PropTypes.func,
     onChangeNewItem: PropTypes.func,
   };
@@ -13,20 +14,23 @@ export default class MainComponent extends Component {
   constructor(props) {
     super(props);
 
+    this.state ={
+      text: this.props.text
+    }
+
     this.handleOnChangeNewItem = this.handleOnChangeNewItem.bind(this);
   }
 
   handleOnChangeNewItem(text) {
     this.props.onChangeNewItem(text);
   }
-// <TextInput onChange={this.props.onAddItem}/>
-  render(){
 
+  render(){
     return (
       <div className="todo-head">
         <div className="todo-head-row">
           <TextInput onChange={this.handleOnChangeNewItem}/>
-          <SubmitInput text={this.props.text} value="Submit" onSubmit={this.props.onAddItem}/>
+          <SubmitInput text={this.state.text} value="Submit" onSubmit={this.props.onAddItem}/>
         </div>
         <div className="todo-head-row">
           <SubmitInput value="Remove resolved"/>
