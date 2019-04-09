@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 export default class TextInput extends Component {
 
   static propTypes = {
+    text: PropTypes.string,
     onChange: PropTypes.func,
   };
 
@@ -19,7 +20,7 @@ export default class TextInput extends Component {
 
   render() {
     return (
-      <input type="text" className="form-control add-todo" onChange={this.handleChange}/>
+      <input type="text" className="form-control add-todo" onChange={this.handleChange} value={this.props.text}/>
     )
   }
 }

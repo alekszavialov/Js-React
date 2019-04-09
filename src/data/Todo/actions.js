@@ -11,3 +11,10 @@ export function newTodoItemText(text){
     text
   }
 }
+
+// export function changeActiveItem(items){
+//   return {
+//     type: "CHANGE_ACTIVE",
+//     items
+//   }
+// }

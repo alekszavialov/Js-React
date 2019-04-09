@@ -14,10 +14,6 @@ export default class MainComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state ={
-      text: this.props.text
-    }
-
     this.handleOnChangeNewItem = this.handleOnChangeNewItem.bind(this);
   }
 
@@ -25,12 +21,12 @@ export default class MainComponent extends Component {
     this.props.onChangeNewItem(text);
   }
 
-  render(){
+  render() {
     return (
       <div className="todo-head">
         <div className="todo-head-row">
-          <TextInput onChange={this.handleOnChangeNewItem}/>
-          <SubmitInput text={this.state.text} value="Submit" onSubmit={this.props.onAddItem}/>
+          <TextInput onChange={this.handleOnChangeNewItem} text={this.props.text}/>
+          <SubmitInput text={this.props.text} value="Submit" onSubmit={this.props.onAddItem}/>
         </div>
         <div className="todo-head-row">
           <SubmitInput value="Remove resolved"/>
