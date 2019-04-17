@@ -5,7 +5,16 @@ import createHistory from 'history/createBrowserHistory';
 // 'routerMiddleware': the new way of storing route changes with redux middleware since rrV4.
 import { routerMiddleware } from 'react-router-redux';
 import rootReducer from './reducers';
+
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
 export const history = createHistory();
+
+const persistConfig = {
+  key : 'root',
+  storage
+};
 
 function configureStoreProd(initialState) {
   const reactRouterMiddleware = routerMiddleware(history);
@@ -18,7 +27,7 @@ function configureStoreProd(initialState) {
     reactRouterMiddleware,
   ];
 
-  return createStore(rootReducer, initialState, compose(
+  return createStore(persistReducer(persistConfig, rootReducer), initialState, compose(
     applyMiddleware(...middlewares)
     )
   );
@@ -39,7 +48,7 @@ function configureStoreDev(initialState) {
   ];
 
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
-  const store = createStore(rootReducer, initialState, composeEnhancers(
+  const store = createStore(persistReducer(persistConfig, rootReducer), initialState, composeEnhancers(
     applyMiddleware(...middlewares)
     )
   );
@@ -57,4 +66,8 @@ function configureStoreDev(initialState) {
 
 const configureStore = process.env.NODE_ENV === 'production' ? configureStoreProd : configureStoreDev;
 
-export default configureStore;
+export default () => {
+  let store = configureStore()
+  let persistor = persistStore(store)
+  return { store, persistor }
+};

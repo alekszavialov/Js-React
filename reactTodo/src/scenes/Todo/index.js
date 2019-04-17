@@ -2,19 +2,19 @@ import React, {Component} from 'react';
 import TodoHead from './components/TodoHead';
 import TodoList from './components/TodoList';
 import {connect} from 'react-redux';
-import {modifyTodoList} from '../../data/Todo/actions';
+import {addToTodoList, modifyTodoList} from '../../data/Todo/actions';
 import PropTypes from 'prop-types';
 
 class Todo extends Component {
 
   static propTypes = {
     list: PropTypes.array,
+    onAddToTodoList: PropTypes.func,
     onModifyTodoList: PropTypes.func
   };
 
   constructor(props) {
     super(props);
-
     this.state = {
       inputText: ""
     };
@@ -32,11 +32,8 @@ class Todo extends Component {
     if (this.state.inputText === "") {
       return;
     }
-    const modifiedList = [...this.props.list];
-    modifiedList.push({text: this.state.inputText, active: true, id: this.props.list.length + Math.random()});
     this.modifyState('inputText');
-    this.props.onModifyTodoList(modifiedList);
-    localStorage.setItem('todoItems', JSON.stringify(modifiedList));
+    this.props.onAddToTodoList({text: this.state.inputText, active: true, id: this.props.list.length + Math.random()});
   }
 
   handleChangeTodoItem(item, state = 'active') {
@@ -47,7 +44,6 @@ class Todo extends Component {
       return obj;
     });
     this.props.onModifyTodoList(modifiedList);
-    localStorage.setItem('todoItems', JSON.stringify(modifiedList));
   }
 
   handleChangeTodoItemText(item, obj) {
@@ -111,7 +107,6 @@ class Todo extends Component {
       sortedList = this.sortByValue([...this.props.list]);
     }
     this.props.onModifyTodoList(sortedList);
-    localStorage.setItem('todoItems', JSON.stringify(sortedList));
   };
 
   sortByValue = (array) => {
@@ -128,16 +123,10 @@ class Todo extends Component {
       sortedList = this.props.list.filter(obj => obj.id !== id);
     }
     this.props.onModifyTodoList(sortedList);
-    localStorage.setItem('todoItems', JSON.stringify(sortedList));
   }
 
   handleChangeItemPosition(id, className) {
-    const currentItem = this.props.list.reduce((acc, item, index) => {
-      if (item.id === id) {
-        return index;
-      }
-      return acc;
-    }, -1);
+    const currentItem = this.props.list.findIndex(element => element.id === id);
     if ((currentItem === 0 && className === 'up') || (currentItem === this.props.list.length - 1 && className === 'down')) {
       return;
     }
@@ -145,7 +134,6 @@ class Todo extends Component {
     const replaceableItem = className === "up" ? -1 : 1;
     [modifiedList[currentItem], modifiedList[currentItem + replaceableItem]] = [modifiedList[currentItem + replaceableItem], modifiedList[currentItem]];
     this.props.onModifyTodoList(modifiedList);
-    localStorage.setItem('todoItems', JSON.stringify(modifiedList));
   }
 
 
@@ -173,12 +161,13 @@ class Todo extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    list: state.Todo.list
+    list: state.Todo
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onAddToTodoList: (item) => dispatch(addToTodoList(item)),
     onModifyTodoList: (list) => dispatch(modifyTodoList(list))
   };
 };

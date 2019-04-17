@@ -1,15 +1,14 @@
-const initialState = {
-    list: localStorage.getItem('todoItems') ? JSON.parse(localStorage.getItem('todoItems')) : [],
-  }
-;
+const initialState = [];
 
 export default function Todo(state = initialState, action) {
   switch (action.type) {
+    case "ADD_TO_LIST":
+      return [
+        ...state
+        , action.item
+      ];
     case "MODIFY_LIST":
-      return {
-        ...state,
-        list: action.list
-      };
+      return action.list;
     default:
       return state;
   }
