@@ -1,32 +1,32 @@
 /* eslint-disable import/default */
-// import 'bootstrap/dist/css/bootstrap.css';
-import React from 'react';
+import React from 'react'
 import ReactDOM from 'react-dom';
 import configureStore from './store/configureStore';
 
 require('./favicon.ico');
-const store = configureStore();
+
+const mainImport = configureStore();
+const store = mainImport.store;
+const persistor = mainImport.persistor;
 import {Provider} from 'react-redux'
 import {Router, Route, Redirect, browserHistory} from 'react-router'
-
+import {PersistGate} from 'redux-persist/integration/react'
 
 import {syncHistoryWithStore} from 'react-router-redux'
-import App from './components/App';
-import Main from "./scenes/Main";
-import Name from "./scenes/Name"
 import Todo from "./scenes/Todo"
+import Calculator from "./scenes/Calculator"
 
 const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
-      <Route path="/main-page" component={App}/>
-      <Route path="/main" component={Main}/>
-      <Route path="/name" component={Name}/>
-      <Route path="/todo" component={Todo}/>
-      <Redirect from="*" to="/todo"/>
-    </Router>
+    <PersistGate loading={null} persistor={persistor}>
+      <Router history={history}>
+        <Route path="/todo" component={Todo}/>
+        <Route path="/calc" component={Calculator}/>
+        <Redirect from="*" to="/calc"/>
+      </Router>
+    </PersistGate>
   </Provider>,
   document.getElementById('app')
 );

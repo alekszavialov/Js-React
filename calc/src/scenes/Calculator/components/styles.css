@@ -1,0 +1,67 @@
+.containter {
+  display: block;
+  width: 600px;
+  margin: 0 auto;
+}
+
+.calculator-body {
+  width: 100%;
+  border: 1px solid #921029;
+  display: flex;
+  flex-flow: wrap;
+  /*flex-flow: row wrap;*/
+  /*flex-flow: row wrap;*/
+  /*align-items: center;*/
+  /*justify-content: center;*/
+  /*flex-direction: column;*/
+}
+
+span {
+  background: #433437;
+  display: block;
+  border-bottom: 1px solid #921029;
+  color: #fff;
+  text-align: right;
+  padding: 10px;
+  font-size: 36px;
+  flex: 1 0 100%;
+}
+
+input {
+  border: none;
+  outline: none;
+  font-size: 32px;
+  padding: 10px;
+  width: calc(100% / 3);
+  transition: 0.15s ease-in-out;
+}
+
+input:hover{
+  background: #ff7457;
+}
+
+.input-keys {
+  display: inline-flex;
+  width: 85%;
+  flex-flow: wrap;
+}
+
+.input-keys > input {
+  border-bottom: 1px solid #921029;
+  border-right: 1px solid #921029;
+}
+
+.input-controls {
+  display: inline-flex;
+  width: 15%;
+  flex-flow: wrap;
+}
+
+.input-controls > input {
+  border-bottom: 1px solid #921029;
+}
+
+.one-flex-item {
+
+  flex: 1 0 100%;
+}
