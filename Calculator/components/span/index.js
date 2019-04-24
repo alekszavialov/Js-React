@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 
 export default class Span extends Component {
@@ -15,7 +15,11 @@ export default class Span extends Component {
 
   render() {
     return (
-      <span>{this.props.calcValue ? this.props.calcValue + <br/> : ''}{this.props.value}</span>
+      <Fragment>
+        {this.props.calcValue ? <span>{this.props.calcValue}</span> : ''}
+        <span>{this.props.value}</span>
+      </Fragment>
     )
+
   }
 }

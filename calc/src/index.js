@@ -23,8 +23,12 @@ ReactDOM.render(
     <PersistGate loading={null} persistor={persistor}>
       <Router history={history}>
         <Route path="/todo" component={Todo}/>
+<<<<<<< HEAD:calc/src/index.js
         <Route path="/calc" component={Calculator}/>
         <Redirect from="*" to="/calc"/>
+=======
+        <Redirect from="*" to="/todo"/>
+>>>>>>> ae994304733f06905ecff075233691506d4c71f4:reactTodo/src/index.js
       </Router>
     </PersistGate>
   </Provider>,
