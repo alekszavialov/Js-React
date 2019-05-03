@@ -1,0 +1,105 @@
+li.itemResolved{
+  text-decoration: line-through;
+  color: #ffbb00;
+}
+li.itemActive{
+  text-decoration: none;
+}
+
+li span {
+  display: block;
+  position: absolute;
+  right: 20px;
+  padding: 8px;
+  background: #007bff;
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
+}
+
+li span.up {
+  top: 5px;
+}
+
+li span.up:after {
+  border-width: 0 8px 8px 8px;
+  border-color: transparent transparent #fff transparent;
+}
+
+li span.down {
+  bottom: 5px;
+}
+
+li span.down:after {
+  border-width: 8px 8px 0 8px;
+  border-color: #fff transparent transparent transparent;
+}
+
+li span.down:after, li span.up:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  top: 4px;
+  left: 0;
+}
+
+li span:hover, .remove:hover {
+  background: #ffbb00;
+}
+
+ul li.list-group-item {
+  transition: 0.15s ease-in-out;
+  cursor: pointer;
+  padding: 0.3rem 1.25rem 0.3rem 3rem;
+}
+
+ul li.list-group-item:hover{
+  background: #ececec;
+}
+
+.remove {
+  transition: 0.15s ease-in-out;
+  position: absolute;
+  display: block;
+  width: 30px;
+  height: 30px;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  background: #007bff;
+}
+
+.remove:after {
+  transition: 0.15s ease-in-out;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  content: '\d7';
+  color: #ffbb00;
+  text-align: center;
+}
+
+.remove:hover:after{
+  content: "\274c";
+}
+
+select{
+  cursor: pointer;
+}
+
+h6{
+  margin: 5px 30px 5px 0;
+  padding: 5px;
+  border: 5px solid transparent;
+  transition: 0.15s ease-in-out;
+  box-sizing: border-box;
+  border-radius: 6px;
+}
+
+h6:hover{
+  border: 5px solid #0069d9;
+}
