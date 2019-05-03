@@ -1,0 +1,46 @@
+.shop-navigation ul{
+  display: flex;
+  flex-direction: row;
+}
+
+.shop-navigation ul li {
+  width: 25%;
+  text-align: center;
+  position: relative;
+}
+
+.shop-navigation ul li a{
+  font-size: 14px;
+  display: block;
+  padding: 12px;
+}
+
+.shop-navigation ul li a:hover, .shop-navigation ul li a:focus {
+  background: rgba(174,116,198,0.4);
+  color: #2a3039;
+}
+
+.shop-navigation ul li ul {
+  display: none;
+  border-bottom: 3px solid #9b59b6;
+  border-left: 3px solid #9b59b6;
+  border-right: 2px solid #9b59b6;
+}
+
+.shop-navigation ul li > ul{
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  background-color: #ecf0f1;
+  left: 0;
+  z-index: 555;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.shop-navigation ul li:hover > ul{
+  display: flex;
+}

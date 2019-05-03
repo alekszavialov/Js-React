@@ -1,0 +1,197 @@
+.carousel a{
+  display: block;
+}
+
+.carousel .control-dots{
+  padding-right: 35px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.carousel .control-dots .dot{
+  border-radius: 0;
+  width: 16px;
+  height: 16px;
+  background: rgba(42,48,57,0.7);
+  position: relative;
+  border: 1px solid rgba(160,122,176,0.7);
+  margin: 0 4px;
+  box-shadow: none;
+  outline: none;
+}
+
+.carousel .control-dots .dot.selected:before{
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  border: 1px solid rgba(160,122,176,0.7);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: #ABABAB;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -o-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+/*display: block;*/
+
+.alice-carousel__stage-item img{
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.alice-carousel__dots{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.alice-carousel__dots-item{
+  border-radius: 0;
+  width: 16px;
+  height: 16px;
+  background: rgba(42,48,57,0.7);
+  position: relative;
+  border: 1px solid rgba(160,122,176,0.7);
+  margin: 0 4px;
+  box-shadow: none;
+  outline: none;
+  opacity: 0.9;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.alice-carousel__dots-item:hover, .alice-carousel__dots-item.__active{
+  background-color: rgba(42,48,57,0.7);
+  opacity: 1;
+}
+
+.alice-carousel__dots-item.__active:before{
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  border: 1px solid rgba(160,122,176,0.7);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: #ABABAB;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -o-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.alice-carousel__dots-item:not(:last-child){
+  margin-right: 5px;
+}
+
+.alice-carousel__prev-btn, .alice-carousel__next-btn{
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 0;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.alice-carousel__prev-btn span, .alice-carousel__next-btn span{
+  font-size: 0;
+  display: block;
+  width: 35px;
+  height: 60px;
+  opacity: 0.2;
+  background-color: #bdc3c7;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.alice-carousel__prev-btn span:hover, .alice-carousel__next-btn span:hover{
+  background-color: #9b59b6;
+  opacity: 1;
+}
+
+.alice-carousel__prev-btn{
+  left: 0;
+}
+
+.alice-carousel__next-btn{
+  right: 0;
+}
+
+.alice-carousel__prev-btn span{
+  -webkit-mask: url(../../../public/icons/caret-left-solid.svg) no-repeat 50% 50%;
+  mask: url(../../../public/icons/caret-left-solid.svg) no-repeat 50% 50%;
+  mask-size: cover;
+}
+
+.alice-carousel__next-btn span{
+  -webkit-mask: url(../../../public/icons/caret-right-solid.svg) no-repeat 50% 50%;
+  mask: url(../../../public/icons/caret-right-solid.svg) no-repeat 50% 50%;
+  mask-size: cover;
+}
+
+.accompanying-carousel-block .alice-carousel {
+
+}
+
+.accompanying-carousel-block .alice-carousel__stage-item{
+
+}
+
+.accompanying-product-item {
+  margin: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.accompanying-product-item a{
+  display: block;
+  margin: 5px 0;
+  height: 52px;
+  overflow: hidden;
+  color: #334150;
+  font-weight: bold;
+  font-family: "MyriadProSemibold",sans-serif;
+}
+
+.accompanying-product-item .accompanying-product-item-img-wrapper{
+  display: block;
+  max-width: 140px;
+  max-height: 140px;
+}
+
+.accompanying-product-item-bottom{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.accompanying-product-item-price{
+  font-size: 17px;
+  font-weight: bold;
+  color: #9b59b6;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.accompanying-product-item-price p {
+  color: #9b59b6;
+  font-size: 12px;
+}
+
+

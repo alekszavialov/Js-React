@@ -1,0 +1,43 @@
+.seal-lead {
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+.about-corp {
+  margin: 10px 0;
+}
+
+.about-corp h3 {
+  font-size: 22px;
+  color: #fff;
+  margin: 0 0 0 5px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.about-corp h3:before{
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  mask-size: cover;
+  background-color: #fff;
+}
+
+.trophy h3:before{
+  -webkit-mask: url(../../public/icons/trophy-solid.svg) no-repeat 50% 50%;
+  mask: url(../../public/icons/trophy-solid.svg) no-repeat 50% 50%;
+}
+
+.certificate h3:before{
+  -webkit-mask: url(../../public/icons/certificate-solid.svg) no-repeat 50% 50%;
+  mask: url(../../public/icons/certificate-solid.svg) no-repeat 50% 50%;
+}
+
+.cogs h3:before{
+  -webkit-mask: url(../../public/icons/cogs-solid.svg) no-repeat 50% 50%;
+  mask: url(../../public/icons/cogs-solid.svg) no-repeat 50% 50%;
+}

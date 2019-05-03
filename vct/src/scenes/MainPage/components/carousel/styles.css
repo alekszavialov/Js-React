@@ -1,0 +1,41 @@
+.carousel a{
+  display: block;
+}
+
+.carousel .control-dots{
+  padding-right: 35px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.carousel .control-dots .dot{
+  border-radius: 0;
+  width: 16px;
+  height: 16px;
+  background: rgba(42,48,57,0.7);
+  position: relative;
+  border: 1px solid rgba(160,122,176,0.7);
+  margin: 0 4px;
+  box-shadow: none;
+  outline: none;
+}
+
+.carousel .control-dots .dot.selected:before{
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  border: 1px solid rgba(160,122,176,0.7);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: #ABABAB;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -o-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+/*display: block;*/
+
