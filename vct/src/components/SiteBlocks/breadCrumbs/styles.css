@@ -1,0 +1,27 @@
+.bread-crumbs {
+  display: flex;
+  margin: 25px 0;
+  font-size: 0;
+  flex-direction: row;
+  align-items: center;
+}
+
+.bread-crumbs span:after {
+  content: ">";
+  display: inline-block;
+  margin: 0 5px;
+  font-size: 12px;
+  color: #334150;
+}
+
+.bread-crumbs span:last-child:after {
+  display: none;
+}
+
+.bread-crumbs a {
+  color: #bdc3c7;
+}
+
+.bread-crumbs a:hover {
+  color: #995bb8;
+}

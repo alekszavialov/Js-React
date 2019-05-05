@@ -6,6 +6,9 @@ a {
   color: #FFF;
   text-decoration: none;
   outline: none;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 ul, li {
@@ -22,9 +25,6 @@ button{
 a:hover, a:focus {
   color: #995bb8;
   text-decoration: none;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 
 p {
@@ -149,9 +149,6 @@ a, p, span{
   font-family: "MyriadProRegular",sans-serif;
   letter-spacing: 0;
   line-height: 24px;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  transition: all 0.3s ease;
   align-self: baseline;
 }
 
@@ -230,4 +227,32 @@ a, p, span{
 
 .accompanying-product-item .shop-block-buy:before{
   display: block;
+}
+
+.seal-lead {
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+.block-with-icon{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.icon-thumbs-up:before {
+  background: url(./public/icons/thumbs-up-solid.svg) no-repeat top left;
+}
+
+.block-with-icon:before{
+  display: block;
+  content: "";
+  width: 26px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.icon-eye:before {
+  background: url(./public/icons/eye-solid.svg) no-repeat top left;
 }

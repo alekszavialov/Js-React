@@ -1,8 +1,3 @@
-.seal-lead {
-  margin-left: 10px;
-  font-size: 20px;
-}
-
 .about-corp {
   margin: 10px 0;
 }
@@ -40,4 +35,79 @@
 .cogs h3:before{
   -webkit-mask: url(../../public/icons/cogs-solid.svg) no-repeat 50% 50%;
   mask: url(../../public/icons/cogs-solid.svg) no-repeat 50% 50%;
+}
+
+.tabs-item-image{
+  display: flex;
+  flex: 0 0 200px;
+  height: 200px;
+  margin-right: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.tabs-item-image img {
+  max-width: 100%;
+  max-height: 100%;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.tabs-item-image a:hover img{
+  transform: scale(1.02);
+}
+
+.tabs-item-content{
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs-item-content h3{
+  margin: 5px 0;
+  overflow: hidden;
+}
+
+.tabs-item-content a{
+  color: #334150;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.tabs-item-content span{
+  color: #A0A0A0;
+  margin: 15px 0 15px 20px;
+  display: block;
+  line-height: 18px;
+  position: relative;
+}
+
+.tabs-item-content span:before{
+  content: '';
+  display: block;
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  -webkit-mask: url(../../public/icons/clock-regular.svg) no-repeat 50% 50%;
+  mask: url(../../public/icons/clock-regular.svg) no-repeat 50% 50%;
+  mask-size: cover;
+  background-color: #A0A0A0;
+  right: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tabs-item-content p{
+  color: #334150;
+  display: block;
+  margin: 0;
+  line-height: 18px;
+  font-size: 16px;
+  letter-spacing: 0.2px;
+  height: 72px;
+  overflow: hidden;
+}
+
+.accompanying-carousel-block{
+  margin: 20px 0;
 }

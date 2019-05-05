@@ -15,6 +15,7 @@ import Header from './components/SiteBlocks/header'
 import Footer from './components/SiteBlocks/footer'
 import MainPage from './scenes/MainPage';
 import Catalog from './scenes/Catalog';
+import ProductPage from "./scenes/productPage";
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { library } from '@fortawesome/fontawesome-svg-core'
@@ -25,6 +26,7 @@ import './common'
 import 'normalize.css';
 import './index.css';
 
+
 const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
@@ -34,6 +36,7 @@ ReactDOM.render(
       <Router history={history}>
         <Route path="/" component={MainPage}/>
         <Route path="/catalog" component={Catalog}/>
+        <Route path="/product" component={ProductPage}/>
         <Redirect from="*" to="/"/>
       </Router>
     </Provider>

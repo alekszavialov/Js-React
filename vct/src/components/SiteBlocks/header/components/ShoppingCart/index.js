@@ -6,6 +6,7 @@ export default class ShoppingCart extends Component {
   static propTypes = {
     img: PropTypes.string,
     alt: PropTypes.string,
+    src: PropTypes.string,
     title: PropTypes.string,
     value: PropTypes.number
   };

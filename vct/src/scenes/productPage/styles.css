@@ -1,0 +1,43 @@
+.bread-crumbs {
+  margin-left: 10px;
+}
+
+.product-info-head{
+  padding-bottom: 10px;
+  position: relative;
+}
+
+.product-info-head:after{
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 5px;
+  left: 5%;
+  width: 90%;
+  height: 1px;
+  background: #414e5c;
+}
+
+.product-card-tabs .tabs-item{
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-full-descr-item{
+  display: flex;
+  flex-direction: row;
+}
+
+.shop-full-descr-item-tittle{
+  flex: 0 0 30%;
+}
+
+.shop-full-descr-item p {
+  color: #414e5c;
+  font-size: 12px;
+  word-wrap: break-word;
+}
+
+.shop-full-descr-item-field{
+  margin-left: 2%;
+}

@@ -1,0 +1,72 @@
+{
+  "params": {
+    "responsive": {
+      "0": {
+        "items": 1
+      },
+      "1024": {
+        "items": 6
+      }
+    },
+    "autoPlayInterval": 15000,
+    "autoPlayDirection": "ltr",
+    "dotsDisabled": true,
+    "autoPlay": true,
+    "disableAutoPlayOnAction": true
+  },
+  "items": [
+    {
+      "src": "https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg",
+      "href": "#",
+      "name": "Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)",
+      "description": "M6500/M6607/P2200/P2207/ P2500/P2507",
+      "price": 324
+    },
+    {
+      "src": "https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg",
+      "href": "#",
+      "name": "Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)",
+      "description": "M6500/M6607/P2200/P2207/ P2500/P2507",
+      "price": 324
+    },
+    {
+      "src": "https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg",
+      "href": "#",
+      "name": "Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)",
+      "description": "M6500/M6607/P2200/P2207/ P2500/P2507",
+      "price": 324
+    },
+    {
+      "src": "https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg",
+      "href": "#",
+      "name": "Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)",
+      "description": "M6500/M6607/P2200/P2207/ P2500/P2507",
+      "price": 324
+    },{
+      "src": "https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg",
+      "href": "#",
+      "name": "Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)",
+      "description": "M6500/M6607/P2200/P2207/ P2500/P2507",
+      "price": 324
+    },
+    {
+      "src": "https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg",
+      "href": "#",
+      "name": "Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)",
+      "description": "M6500/M6607/P2200/P2207/ P2500/P2507",
+      "price": 324
+    },{
+      "src": "https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg",
+      "href": "#",
+      "name": "Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)",
+      "description": "M6500/M6607/P2200/P2207/ P2500/P2507",
+      "price": 324
+    },{
+      "src": "https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg",
+      "href": "#",
+      "name": "Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)",
+      "description": "M6500/M6607/P2200/P2207/ P2500/P2507",
+      "price": 324
+    }
+  ]
+}

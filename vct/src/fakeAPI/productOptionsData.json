@@ -1,0 +1,48 @@
+{
+  "sliderValues": {
+    "min": 0,
+    "max": 20000
+  },
+  "productParameters": [
+    {
+      "head": "Производитель:",
+      "options": [
+        "Epson",
+        "HP",
+        "Canon"
+      ]
+    },
+    {
+      "head": "Производитель:",
+      "options": [
+        "Epson",
+        "HP",
+        "Canon"
+      ]
+    },
+    {
+      "head": "Производитель:",
+      "options": [
+        "Epson",
+        "HP",
+        "Canon"
+      ]
+    },
+    {
+      "head": "Производитель:",
+      "options": [
+        "Epson",
+        "HP",
+        "Canon"
+      ]
+    },
+    {
+      "head": "Производитель:",
+      "options": [
+        "Epson",
+        "HP",
+        "Canon"
+      ]
+    }
+  ]
+}

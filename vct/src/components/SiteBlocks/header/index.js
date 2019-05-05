@@ -68,7 +68,9 @@ export default class Header extends Component {
         </div>
         <div className="bg-shop">
           <div className="container">
-            <ItemsNavigation/>
+            <div className="row">
+              <ItemsNavigation/>
+            </div>
           </div>
         </div>
       </header>

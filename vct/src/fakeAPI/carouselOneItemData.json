@@ -1,0 +1,30 @@
+{
+  "params": {
+    "responsive": {
+      "0": {
+        "items": 1
+      },
+      "1024": {
+        "items": 1
+      }
+    },
+    "autoPlayInterval": 15000,
+    "autoPlayDirection": "rtl",
+    "buttonsDisabled": true,
+    "autoPlay": true,
+    "fadeOutAnimation": true,
+    "disableAutoPlayOnAction": true
+  },
+  "items": [
+    {
+      "url": "#",
+      "src": "https://vct1.com/img/slider/epson_service.jpg.pagespeed.ce.CzIKBqmjM-.jpg",
+      "text": "Банер слайдера."
+    },
+    {
+      "url": "#",
+      "src": "https://vct1.com/img/slider/pantum.jpg.pagespeed.ce.934YCqpgyu.jpg",
+      "text": "Банер слайдера."
+    }
+  ]
+}
