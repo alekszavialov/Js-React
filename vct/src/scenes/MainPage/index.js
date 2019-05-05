@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import CarouselElement from '../../components/SiteBlocks/carousel'
@@ -6,13 +7,16 @@ import CategoriesItems from './components/categoriesItems'
 import ItemCatalog from '../../components/SiteBlocks/itemCatalog'
 import SiteTabs from '../../components/SiteBlocks/tabs'
 
+import {addToCart} from '../../data/Store/actions';
 import fetchApi from '../../modules/fetch-api'
 
 import './styles.css'
 
-export default class MainPage extends Component {
+class MainPage extends Component {
 
-  static propTypes = {};
+  static propTypes = {
+    onAddToCart: PropTypes.func,
+  };
 
   constructor(props) {
     super(props);
@@ -23,7 +27,13 @@ export default class MainPage extends Component {
       popularItemsData: null,
       catalogItems: null,
       tabItems: null
-    }
+    };
+
+    this.addToCart = this.addToCart.bind(this)
+  }
+
+  addToCart(item){
+    this.props.onAddToCart(item);
   }
 
   loadCarouselData = () => {
@@ -140,7 +150,7 @@ export default class MainPage extends Component {
                 {this.state.catalogItems !== null ?
                   <Fragment>
                     <h2 className="seal-lead">Популярные товары:</h2>
-                    <ItemCatalog items={this.state.catalogItems}/>
+                    <ItemCatalog items={this.state.catalogItems} onAddToCart={this.addToCart}/>
                   </Fragment> :
                   ""
                 }
@@ -192,7 +202,12 @@ export default class MainPage extends Component {
       </Fragment>
     )
   }
-
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddToCart: (item) => dispatch(addToCart(item)),
+  };
+};
 
+export default connect(null, mapDispatchToProps)(MainPage)

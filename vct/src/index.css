@@ -1,5 +1,6 @@
 body {
   background: #ecf0f1;
+  position: relative;
 }
 
 a {
@@ -189,6 +190,7 @@ a, p, span{
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .shop-block-buy span {

@@ -5,11 +5,26 @@ import './styles.css'
 
 export default class ShopItem extends Component {
   static propTypes = {
-    item: PropTypes.object
-  }
+    item: PropTypes.object,
+    addToCart: PropTypes.func
+  };
 
   constructor(props) {
-    super(props)
+    super(props);
+
+    this.state = {
+      name: this.props.item.name,
+      description: this.props.item.description,
+      src: this.props.item.src,
+      price: this.props.item.price,
+      article: this.props.item.article,
+    }
+
+    this.addToCart = this.addToCart.bind(this);
+  }
+
+  addToCart(){
+    this.props.addToCart(this.state)
   }
 
   createItemBlock = () => {
@@ -23,7 +38,7 @@ export default class ShopItem extends Component {
             {this.props.item.price}
             <p>грн</p>
           </div>
-          <a href="#" className="shop-block-buy">
+          <a className="shop-block-buy" onClick={this.addToCart}>
             <span>Купить</span>
           </a>
         </div>
