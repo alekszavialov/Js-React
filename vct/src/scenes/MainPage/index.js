@@ -22,6 +22,7 @@ class MainPage extends Component {
     super(props);
 
     this.state = {
+      loading: true,
       carouselData: null,
       carouselItemsData: null,
       popularItemsData: null,
@@ -32,7 +33,7 @@ class MainPage extends Component {
     this.addToCart = this.addToCart.bind(this)
   }
 
-  addToCart(item){
+  addToCart(item) {
     this.props.onAddToCart(item);
   }
 
@@ -123,6 +124,7 @@ class MainPage extends Component {
     this.loadCatalogItemsData();
     this.loadCarouselItems();
     this.loadPageTabItems();
+    this.setState({ loading: false });
   }
 
   render() {

@@ -29,6 +29,7 @@ class Header extends Component {
 
     this.toggleModalMenu = this.toggleModalMenu.bind(this);
     this.changeQuantityInCart = this.changeQuantityInCart.bind(this);
+    this.removeFromCart = this.removeFromCart.bind(this);
   }
 
   toggleModalMenu() {
@@ -38,8 +39,17 @@ class Header extends Component {
   }
 
   changeQuantityInCart(item){
-    const product = this.props.cart.filter(item => item.article === item.article)[0];
-    product.quantity > item.quantity ? this.props.onDecreaseInCart(product) : this.props.onAddToCart(product);
+    const product = this.findProduct(item.article);
+    product.quantity > item.quantity ?
+      this.props.onDecreaseInCart(product, item.quantity) :
+      this.props.onAddToCart(product, item.quantity);
+  }
+
+  findProduct = (article) => this.props.cart.filter(cartItem => cartItem.article === article)[0];
+
+  removeFromCart(item){
+    const product = this.findProduct(item.article);
+    product && this.props.onRemoveFromCart(product);
   }
 
   render() {
@@ -59,6 +69,7 @@ class Header extends Component {
           <ModalCart
           items={this.props.cart}
           onChangeQuantity={this.changeQuantityInCart}
+          onRemoveFromCart={this.removeFromCart}
           handleClose={this.toggleModalMenu}/> :
           ''
         }
@@ -122,8 +133,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddToCart: (item) => dispatch(addToCart(item)),
-    onDecreaseInCart: (item) => dispatch(decreaseInCart(item)),
+    onAddToCart: (item, value) => dispatch(addToCart(item, value)),
+    onDecreaseInCart: (item, value) => dispatch(decreaseInCart(item, value)),
+    onRemoveFromCart: (item) => dispatch(removeFromCart(item)),
   };
 };
 

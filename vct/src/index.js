@@ -9,16 +9,14 @@ const mainImport = configureStore();
 const store = mainImport.store;
 const persistor = mainImport.persistor;
 import {Provider} from 'react-redux'
-import {Router, Route, Redirect, browserHistory, Switch} from 'react-router'
+import {browserHistory} from 'react-router'
+import { BrowserRouter } from 'react-router-dom';
 
 import {PersistGate} from 'redux-persist/integration/react'
 
 import {syncHistoryWithStore} from 'react-router-redux'
-import Header from './components/SiteBlocks/header'
-import Footer from './components/SiteBlocks/footer'
-import MainPage from './scenes/MainPage';
-import Catalog from './scenes/Catalog';
-import ProductPage from "./scenes/productPage";
+
+import App from './components/App';
 
 import './common'
 import 'normalize.css';
@@ -30,17 +28,13 @@ ReactDOM.render(
   <Fragment>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Header/>
-        <Router history={history}>
-          <Route path="/" component={MainPage}/>
-          <Route path="/catalog" component={Catalog}/>
-          <Route path="/product" component={ProductPage}/>
-          <Redirect from="/" to="/"/>
-        </Router>
-        <Footer/>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </PersistGate>
     </Provider>
   </Fragment>
   ,
   document.getElementById('app')
 );
+

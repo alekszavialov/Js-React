@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 
+import CartItem from './components'
+
 import './styles.css'
 
 export default class ShoppingCartModal extends Component {
@@ -8,6 +10,7 @@ export default class ShoppingCartModal extends Component {
   static propTypes = {
     items: PropTypes.array,
     onChangeQuantity: PropTypes.func,
+    onRemoveFromCart: PropTypes.func,
     handleClose: PropTypes.func,
   };
 
@@ -16,43 +19,36 @@ export default class ShoppingCartModal extends Component {
 
     this.closeCart = this.closeCart.bind(this);
     this.changeQuantityInCart = this.changeQuantityInCart.bind(this);
+    this.removeFromCart = this.removeFromCart.bind(this);
   }
 
-  closeCart() {
+  closeCart(e) {
+    if (!e.target.className.includes('closeCard')) {
+      return;
+    }
     this.props.handleClose();
   }
 
-  changeQuantityInCart(e){
-    this.props.onChangeQuantity({article: e.target.id, quantity: e.target.value})
+  changeQuantityInCart(item) {
+    this.props.onChangeQuantity(item)
+  }
+
+  removeFromCart(item) {
+    this.props.onRemoveFromCart(item)
   }
 
   loadCart = () => {
     return this.props.items.map(item =>
-      <div className="modal-cart-items-shopped-item" key={item.article}>
-        <div className="modal-cart-items-shopped-item-img">
-          <a href="#">
-            <img src={item.src}
-                 alt={`image of ${item.name}`}/>
-          </a>
-        </div>
-        <div className="modal-cart-items-shopped-item-info">
-          <a href="#">{item.name}</a>
-          <p>{item.description}</p>
-          <div className="modal-cart-items-shopped-item-info-price">
-            {item.price}<p>грн</p>
-          </div>
-          <div className="modal-cart-items-shopped-item-info-count">
-            <p>Количество(шт.)</p>
-            <input value={item.quantity} min="1" max="99" id={item.article} onChange={this.changeQuantityInCart} type="number"/>
-          </div>
-        </div>
-      </div>
+      <CartItem key={item.article}
+                item={item}
+                onChangeQuantity={this.changeQuantityInCart}
+                onRemoveFromCart={this.removeFromCart}/>
     )
   };
 
   render() {
     return (
-      <div className="modal-cart-bg">
+      <div className="modal-cart-bg closeCard" onClick={this.closeCart}>
         <div className={`modal-cart`}>
           <form method="POST">
             <div className="modal-cart-order">
@@ -96,10 +92,11 @@ export default class ShoppingCartModal extends Component {
               <div className="modal-cart-items-pay">
                 <span>К оплате</span>
                 <div className="modal-cart-items-shopped-item-info-price">
-                  {this.props.items.reduce((acc,item) => acc+item.price*item.quantity, 0)} <p>грн</p>
+                  {this.props.items.reduce((acc, item) => acc + item.price * item.quantity, 0)} <p>грн</p>
                 </div>
               </div>
-              <button onClick={this.closeCart}><img src="https://vct1.com/img/continue_shop.png" alt=""/></button>
+              <div className="continue-shopping"><img className="closeCard" onClick={this.closeCart}
+                                                      src="https://vct1.com/img/continue_shop.png" alt=""/></div>
             </div>
           </form>
         </div>

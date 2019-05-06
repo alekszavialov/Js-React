@@ -207,6 +207,30 @@
 .modal-cart-items-shopped-item-info-count{
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+.modal-cart-items-shopped-item-remove{
+  display: flex;
+  position: absolute;
+  border-radius: 50%;
+  height: 48px;
+  width: 48px;
+  background: #d9d9d9;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  transform: rotate(45deg);
+  font-weight: bold;
+  font-size: 55px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  left: 115px;
+  bottom: -2px;
+}
+
+.modal-cart-items-shopped-item-remove:hover{
+  color: #9b59b6;
 }
 
 .modal-cart-items-shopped-item-info-count p{
@@ -237,7 +261,15 @@
   font-size: 14px;
 }
 
-.modal-cart-items button{
-  width: auto;
-  margin-top: 65px;
+.continue-shopping{
+  margin: 65px auto 0;
+  cursor: pointer;
+  opacity: 0.9;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.continue-shopping:hover{
+  opacity: 1;
 }

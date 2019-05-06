@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import './styles.css'
@@ -37,8 +38,8 @@ export default class ItemsNavigation extends Component{
         <ul>
           <li key='catalog'><a href="catalog">Каталог</a><Catalog list={list}/></li>
           <li key='actions'><a href="">Акции</a></li>
-          <li key='service'><a href="">Сервис</a></li>
-          <li key='sale'><a href="">Распродажа</a></li>
+          <li key='service'><NavLink to='/catalog'>Catalog</NavLink></li>
+          <li key='sale'><NavLink to='/product'>Product</NavLink></li>
         </ul>
       </div>
     )
