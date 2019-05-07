@@ -1,15 +1,19 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux';
+import {NavLink} from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 import {addToCart, removeFromCart, decreaseInCart} from '../../../data/Store/actions';
 
 import Navigation from './components/Navigation'
-import Callback from './components/Callback'
 import HeadSearch from './components/HeadSearch'
 import ShoppingCart from './components/ShoppingCart'
 import ItemsNavigation from './components/ItemsNavigation'
 import ModalCart from './components/modalCart'
+
+import fetchApi from '../../../modules/fetch-api'
+
+import './styles.css'
 
 class Header extends Component {
 
@@ -18,13 +22,14 @@ class Header extends Component {
     onAddToCart: PropTypes.func,
     onDecreaseInCart: PropTypes.func,
     onRemoveFromCart: PropTypes.func
-  }
+  };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      isOpen: false
+      isOpen: false,
+      catalogList: null
     };
 
     this.toggleModalMenu = this.toggleModalMenu.bind(this);
@@ -38,7 +43,7 @@ class Header extends Component {
     })
   }
 
-  changeQuantityInCart(item){
+  changeQuantityInCart(item) {
     const product = this.findProduct(item.article);
     product.quantity > item.quantity ?
       this.props.onDecreaseInCart(product, item.quantity) :
@@ -47,9 +52,21 @@ class Header extends Component {
 
   findProduct = (article) => this.props.cart.filter(cartItem => cartItem.article === article)[0];
 
-  removeFromCart(item){
+  removeFromCart(item) {
     const product = this.findProduct(item.article);
     product && this.props.onRemoveFromCart(product);
+  }
+
+  loadCatalogList = () => {
+    fetchApi('../../fakeAPI/headerItemNavigationItems.json')
+      .then(result => this.setState({
+          catalogList: result
+        }
+      ));
+  };
+
+  componentWillMount() {
+    this.loadCatalogList();
   }
 
   render() {
@@ -60,17 +77,16 @@ class Header extends Component {
       {text: 'Магазин', url: 'contacts'},
       {text: 'Сервисный центр', url: 'contacts'},
       {text: 'Контакты', url: 'contacts'},
-      {text: 'Вход', url: 'main-page'},
-    ]
-    console.log(this.state.isOpen);
+      {text: 'Вход', url: '/product'},
+    ];
     return (
       <Fragment>
         {this.state.isOpen ?
           <ModalCart
-          items={this.props.cart}
-          onChangeQuantity={this.changeQuantityInCart}
-          onRemoveFromCart={this.removeFromCart}
-          handleClose={this.toggleModalMenu}/> :
+            items={this.props.cart}
+            onChangeQuantity={this.changeQuantityInCart}
+            onRemoveFromCart={this.removeFromCart}
+            handleClose={this.toggleModalMenu}/> :
           ''
         }
         <header>
@@ -81,7 +97,8 @@ class Header extends Component {
                   <Navigation navList={list}/>
                 </div>
                 <div className="col-md-4 callback-block">
-                  <Callback/>
+                  <p>Напиши Нам : </p>
+                  <a href="#">Обратная связь</a>
                 </div>
               </div>
             </div>
@@ -90,24 +107,24 @@ class Header extends Component {
             <div className="container">
               <div className="row">
                 <div className="col-md-3 head-logo">
-                  <a href="index">
+                  <NavLink to='/'>
                     <img src="https://vct1.com/img/logo.png.pagespeed.ce.dMpD6YjZpM.png"
                          alt="Логотип компании ВКТ Сервис"
                          title="Интернет-магазин ВКТ Сервис"/>
-                  </a>
+                  </NavLink>
                 </div>
                 <div className="col-md-4 head-search">
                   <HeadSearch/>
                 </div>
                 <div className="col-md-3 head-telephones">
                   <p>Наши телефоны</p>
-                  <a href="">0522 32 05 75</a>
-                  <a href="">099 70 17 001</a>
+                  <a href="tel:0522320575">0522 32 05 75</a>
+                  <a href="tel:0997017001">099 70 17 001</a>
                 </div>
                 <div className="col-md-2 head-bucket">
                   <ShoppingCart
                     handleClick={this.toggleModalMenu}
-                    value={this.props.cart.reduce((acc, item) => acc+item.quantity,0)}/>
+                    value={this.props.cart.reduce((acc, item) => acc + item.quantity, 0)}/>
                 </div>
               </div>
             </div>
@@ -115,7 +132,13 @@ class Header extends Component {
           <div className="bg-shop">
             <div className="container">
               <div className="row">
-                <ItemsNavigation/>
+                <div className="col-md-12">
+                  {this.state.catalogList !== null ? (
+                    <div className="product-card-tabs">
+                      <ItemsNavigation list={this.state.catalogList}/>
+                    </div>
+                  ) : ""}
+                </div>
               </div>
             </div>
           </div>

@@ -1,9 +1,10 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
+import {NavLink} from "react-router-dom";
 import PropTypes from 'prop-types';
 
 import CarouselElement from '../../components/SiteBlocks/carousel'
-import CategoriesItems from './components/categoriesItems'
+import PopularCategoriesItems from './components/popularCategoriesItems'
 import ItemCatalog from '../../components/SiteBlocks/itemCatalog'
 import SiteTabs from '../../components/SiteBlocks/tabs'
 
@@ -43,9 +44,7 @@ class MainPage extends Component {
           carouselData: {
             ...result, items: result.items.map(item =>
               <div key={item.name + Math.random()}>
-                <a href={item.url}>
-                  <img src={item.src} alt={item.text}/>
-                </a>
+                <NavLink to={item.url}><img src={item.src} alt={item.text}/></NavLink>
               </div>
             )
           }
@@ -77,13 +76,21 @@ class MainPage extends Component {
           items: result.items.map(item =>
             <div className="accompanying-product-item" key={Math.random()}>
               <div className="accompanying-product-item-img-wrapper"><img src={item.src} alt=""/></div>
-              <a href={item.href}>{item.name}</a>
+              <NavLink to={item.href}>{item.name}</NavLink>
               <div className="accompanying-product-item-bottom">
                 <div className="accompanying-product-item-price">
                   {item.price}
                   <p> грн</p>
                 </div>
-                <a href="#" className="shop-block-buy"></a>
+                <div className="shop-block-buy"
+                     onClick={this.addToCart.bind(null, {
+                       name: item.name,
+                       description: item.description,
+                       src: item.src,
+                       price: item.price,
+                       article: item.article
+                     })}>
+                </div>
               </div>
             </div>
           )
@@ -99,13 +106,15 @@ class MainPage extends Component {
               (item.map(item =>
                 <div className="tabs-item" key={Math.random()}>
                   <div className="tabs-item-image">
-                    <a href="#">
-                      <img src={item.src} alt=""/>
-                    </a>
+                      <NavLink to={item.href}>
+                        <img src={item.src} alt=""/>
+                      </NavLink>
                   </div>
                   <div className="tabs-item-content">
                     <h3>
-                      <a href="#">{item.name}</a>
+                      <NavLink to={item.href}>
+                        {item.name}
+                      </NavLink>
                     </h3>
                     <span>{item.date}</span>
                     <p>{item.text}</p>
@@ -119,15 +128,21 @@ class MainPage extends Component {
   };
 
   componentDidMount() {
-    this.loadCarouselData();
-    this.loadPopularItemsData();
-    this.loadCatalogItemsData();
-    this.loadCarouselItems();
-    this.loadPageTabItems();
-    this.setState({ loading: false });
+    Promise.all([
+      this.loadCarouselData(),
+      this.loadPopularItemsData(),
+      this.loadCatalogItemsData(),
+      this.loadCarouselItems(),
+      this.loadPageTabItems()
+    ]).then(() => this.setState({loading: false}));
   }
 
   render() {
+    const {loading} = this.state;
+
+    if (loading) { // if your component doesn't have to wait for async data, remove this block
+      return null; // render null when app is not ready
+    }
     return (
       <Fragment>
         <div className="container">
@@ -143,7 +158,7 @@ class MainPage extends Component {
                 {this.state.popularItemsData !== null ?
                   <Fragment>
                     <h2 className="seal-lead">Популярные категории товаров:</h2>
-                    <CategoriesItems items={this.state.popularItemsData}/>
+                    <PopularCategoriesItems items={this.state.popularItemsData}/>
                   </Fragment> :
                   ""
                 }

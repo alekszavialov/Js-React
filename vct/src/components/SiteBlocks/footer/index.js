@@ -1,11 +1,9 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types'
+import {NavLink} from "react-router-dom";
 
 import './styles.css'
 
 export default class Footer extends Component {
-
-  static propTypes = {}
 
   constructor(props) {
     super(props)
@@ -13,13 +11,13 @@ export default class Footer extends Component {
 
   render() {
     const footerNavItems = [
-      {url: '#', name: 'Помощь'},
-      {url: '#', name: 'О нас'},
-      {url: '#', name: 'Акции'},
-      {url: '#', name: 'Новости'},
-      {url: '#', name: 'Оплата и доставка'},
-      {url: '#', name: 'Оптовым клиентам'},
-    ]
+      {url: '/', name: 'Помощь'},
+      {url: '/', name: 'О нас'},
+      {url: '/', name: 'Акции'},
+      {url: '/', name: 'Новости'},
+      {url: '/', name: 'Оплата и доставка'},
+      {url: '/', name: 'Оптовым клиентам'},
+    ];
     return (
       <footer>
         <div className="container">
@@ -31,9 +29,9 @@ export default class Footer extends Component {
             </div>
             <div className="col-md-9">
               <ul className="footer-navigation">
-                {footerNavItems.map((item,index) =>
+                {footerNavItems.map((item, index) =>
                   <li key={item.name + index}>
-                    <a href={item.url}>{item.name}</a>
+                    <NavLink exact to={item.url}>{item.name}</NavLink>
                   </li>
                 )}
               </ul>

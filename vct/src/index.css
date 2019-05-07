@@ -28,7 +28,7 @@ button{
   font-size: 12px;
 }
 
-a:hover, a:focus {
+a:hover, a:focus, a.active {
   color: #995bb8;
   text-decoration: none;
 }
@@ -58,128 +58,6 @@ a, p, span{
   background: #fff;
 }
 
-.top-nav ul {
-  display: block;
-  margin: 0;
-  padding: 0;
-  line-height: 18px;
-}
-
-.top-nav ul li {
-  display: inline-block;
-  vertical-align: middle;
-  padding: 2px 19px;
-}
-
-.top-nav ul li a {
-  display: block;
-}
-
-.callback-block{
-  display: flex;
-  line-height: 22px;
-  justify-content: flex-end;
-}
-
-.callback-block a {
-  display: inline-block;
-  text-decoration: underline;
-  margin: 0px 67px 0 2px;
-}
-
-.head-logo a {
-  overflow: hidden;
-  height: 85px;
-  display: inline-block;
-}
-
-.head-search{
-  display: flex;
-  margin-top: 25px;
-  justify-content: center;
-}
-
-.head-search input {
-  border: 1px solid #cdcccc;
-  border-radius: 4px 0px 0px 4px;
-  padding: 0 10px;
-  border-right: none;
-  font-size: 12px;
-  background: none;
-  outline: none;
-  height: 26px;
-  color: #ababab;
-  width: 263px;
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-}
-
-.head-search button {
-  background: #ababab;
-  height: 26px;
-  width: 30px;
-  border-radius: 0 4px 4px 0;
-  border: 1px solid #cdcccc;
-  border-left: none;
-  position: relative;
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-}
-
-.head-search form{
-  display: inline-flex;
-}
-
-.head-search form:hover input, .head-search form:hover button{
-  border-color: #995bb8;
-}
-
-.head-telephones {
-  display: flex;
-  flex-direction: column;
-}
-
-.head-telephones p {
-  margin: 10px 0 0 54px;
-  font-size: 10px;
-  color: #2a3039;
-}
-
-.head-telephones a {
-  color: #2a3039;
-  margin: 0 0 0 54px;
-  text-transform: uppercase;
-  font-size: 22px;
-  font-family: "MyriadProRegular",sans-serif;
-  letter-spacing: 0;
-  line-height: 24px;
-  align-self: baseline;
-}
-
-.head-telephones a:hover {
-  color: #995bb8;
-}
-
-.head-bucket a{
-  margin-top: 10px;
-  display: flex;
-}
-
-.head-bucket a:hover span{
-  color: #995bb8
-}
-
-.head-bucket a span{
-  margin-top: 4px;
-  color: #2a3039;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-
-
 .shop-block-buy {
   display: flex;
   width: 210px;
@@ -196,6 +74,16 @@ a, p, span{
   -moz-transition: all 0.3s ease;
   transition: all 0.3s ease;
   cursor: pointer;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+
+  /*
+    Introduced in IE 10.
+    See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+  */
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .shop-block-buy span {

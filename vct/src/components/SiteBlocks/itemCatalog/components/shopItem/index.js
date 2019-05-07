@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {NavLink} from "react-router-dom";
 import PropTypes from 'prop-types'
 
 import './styles.css'
@@ -32,15 +33,15 @@ export default class ShopItem extends Component {
       <div className="shop-block">
         <div className="shop-block-container">
           <img src={this.props.item.src} alt="123"/>
-          < a className="shop-block-name" href={this.props.item.href}>{this.props.item.name}</a>
+          <NavLink className="shop-block-name" to={this.props.item.href}>{this.props.item.name}</NavLink>
           <p className="shop-block-descr">{this.props.item.description}</p>
           <div className="shop-block-price">
             {this.props.item.price}
             <p>грн</p>
           </div>
-          <a className="shop-block-buy" onClick={this.addToCart}>
+          <div className="shop-block-buy" onClick={this.addToCart}>
             <span>Купить</span>
-          </a>
+          </div>
         </div>
       </div>
     )

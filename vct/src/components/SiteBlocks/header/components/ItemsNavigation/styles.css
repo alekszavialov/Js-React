@@ -1,4 +1,4 @@
-.shop-navigation ul{
+.shop-navigation ul {
   display: flex;
   flex-direction: row;
 }
@@ -9,15 +9,21 @@
   position: relative;
 }
 
-.shop-navigation ul li a{
+.shop-navigation ul li a {
   font-size: 14px;
   display: block;
   padding: 12px;
 }
 
 .shop-navigation ul li a:hover, .shop-navigation ul li a:focus {
-  background: rgba(174,116,198,0.4);
+  background: rgba(174, 116, 198, 0.4);
   color: #2a3039;
+}
+
+.shop-navigation ul li a.active {
+  background: rgba(174, 116, 198, 0.4);
+  color: #fff;
+  font-weight: bold;
 }
 
 .shop-navigation ul li ul {
@@ -27,7 +33,18 @@
   border-right: 2px solid #9b59b6;
 }
 
-.shop-navigation ul li > ul{
+.shop-navigation ul li ul > li {
+  font-size: 14px;
+  display: block;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.shop-navigation ul li ul > li:hover {
+  background: rgba(174, 116, 198, 0.4);
+}
+
+.shop-navigation ul li > ul {
   position: absolute;
   top: 100%;
   width: 100%;
@@ -41,6 +58,6 @@
   box-sizing: border-box;
 }
 
-.shop-navigation ul li:hover > ul{
+.shop-navigation ul li:hover > ul {
   display: flex;
 }

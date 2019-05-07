@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
+import {NavLink} from 'react-router-dom'
 
 import './styles.css'
 
@@ -9,27 +10,26 @@ export default class CatalogItem extends Component {
 
   static propTypes = {
     item: PropTypes.object
-  }
+  };
 
   constructor(props) {
     super(props)
   }
 
   fillEmptySpace = () => {
-
-    let newList = this.props.item.items.map((item, index) => {
-      return <a href="#" key={item.text + index}>{item.text}</a>
-    });
+    let newList = this.props.item.items.map((item, index) =>
+      <NavLink key={item.text + index} to={item.url}>{item.text}</NavLink>
+    );
     while (newList.length < maxElementsValue) {
-      newList.push(<a href="#" key={newList.length} className="disabled"></a>)
+      newList.push(<a key={newList.length} className="disabled"/>)
     }
     return newList;
-  }
+  };
 
   render() {
     return (
       <li>
-        <a href="#">{this.props.item.name}</a>
+        {this.props.item.name}
         <ul>
           {this.fillEmptySpace()}
         </ul>

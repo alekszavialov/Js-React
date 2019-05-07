@@ -8,7 +8,7 @@ export default class Catalog extends Component {
 
   static propTypes = {
     list: PropTypes.array
-  }
+  };
 
   constructor(props) {
     super(props)

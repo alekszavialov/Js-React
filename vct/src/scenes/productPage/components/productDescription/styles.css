@@ -36,10 +36,9 @@
 }
 
 .brand-zone img {
-  display: block;
+  display: flex;
   width: 128px;
   height: 128px;
-  float: left;
 }
 
 .brand-zone img:before, .brand-zone img:after{

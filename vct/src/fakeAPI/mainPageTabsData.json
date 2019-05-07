@@ -6,12 +6,14 @@
   "items": [
     [
       {
+        "href": "page",
         "src": "https://vct1.com/images/action/235.jpg.pagespeed.ce.op01VOWB3i.jpg",
         "name": "Новогодняя акция: «Фабрика печати Epson» — выбор Чемпиона!",
         "date": "15.11.2018",
         "text": "С 15 ноября по 31 декабря 2018 года купите принтер или МФУ серии «Фабрика печати Epson» и получите в подарок дополнительные контейнеры с оригинальными чернилами Epson и/или упаковку фотобумаги Epson. В некоторых сетях вы сможете оформить беспроцентную рассрочку на устройство или получить другой подарок"
       },
       {
+        "href": "page",
         "src": "http://epson.ua/upload/actions/2018/blackfriday/hero.jpg",
         "name": "Каждый день — «Черная пятница»!",
         "date": "15.11.2018",
@@ -20,12 +22,14 @@
     ],
     [
       {
+        "href": "page",
         "src": "http://epson.ua/upload/resize_cache/iblock/968/381_0_epson/cover-plus-logo.jpg",
         "name": "Epson запускает программу расширенной гарантии Epson CoverPlus",
         "date": "24.04.2019",
         "text": "Теперь каждый владелец устройства Epson может продлить стандартную гарантию, купив пакет расширенной гарантии Epson CoverPlus!"
       },
       {
+        "href": "page",
         "src": "https://vct1.com/public/action/epsonwf.jpg.pagespeed.ce.H_ms4AFBmU.jpg",
         "name": "Серия Epson WorkForce Pro",
         "date": "04.01.2019",

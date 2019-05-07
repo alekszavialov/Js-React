@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+
+import './styles.css'
 
 export default class HeadSearch extends Component {
 
-  static propTypes = {
-  };
-
   constructor(props) {
     super(props);
-
   }
 
 

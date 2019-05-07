@@ -6,11 +6,24 @@ import './styles.css'
 export default class ProductDescription extends Component {
 
   static propTypes = {
-    data: PropTypes.object
-  }
+    data: PropTypes.object,
+    onAddToCart: PropTypes.func
+  };
 
   constructor(props) {
-    super(props)
+    super(props);
+
+    this.addToCart = this.addToCart.bind(this);
+  }
+
+  addToCart() {
+    this.props.onAddToCart({
+      name: this.props.data.name,
+      description: this.props.data.description,
+      src: this.props.data.src,
+      price: this.props.data.price,
+      article: this.props.data.article
+    });
   }
 
   render() {
@@ -36,7 +49,7 @@ export default class ProductDescription extends Component {
             <div className="product-description">
               <p>{this.props.data.description}</p>
               <div className="product-description-price">{this.props.data.price} <p>грн</p></div>
-              <div className="shop-block-buy">Купить</div>
+              <div className="shop-block-buy" onClick={this.addToCart}>Купить</div>
             </div>
             <div className="product-info">
               <h3>Доставка</h3>

@@ -8,7 +8,7 @@ export default class BreadCrumbs extends Component {
 
   static propTypes = {
     items: PropTypes.array
-  }
+  };
 
   constructor(props) {
     super(props)
@@ -22,7 +22,7 @@ export default class BreadCrumbs extends Component {
         </span>
       )
     });
-  }
+  };
 
   render() {
     return (

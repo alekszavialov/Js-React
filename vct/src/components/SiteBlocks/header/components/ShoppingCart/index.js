@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+import './styles.css'
+
 export default class ShoppingCart extends Component {
 
   static propTypes = {
@@ -21,10 +23,10 @@ export default class ShoppingCart extends Component {
 
   render() {
     return (
-      <a href="#">
+      <div>
         <img src="https://vct1.com/img/bucket.gif.pagespeed.ce.bEDFj2GcQE.gif" alt="ВКТ" title="ВКТ" onClick={this.toggleState}/>
         <span>{this.props.value} шт.</span>
-      </a>
+      </div>
     )
   }
 }

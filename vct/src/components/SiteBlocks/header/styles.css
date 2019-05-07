@@ -1,0 +1,44 @@
+.head-logo a {
+  overflow: hidden;
+  height: 85px;
+  display: inline-block;
+}
+
+.head-telephones {
+  display: flex;
+  flex-direction: column;
+}
+
+.head-telephones p {
+  margin: 10px 0 0 54px;
+  font-size: 10px;
+  color: #2a3039;
+}
+
+.head-telephones a {
+  color: #2a3039;
+  margin: 0 0 0 54px;
+  text-transform: uppercase;
+  font-size: 22px;
+  font-family: "MyriadProRegular",sans-serif;
+  letter-spacing: 0;
+  line-height: 24px;
+  align-self: baseline;
+}
+
+.head-telephones a:hover {
+  color: #995bb8;
+}
+
+.callback-block{
+  display: flex;
+  line-height: 22px;
+  justify-content: flex-end;
+}
+
+.callback-block a {
+  display: inline-block;
+  text-decoration: underline;
+  margin: 0 67px 0 2px;
+}
+

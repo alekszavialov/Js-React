@@ -1,18 +1,24 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux';
+import {NavLink} from "react-router-dom";
 import PropTypes from 'prop-types'
 
 import BreadCrumbs from '../../components/SiteBlocks/breadCrumbs'
 import CarouselElement from '../../components/SiteBlocks/carousel'
+import CarouselSmallItem from '../../components/SiteBlocks/carousel/components/carouselSmallItem'
 import SiteTabs from "../../components/SiteBlocks/tabs"
 import ProductDescription from './components/productDescription'
 
+import {addToCart} from "../../data/Store/actions";
 import fetchApi from '../../modules/fetch-api'
 
 import './styles.css'
 
-export default class ProductPage extends Component {
+class ProductPage extends Component {
 
-  static propTypes = {}
+  static propTypes = {
+    onAddToCart: PropTypes.func
+  };
 
   constructor(props) {
     super(props);
@@ -22,7 +28,13 @@ export default class ProductPage extends Component {
       tabsItems: null,
       breadCrumbs: null,
       carouselData: null
-    }
+    };
+
+    this.addToCart = this.addToCart.bind(this);
+  }
+
+  addToCart(item) {
+    this.props.onAddToCart(item);
   }
 
   loadProductData = () => {
@@ -62,17 +74,7 @@ export default class ProductPage extends Component {
         carouselData: {
           ...result,
           items: result.items.map(item =>
-            <div className="accompanying-product-item" key={Math.random()}>
-              <div className="accompanying-product-item-img-wrapper"><img src={item.src} alt=""/></div>
-              <a href={item.href}>{item.name}</a>
-              <div className="accompanying-product-item-bottom">
-                <div className="accompanying-product-item-price">
-                  {item.price}
-                  <p> грн</p>
-                </div>
-                <a href="#" className="shop-block-buy"></a>
-              </div>
-            </div>
+            <CarouselSmallItem key={Math.random()} item={item} onAddToCart={this.addToCart}/>
           )
         }
       }));
@@ -99,7 +101,7 @@ export default class ProductPage extends Component {
                 ) : ""}
               </div>
               {this.state.productData !== null ? (
-                <ProductDescription data={this.state.productData}/>
+                <ProductDescription data={this.state.productData} onAddToCart={this.addToCart}/>
               ) : ""}
             </div>
           </div>
@@ -140,5 +142,12 @@ export default class ProductPage extends Component {
       </div>
     )
   }
-
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddToCart: (item) => dispatch(addToCart(item)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ProductPage)

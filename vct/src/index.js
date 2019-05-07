@@ -9,12 +9,12 @@ const mainImport = configureStore();
 const store = mainImport.store;
 const persistor = mainImport.persistor;
 import {Provider} from 'react-redux'
-import {browserHistory} from 'react-router'
+// import {browserHistory} from 'react-router'
 import { BrowserRouter } from 'react-router-dom';
 
 import {PersistGate} from 'redux-persist/integration/react'
 
-import {syncHistoryWithStore} from 'react-router-redux'
+// import {syncHistoryWithStore} from 'react-router-redux'
 
 import App from './components/App';
 
@@ -22,7 +22,7 @@ import './common'
 import 'normalize.css';
 import './index.css';
 
-const history = syncHistoryWithStore(browserHistory, store);
+// const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
   <Fragment>

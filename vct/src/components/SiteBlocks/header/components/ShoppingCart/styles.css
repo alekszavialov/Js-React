@@ -1,0 +1,17 @@
+.head-bucket div{
+  margin-top: 10px;
+  display: flex;
+  cursor: pointer;
+}
+
+.head-bucket div:hover span{
+  color: #995bb8
+}
+
+.head-bucket div span{
+  margin-top: 4px;
+  color: #2a3039;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
