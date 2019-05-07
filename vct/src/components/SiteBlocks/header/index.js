@@ -35,6 +35,7 @@ class Header extends Component {
     this.toggleModalMenu = this.toggleModalMenu.bind(this);
     this.changeQuantityInCart = this.changeQuantityInCart.bind(this);
     this.removeFromCart = this.removeFromCart.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
   toggleModalMenu() {
@@ -89,7 +90,7 @@ class Header extends Component {
             handleClose={this.toggleModalMenu}/> :
           ''
         }
-        <header>
+        <header ref={elem => this.header = elem}>
           <div className="bg-dark">
             <div className="container">
               <div className="row">
@@ -103,28 +104,30 @@ class Header extends Component {
               </div>
             </div>
           </div>
-          <div className="bg-normal">
-            <div className="container">
-              <div className="row">
-                <div className="col-md-3 head-logo">
-                  <NavLink to='/'>
-                    <img src="https://vct1.com/img/logo.png.pagespeed.ce.dMpD6YjZpM.png"
-                         alt="Логотип компании ВКТ Сервис"
-                         title="Интернет-магазин ВКТ Сервис"/>
-                  </NavLink>
-                </div>
-                <div className="col-md-4 head-search">
-                  <HeadSearch/>
-                </div>
-                <div className="col-md-3 head-telephones">
-                  <p>Наши телефоны</p>
-                  <a href="tel:0522320575">0522 32 05 75</a>
-                  <a href="tel:0997017001">099 70 17 001</a>
-                </div>
-                <div className="col-md-2 head-bucket">
-                  <ShoppingCart
-                    handleClick={this.toggleModalMenu}
-                    value={this.props.cart.reduce((acc, item) => acc + item.quantity, 0)}/>
+          <div className="bg-normal head-line-block">
+            <div className="head-line-default" ref={elem => this.headLine = elem}>
+              <div className="container">
+                <div className="row">
+                  <div className="col-md-3 head-logo">
+                    <NavLink to='/'>
+                      <img src="https://vct1.com/img/logo.png.pagespeed.ce.dMpD6YjZpM.png"
+                           alt="Логотип компании ВКТ Сервис"
+                           title="Интернет-магазин ВКТ Сервис"/>
+                    </NavLink>
+                  </div>
+                  <div className="col-md-4 head-search">
+                    <HeadSearch/>
+                  </div>
+                  <div className="col-md-3 head-telephones">
+                    <p>Наши телефоны</p>
+                    <a href="tel:0522320575">0522 32 05 75</a>
+                    <a href="tel:0997017001">099 70 17 001</a>
+                  </div>
+                  <div className="col-md-2 head-bucket">
+                    <ShoppingCart
+                      handleClick={this.toggleModalMenu}
+                      value={this.props.cart.reduce((acc, item) => acc + item.quantity, 0)}/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -145,6 +148,51 @@ class Header extends Component {
         </header>
       </Fragment>
     )
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll(e) {
+    if (window.scrollY > this.header.clientHeight && this.headLine.className.includes("head-line-default")) {
+      new Promise((resolve, reject) => {
+        this.headLine.classList.remove("fade-visible");
+        this.headLine.classList.add("fade-hidden");
+        setTimeout(() => {
+          resolve();
+        }, 200);
+      })
+        .then(() => {
+          this.header.style.height = this.header.clientHeight + "px";
+          this.headLine.classList.add("head-line-fixed");
+          this.headLine.classList.remove("head-line-default");
+        }).then(() => {
+        this.headLine.classList.remove("fade-hidden");
+        this.headLine.classList.add("fade-visible");
+      });
+    } else if (window.scrollY <= this.header.clientHeight &&
+      this.headLine.className.includes("head-line-fixed")) {
+      new Promise((resolve, reject) => {
+        this.headLine.classList.remove("fade-visible");
+        this.headLine.classList.add("fade-hidden");
+        setTimeout(() => {
+          resolve();
+        }, 200);
+      })
+        .then(() => {
+          this.headLine.classList.add("head-line-default");
+          this.headLine.classList.remove("head-line-fixed");
+        }).then(() => {
+        this.headLine.classList.remove("fade-hidden");
+        this.headLine.classList.add("fade-visible");
+        this.header.style.height = "auto";
+      });
+    }
   }
 }
 

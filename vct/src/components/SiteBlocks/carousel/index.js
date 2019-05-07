@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 
 import AliceCarousel from 'react-alice-carousel';
@@ -13,7 +13,7 @@ export default class CarouselElement extends Component {
     params: PropTypes.object
   };
 
-  constructor(props){
+  constructor(props) {
     super(props)
 
   }

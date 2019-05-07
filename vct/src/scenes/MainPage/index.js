@@ -4,6 +4,8 @@ import {NavLink} from "react-router-dom";
 import PropTypes from 'prop-types';
 
 import CarouselElement from '../../components/SiteBlocks/carousel'
+import CarouselSmallItem from '../../components/SiteBlocks/carousel/components/carouselSmallItem'
+import CarouselBigItem from '../../components/SiteBlocks/carousel/components/carouselBigItem'
 import PopularCategoriesItems from './components/popularCategoriesItems'
 import ItemCatalog from '../../components/SiteBlocks/itemCatalog'
 import SiteTabs from '../../components/SiteBlocks/tabs'
@@ -43,9 +45,7 @@ class MainPage extends Component {
       .then(result => this.setState({
           carouselData: {
             ...result, items: result.items.map(item =>
-              <div key={item.name + Math.random()}>
-                <NavLink to={item.url}><img src={item.src} alt={item.text}/></NavLink>
-              </div>
+              <CarouselBigItem item={item} key={Math.random()}/>
             )
           }
         }
@@ -74,25 +74,7 @@ class MainPage extends Component {
         carouselItemsData: {
           ...result,
           items: result.items.map(item =>
-            <div className="accompanying-product-item" key={Math.random()}>
-              <div className="accompanying-product-item-img-wrapper"><img src={item.src} alt=""/></div>
-              <NavLink to={item.href}>{item.name}</NavLink>
-              <div className="accompanying-product-item-bottom">
-                <div className="accompanying-product-item-price">
-                  {item.price}
-                  <p> грн</p>
-                </div>
-                <div className="shop-block-buy"
-                     onClick={this.addToCart.bind(null, {
-                       name: item.name,
-                       description: item.description,
-                       src: item.src,
-                       price: item.price,
-                       article: item.article
-                     })}>
-                </div>
-              </div>
-            </div>
+            <CarouselSmallItem item={item} onAddToCart={this.addToCart} key={Math.random()}/>
           )
         }
       }));
@@ -106,9 +88,9 @@ class MainPage extends Component {
               (item.map(item =>
                 <div className="tabs-item" key={Math.random()}>
                   <div className="tabs-item-image">
-                      <NavLink to={item.href}>
-                        <img src={item.src} alt=""/>
-                      </NavLink>
+                    <NavLink to={item.href}>
+                      <img src={item.src} alt=""/>
+                    </NavLink>
                   </div>
                   <div className="tabs-item-content">
                     <h3>

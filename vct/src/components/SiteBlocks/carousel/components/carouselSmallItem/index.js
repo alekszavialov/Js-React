@@ -30,7 +30,7 @@ export default class CarouselSmallItem extends Component {
 
   render() {
     return (
-      <div className="accompanying-product-item" key={Math.random()}>
+      <div className="accompanying-product-item">
         <div className="accompanying-product-item-img-wrapper"><img src={this.state.src} alt=""/></div>
         <NavLink to={this.props.item.href}>{this.state.name}</NavLink>
         <div className="accompanying-product-item-bottom">

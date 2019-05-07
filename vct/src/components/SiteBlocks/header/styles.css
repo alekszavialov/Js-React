@@ -42,3 +42,26 @@
   margin: 0 67px 0 2px;
 }
 
+.head-line-fixed {
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 888;
+  background: #ecf0f1;
+}
+
+.fade-visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .2s linear;
+}
+.fade-hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.2s, opacity .2s linear;
+}
+
+.head-line-block {
+   min-height: 90px;
+}
