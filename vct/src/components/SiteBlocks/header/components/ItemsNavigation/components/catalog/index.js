@@ -1,27 +1,39 @@
 import React, {Component} from 'react'
+import {NavLink} from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import './styles.css'
-import CatalogItem from './components/catalogItem'
 
-export default class Catalog extends Component {
+const maxElementsValue = 24;
+
+export default class CatalogItem extends Component {
 
   static propTypes = {
-    list: PropTypes.array
+    item: PropTypes.object
   };
 
   constructor(props) {
     super(props)
   }
 
+  fillEmptySpace = () => {
+    let newList = this.props.item.items.map((item, index) =>
+      <NavLink key={item.text + index} to={item.url}>{item.text}</NavLink>
+    );
+    while (newList.length < maxElementsValue) {
+      newList.push(<a key={newList.length} className="disabled"/>)
+    }
+    return newList;
+  };
+
   render() {
     return (
-      <ul className="toggle-menu">
-        {this.props.list.map(item => {
-          return <CatalogItem item={item} key={item.name + this.props.list.length}/>
-        })}
-      </ul>
+      <li>
+        {this.props.item.name}
+        <ul>
+          {this.fillEmptySpace()}
+        </ul>
+      </li>
     )
   }
-
 }

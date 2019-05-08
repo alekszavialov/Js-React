@@ -1,7 +1,8 @@
 .head-search{
   display: flex;
   margin-top: 25px;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .head-search input {
@@ -39,4 +40,25 @@
 
 .head-search form:hover input, .head-search form:hover button{
   border-color: #995bb8;
+}
+
+.shop-navigation-mobile{
+  position: relative;
+}
+
+.shop-navigation-mobile, .shop-navigation-mobile ul{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.shop-navigation-mobile .toggle-menu{
+  /*display: none;*/
+  position: absolute;
+  top: 100%;
+}
+
+.shop-navigation-mobile .toggle-menu li ul {
+  display: none;
 }

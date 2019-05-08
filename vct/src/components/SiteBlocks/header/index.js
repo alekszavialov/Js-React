@@ -8,7 +8,7 @@ import {addToCart, removeFromCart, decreaseInCart} from '../../../data/Store/act
 import Navigation from './components/Navigation'
 import HeadSearch from './components/HeadSearch'
 import ShoppingCart from './components/ShoppingCart'
-import ItemsNavigation from './components/ItemsNavigation'
+import Catalog from './components/ItemsNavigation'
 import ModalCart from './components/modalCart'
 
 import fetchApi from '../../../modules/fetch-api'
@@ -29,7 +29,8 @@ class Header extends Component {
 
     this.state = {
       isOpen: false,
-      catalogList: null
+      catalogList: null,
+      catalogListFixed: false
     };
 
     this.toggleModalMenu = this.toggleModalMenu.bind(this);
@@ -117,6 +118,14 @@ class Header extends Component {
                   </div>
                   <div className="col-md-4 head-search">
                     <HeadSearch/>
+                    {this.state.catalogListFixed && this.state.catalogList !== null ? (
+                      <div className="shop-navigation-mobile">
+                        <ul>
+                          <li>Каталог</li>
+                          <Catalog list={this.state.catalogList}/>
+                        </ul>
+                      </div>
+                    ) : ""}
                   </div>
                   <div className="col-md-3 head-telephones">
                     <p>Наши телефоны</p>
@@ -136,11 +145,20 @@ class Header extends Component {
             <div className="container">
               <div className="row">
                 <div className="col-md-12">
-                  {this.state.catalogList !== null ? (
-                    <div className="product-card-tabs">
-                      <ItemsNavigation list={this.state.catalogList}/>
+                  <div className="product-card-tabs">
+                    <div className="shop-navigation">
+                      <ul>
+                        <li key='catalog'><NavLink to='/catalog'>Каталог</NavLink>
+                          {!this.state.catalogListFixed && this.state.catalogList !== null ? (
+                            <Catalog list={this.state.catalogList}/>
+                          ) : ""}
+                        </li>
+                        <li key='actions'><NavLink to='/page/actions'>Акции</NavLink></li>
+                        <li key='service'><NavLink to='/page/service'>Сервис</NavLink></li>
+                        <li key='sale'><NavLink to='/page/sale'>Распродажа</NavLink></li>
+                      </ul>
                     </div>
-                  ) : ""}
+                  </div>
                 </div>
               </div>
             </div>
@@ -158,9 +176,9 @@ class Header extends Component {
     window.removeEventListener('scroll', this.handleScroll);
   }
 
-  handleScroll(e) {
+  handleScroll() {
     if (window.scrollY > this.header.clientHeight && this.headLine.className.includes("head-line-default")) {
-      new Promise((resolve, reject) => {
+      new Promise((resolve) => {
         this.headLine.classList.remove("fade-visible");
         this.headLine.classList.add("fade-hidden");
         setTimeout(() => {
@@ -168,6 +186,7 @@ class Header extends Component {
         }, 200);
       })
         .then(() => {
+          this.setState({catalogListFixed: true});
           this.header.style.height = this.header.clientHeight + "px";
           this.headLine.classList.add("head-line-fixed");
           this.headLine.classList.remove("head-line-default");
@@ -177,7 +196,7 @@ class Header extends Component {
       });
     } else if (window.scrollY <= this.header.clientHeight &&
       this.headLine.className.includes("head-line-fixed")) {
-      new Promise((resolve, reject) => {
+      new Promise((resolve) => {
         this.headLine.classList.remove("fade-visible");
         this.headLine.classList.add("fade-hidden");
         setTimeout(() => {
@@ -187,10 +206,11 @@ class Header extends Component {
         .then(() => {
           this.headLine.classList.add("head-line-default");
           this.headLine.classList.remove("head-line-fixed");
+          this.header.style.height = "auto";
+          this.setState({catalogListFixed: false});
         }).then(() => {
         this.headLine.classList.remove("fade-hidden");
         this.headLine.classList.add("fade-visible");
-        this.header.style.height = "auto";
       });
     }
   }
