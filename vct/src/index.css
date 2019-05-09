@@ -75,13 +75,7 @@ a, p, span{
   transition: all 0.3s ease;
   cursor: pointer;
   -moz-user-select: none;
-  -khtml-user-select: none;
   -webkit-user-select: none;
-
-  /*
-    Introduced in IE 10.
-    See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
-  */
   -ms-user-select: none;
   user-select: none;
 }
@@ -173,4 +167,11 @@ main:empty:before {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.not-selected-text{
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

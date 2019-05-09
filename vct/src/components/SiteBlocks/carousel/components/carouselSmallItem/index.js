@@ -38,7 +38,7 @@ export default class CarouselSmallItem extends Component {
             {this.state.price}
             <p> грн</p>
           </div>
-          <div className="shop-block-buy"
+          <div className="shop-block-buy not-selected-text"
                onClick={this.addToCart}
           />
         </div>

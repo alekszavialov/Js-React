@@ -1,6 +1,6 @@
-import React, {Component, Fragment} from 'react'
+import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
-import {NavLink} from 'react-router-dom'
+import {NavLink} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import {addToCart, removeFromCart, decreaseInCart} from '../../../data/Store/actions';
@@ -30,18 +30,28 @@ class Header extends Component {
     this.state = {
       isOpen: false,
       catalogList: null,
-      catalogListFixed: false
+      catalogListFixed: false,
+      mobileListIsOpen: false,
+      isMobile: window.innerWidth <= 992
     };
 
     this.toggleModalMenu = this.toggleModalMenu.bind(this);
+    this.toggleMobileList = this.toggleMobileList.bind(this);
     this.changeQuantityInCart = this.changeQuantityInCart.bind(this);
     this.removeFromCart = this.removeFromCart.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
+    this.updateIsMobile = this.updateIsMobile.bind(this);
   }
 
   toggleModalMenu() {
     this.setState({
       isOpen: !this.state.isOpen
+    })
+  }
+
+  toggleMobileList() {
+    this.setState({
+      mobileListIsOpen: !this.state.mobileListIsOpen
     })
   }
 
@@ -116,26 +126,28 @@ class Header extends Component {
                            title="Интернет-магазин ВКТ Сервис"/>
                     </NavLink>
                   </div>
-                  <div className="col-md-4 head-search">
-                    <HeadSearch/>
-                    {this.state.catalogListFixed && this.state.catalogList !== null ? (
-                      <div className="shop-navigation-mobile">
-                        <ul>
-                          <li>Каталог</li>
-                          <Catalog list={this.state.catalogList}/>
-                        </ul>
-                      </div>
-                    ) : ""}
-                  </div>
-                  <div className="col-md-3 head-telephones">
+                  <div className="col-md-3 col-md-push-4 col-sm-7 col-xs-7 head-telephones">
                     <p>Наши телефоны</p>
                     <a href="tel:0522320575">0522 32 05 75</a>
                     <a href="tel:0997017001">099 70 17 001</a>
                   </div>
-                  <div className="col-md-2 head-bucket">
+                  <div className="col-md-2 col-md-push-4  col-sm-5 col-xs-5 head-bucket">
                     <ShoppingCart
                       handleClick={this.toggleModalMenu}
                       value={this.props.cart.reduce((acc, item) => acc + item.quantity, 0)}/>
+                  </div>
+                  <div className="col-md-4 col-md-pull-5 col-sm-12 col-xs-12 head-search">
+                    <HeadSearch/>
+                    {this.state.catalogListFixed && this.state.catalogList !== null ? (
+                      <div className="shop-navigation-mobile">
+                        <ul className={this.state.mobileListIsOpen ? "shop-navigation-mobile-open" : null}>
+                          <li onClick={this.toggleMobileList}>
+                            Каталог
+                          </li>
+                          <Catalog list={this.state.catalogList} mobileList={true}/>
+                        </ul>
+                      </div>
+                    ) : ""}
                   </div>
                 </div>
               </div>
@@ -148,16 +160,33 @@ class Header extends Component {
                   <div className="product-card-tabs">
                     <div className="shop-navigation">
                       <ul>
-                        <li key='catalog'><NavLink to='/catalog'>Каталог</NavLink>
-                          {!this.state.catalogListFixed && this.state.catalogList !== null ? (
-                            <Catalog list={this.state.catalogList}/>
-                          ) : ""}
-                        </li>
+                        {!this.state.isMobile ?
+                          (
+                            <li key='catalog'><NavLink to='/catalog'>Каталог</NavLink>
+                              {!this.state.catalogListFixed && this.state.catalogList !== null ? (
+                                <Catalog list={this.state.catalogList}/>
+                              ) : ""}
+                            </li>
+                          ) :
+                          null}
                         <li key='actions'><NavLink to='/page/actions'>Акции</NavLink></li>
                         <li key='service'><NavLink to='/page/service'>Сервис</NavLink></li>
                         <li key='sale'><NavLink to='/page/sale'>Распродажа</NavLink></li>
                       </ul>
                     </div>
+                    {this.state.isMobile && this.state.catalogList !== null ?
+                      (
+                        <div className="shop-navigation-mobile">
+                          <ul className={this.state.mobileListIsOpen ? "shop-navigation-mobile-open" : null}>
+                            <li onClick={this.toggleMobileList}>
+                              Каталог
+                            </li>
+                            <Catalog list={this.state.catalogList} mobileList={true}/>
+                          </ul>
+                        </div>
+                      )
+                      :
+                      null}
                   </div>
                 </div>
               </div>
@@ -168,12 +197,20 @@ class Header extends Component {
     )
   }
 
+  updateIsMobile() {
+    this.setState({
+      isMobile: window.innerWidth <= 992
+    });
+  }
+
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('resize', this.updateIsMobile);
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('resize', this.updateIsMobile);
   }
 
   handleScroll() {
@@ -186,7 +223,7 @@ class Header extends Component {
         }, 200);
       })
         .then(() => {
-          this.setState({catalogListFixed: true});
+          this.setState({catalogListFixed: true, mobileListIsOpen: false});
           this.header.style.height = this.header.clientHeight + "px";
           this.headLine.classList.add("head-line-fixed");
           this.headLine.classList.remove("head-line-default");
@@ -207,7 +244,7 @@ class Header extends Component {
           this.headLine.classList.add("head-line-default");
           this.headLine.classList.remove("head-line-fixed");
           this.header.style.height = "auto";
-          this.setState({catalogListFixed: false});
+          this.setState({catalogListFixed: false, mobileListIsOpen: false});
         }).then(() => {
         this.headLine.classList.remove("fade-hidden");
         this.headLine.classList.add("fade-visible");

@@ -9,11 +9,20 @@ const maxElementsValue = 24;
 export default class CatalogItem extends Component {
 
   static propTypes = {
-    item: PropTypes.object
+    item: PropTypes.object,
+    id: PropTypes.number,
+    isMobileList: PropTypes.bool,
+    handleOpenList: PropTypes.func
   };
 
   constructor(props) {
-    super(props)
+    super(props);
+
+    this.toggleMobileList = this.toggleMobileList.bind(this);
+  }
+
+  toggleMobileList(){
+    this.props.handleOpenList(this.props.id, this.props.item.active === true);
   }
 
   fillEmptySpace = () => {
@@ -28,7 +37,10 @@ export default class CatalogItem extends Component {
 
   render() {
     return (
-      <li>
+      <li
+        className={this.props.item.active ? "shop-navigation-mobile-open" : null}
+        onClick={this.props.handleOpenList === null ? null : this.toggleMobileList}
+      >
         {this.props.item.name}
         <ul>
           {this.fillEmptySpace()}

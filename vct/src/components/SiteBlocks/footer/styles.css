@@ -52,5 +52,17 @@ footer {
   color: #707171;
   font-size: 12px;
   margin-left: 10px;
-  letter-spacing: 0px;
+  letter-spacing: 0;
+}
+
+@media only screen and (max-width: 992px)  {
+  .footer-navigation{
+    flex-wrap: wrap;
+    justify-content: center;
+    display: flex;
+  }
+  .footer-navigation li, .footer-navigation li:last-child{
+    border: 1px solid #A0A0A0;
+    margin: 5px;
+  }
 }

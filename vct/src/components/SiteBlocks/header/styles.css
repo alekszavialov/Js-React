@@ -65,3 +65,105 @@
 .head-line-block {
    min-height: 90px;
 }
+
+.product-card-tabs .shop-navigation-mobile .toggle-menu, .product-card-tabs .shop-navigation-mobile .toggle-menu ul{
+  position: relative;
+  top: auto;
+  background: transparent;
+}
+
+.product-card-tabs .shop-navigation-mobile li{
+  line-height: 44px;
+  position: relative;
+}
+
+.product-card-tabs .shop-navigation-mobile li,
+.product-card-tabs .shop-navigation-mobile .toggle-menu a{
+  color: #fff;
+}
+
+.shop-navigation-mobile li:before{
+  content: "";
+  width: 18px;
+  height: 20px;
+  position: absolute;
+  right: 10px;
+  top: 15px;
+  -webkit-mask: url(../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%;
+  mask: url(../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  background-color: #fff;
+}
+
+.shop-navigation-mobile .shop-navigation-mobile-open .toggle-menu li:before {
+  -webkit-mask: url(../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%;
+  mask: url(../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%;
+}
+
+.shop-navigation-mobile .shop-navigation-mobile-open li:before,
+.shop-navigation-mobile .shop-navigation-mobile-open .toggle-menu .shop-navigation-mobile-open:before
+{
+  -webkit-mask: url(../../../public/icons/minus-square-regular.svg) no-repeat 50% 50%;
+  mask: url(../../../public/icons/minus-square-regular.svg) no-repeat 50% 50%;
+}
+
+@media only screen and (max-width: 992px)  {
+  .top-nav ul{
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .callback-block{
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .callback-block a{
+    margin-right: 0;
+  }
+
+  .head-logo{
+    text-align: center;
+  }
+
+  .head-telephones{
+    align-items: center;
+  }
+
+  .head-telephones p{
+    margin: 10px 0 0 0;
+  }
+
+  .head-telephones a{
+    align-self: auto;
+    margin: 0;
+  }
+
+  .head-bucket div{
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .head-line-fixed .head-logo{
+    display: none;
+  }
+
+  .head-search{
+    margin: 10px 0;
+  }
+
+  .shop-navigation ul{
+    justify-content: space-around;
+  }
+
+  .shop-navigation ul li{
+    width: calc(100% / 3);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .top-nav {
+    text-align: center;
+  }
+}

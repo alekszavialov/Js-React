@@ -39,7 +39,7 @@ export default class ShopItem extends Component {
             {this.props.item.price}
             <p>грн</p>
           </div>
-          <div className="shop-block-buy" onClick={this.addToCart}>
+          <div className="shop-block-buy not-selected-text" onClick={this.addToCart}>
             <span>Купить</span>
           </div>
         </div>
