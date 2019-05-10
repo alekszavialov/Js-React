@@ -1,71 +1,156 @@
-.shop-navigation ul {
+.toggle-menu {
   display: flex;
-  flex-direction: row;
-}
-
-.shop-navigation ul li {
-  width: 25%;
-  text-align: center;
+  flex-direction: column;
+  width: 100%;
+  background: #ecf0f1;
   position: relative;
+  z-index: 999;
 }
 
-.shop-navigation ul li a {
+.toggle-menu a {
   font-size: 14px;
-  display: block;
-  padding: 12px;
 }
 
-.shop-navigation ul li a:hover, .shop-navigation ul li a:focus {
+.toggle-menu span, .toggle-menu a, .shop-navigation-mobile span {
+  display: block;
+  line-height: 30px;
+  color: #2a3039;
+  cursor: pointer;
+}
+
+.toggle-menu ul {
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-navigation-mobile{
+  text-align: center;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.shop-navigation-mobile > ul > ul{
+  display: none;
+}
+
+.shop-navigation-mobile > .shop-navigation-mobile-open > ul{
+  display: flex;
+}
+
+.shop-navigation-mobile span{
+  width: 100%;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.toggle-menu .shop-navigation-mobile-open span,
+.shop-navigation-mobile span:hover,
+.toggle-menu > li > ul > a:hover,
+.toggle-menu > li > ul > .active {
   background: rgba(174, 116, 198, 0.4);
   color: #2a3039;
 }
 
-.shop-navigation ul li a.active, .shop-navigation-mobile ul li a.active {
-  background: rgba(174, 116, 198, 0.4);
-  color: #fff;
-  font-weight: bold;
-}
-
-.shop-navigation ul li ul {
+.toggle-menu > li > ul{
   display: none;
-  border-bottom: 3px solid #9b59b6;
-  border-left: 3px solid #9b59b6;
-  border-right: 2px solid #9b59b6;
 }
 
-.shop-navigation ul li ul > li {
-  font-size: 14px;
-  display: block;
-  padding: 12px;
-  cursor: pointer;
-}
-
-.shop-navigation ul li ul > li:hover {
-  background: rgba(174, 116, 198, 0.4);
-}
-
-.shop-navigation ul li > ul {
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  background-color: #ecf0f1;
-  left: 0;
-  z-index: 555;
-  text-align: left;
-  margin: 0;
-  padding: 0;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-.shop-navigation ul li ul li ul{
-  cursor: default;
-}
-
-.shop-navigation ul li:hover > ul {
+.toggle-menu > .shop-navigation-mobile-open > ul{
   display: flex;
 }
 
-.disabled{
-  cursor: not-allowed;
-}
+/*header ul .toggle-menu {*/
+/*flex-direction: column;*/
+/*position: absolute;*/
+/*width: 100%;*/
+/*z-index: 999;*/
+/*}*/
+
+/*.toggle-menu ul, .toggle-menu {*/
+/*background: #ecf0f1;*/
+/*}*/
+
+/*.toggle-menu > li > ul {*/
+/*display: none;*/
+/*}*/
+
+/*.toggle-menu li {*/
+/*width: 100%;*/
+/*}*/
+
+/*.toggle-menu li span, .toggle-menu li a {*/
+/*border-bottom: 1px solid #9b59b6;*/
+/*width: 100%;*/
+/*cursor: pointer;*/
+/*color: #2a3039;*/
+/*}*/
+
+/*.shop-navigation .toggle-menu li:hover span,*/
+/*.shop-navigation .toggle-menu li ul a:hover:not(.disabled),*/
+/*.shop-navigation .toggle-menu li ul .active {*/
+/*color: #fff;*/
+/*font-weight: bold;*/
+/*background: rgba(174, 116, 198, 0.4);*/
+/*}*/
+
+/*.toggle-menu li:last-child span, .toggle-menu li:last-child a {*/
+/*border-bottom: none;*/
+/*}*/
+
+/*.shop-navigation .toggle-menu li:hover ul {*/
+/*display: flex;*/
+/*}*/
+
+/*.toggle-menu li .disabled, .toggle-menu li ul .active {*/
+/*cursor: not-allowed;*/
+/*}*/
+
+/*.shop-navigation ul li a.active, .shop-navigation-mobile ul li a.active {*/
+/*background: rgba(174, 116, 198, 0.4);*/
+/*color: #fff;*/
+/*font-weight: bold;*/
+/*}*/
+
+/*.shop-navigation ul li ul {*/
+/*display: none;*/
+/*border-bottom: 3px solid #9b59b6;*/
+/*border-left: 3px solid #9b59b6;*/
+/*border-right: 2px solid #9b59b6;*/
+/*}*/
+
+/*.shop-navigation ul li ul > li {*/
+/*font-size: 14px;*/
+/*display: block;*/
+/*padding: 12px;*/
+/*cursor: pointer;*/
+/*}*/
+
+/*.shop-navigation ul li ul > li:hover {*/
+/*background: rgba(174, 116, 198, 0.4);*/
+/*}*/
+
+/*.shop-navigation ul li > ul {*/
+/*position: absolute;*/
+/*top: 100%;*/
+/*width: 100%;*/
+/*background-color: #ecf0f1;*/
+/*left: 0;*/
+/*z-index: 555;*/
+/*text-align: left;*/
+/*margin: 0;*/
+/*padding: 0;*/
+/*flex-direction: column;*/
+/*box-sizing: border-box;*/
+/*}*/
+
+/*.shop-navigation ul li ul li ul{*/
+/*cursor: default;*/
+/*}*/
+
+/*.shop-navigation ul li:hover > ul {*/
+/*display: flex;*/
+/*}*/
+
+/*.disabled{*/
+/*cursor: not-allowed;*/
+/*}*/

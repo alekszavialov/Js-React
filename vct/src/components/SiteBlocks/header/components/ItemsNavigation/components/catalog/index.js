@@ -41,7 +41,7 @@ export default class CatalogItem extends Component {
         className={this.props.item.active ? "shop-navigation-mobile-open" : null}
         onClick={this.props.handleOpenList === null ? null : this.toggleMobileList}
       >
-        {this.props.item.name}
+        <span>{this.props.item.name}</span>
         <ul>
           {this.fillEmptySpace()}
         </ul>

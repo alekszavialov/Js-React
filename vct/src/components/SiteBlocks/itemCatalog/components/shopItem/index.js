@@ -19,7 +19,7 @@ export default class ShopItem extends Component {
       src: this.props.item.src,
       price: this.props.item.price,
       article: this.props.item.article,
-    }
+    };
 
     this.addToCart = this.addToCart.bind(this);
   }
@@ -45,7 +45,7 @@ export default class ShopItem extends Component {
         </div>
       </div>
     )
-  }
+  };
 
   createItemBanner = () => {
     return (
@@ -57,7 +57,7 @@ export default class ShopItem extends Component {
         </div>
       </div>
     )
-  }
+  };
 
   render() {
     return (

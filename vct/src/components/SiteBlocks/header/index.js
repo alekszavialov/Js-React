@@ -142,7 +142,7 @@ class Header extends Component {
                       <div className="shop-navigation-mobile">
                         <ul className={this.state.mobileListIsOpen ? "shop-navigation-mobile-open" : null}>
                           <li onClick={this.toggleMobileList}>
-                            Каталог
+                            <span>Каталог</span>
                           </li>
                           <Catalog list={this.state.catalogList} mobileList={true}/>
                         </ul>
@@ -162,7 +162,7 @@ class Header extends Component {
                       <ul>
                         {!this.state.isMobile ?
                           (
-                            <li key='catalog'><NavLink to='/catalog'>Каталог</NavLink>
+                            <li key='catalog' className="head=catalog"><NavLink to='/catalog'>Каталог</NavLink>
                               {!this.state.catalogListFixed && this.state.catalogList !== null ? (
                                 <Catalog list={this.state.catalogList}/>
                               ) : ""}
@@ -179,7 +179,7 @@ class Header extends Component {
                         <div className="shop-navigation-mobile">
                           <ul className={this.state.mobileListIsOpen ? "shop-navigation-mobile-open" : null}>
                             <li onClick={this.toggleMobileList}>
-                              Каталог
+                              <span>Каталог</span>
                             </li>
                             <Catalog list={this.state.catalogList} mobileList={true}/>
                           </ul>
