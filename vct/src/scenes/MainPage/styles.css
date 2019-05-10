@@ -126,6 +126,10 @@
     width: 50%;
   }
 
+  .accompanying-product-item-bottom{
+    justify-content: space-around;
+  }
+
 }
 
 @media only screen and (max-width: 580px)  {

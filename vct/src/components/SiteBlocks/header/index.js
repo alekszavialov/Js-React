@@ -162,7 +162,7 @@ class Header extends Component {
                       <ul>
                         {!this.state.isMobile ?
                           (
-                            <li key='catalog' className="head=catalog"><NavLink to='/catalog'>Каталог</NavLink>
+                            <li key='catalog' className="head-catalog"><span>Каталог</span>
                               {!this.state.catalogListFixed && this.state.catalogList !== null ? (
                                 <Catalog list={this.state.catalogList}/>
                               ) : ""}

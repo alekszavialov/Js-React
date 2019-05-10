@@ -48,3 +48,33 @@
 .react-tabs__tab-panel a {
   color: #995bb8;
 }
+
+@media only screen and (max-width: 992px)  {
+  .catalog-shop-blocks{
+    padding: 10px 0;
+  }
+  .shop-sort-block{
+    margin: 25px auto 10px;
+  }
+  .bread-crumbs, .shop-tags{
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+  .react-tabs__tab-list{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 766px)  {
+  .catalog-shop-blocks .shop-block{
+    flex: 0 0 calc(100%/2);
+  }
+}
+
+@media only screen and (max-width: 520px)  {
+  .catalog-shop-blocks .shop-block{
+    flex: 0 0 100%;
+  }
+}

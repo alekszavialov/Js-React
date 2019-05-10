@@ -18,34 +18,30 @@
 }
 
 .parameters-block-head:hover:after{
-  color: #9b59b6;
-  border-color: #9b59b6;
+  background: #9b59b6;
 }
 
 .parameters-block-head.active:after{
-  line-height: normal;
-  content: "+";
-  align-items: center;
+  -webkit-mask: url(../../../../../../public/icons/minus-square-regular.svg) no-repeat 50% 50%;
+  mask: url(../../../../../../public/icons/minus-square-regular.svg) no-repeat 50% 50%;
 }
 
 .parameters-block-head:after {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  transition: all 0.3s ease;
   content: "-";
-  display: flex;
   font-size: 16px;
   color: #334150;
   position: relative;
-  margin: 0px 0 0 20px;
+  margin: 0 0 0 20px;
   top: 1px;
-  justify-content: center;
-  line-height: 11px;
   width: 15px;
   height: 15px;
-  letter-spacing: -1px;
-  border: 1px solid #334150;
-  border-radius: 3px;
+  -webkit-mask: url(../../../../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%;
+  mask: url(../../../../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  background-color: #334150;
+  display: block;
+  right: 5px;
 }
 
 .shop-sort-block ul{

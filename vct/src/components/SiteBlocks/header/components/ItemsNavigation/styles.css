@@ -8,7 +8,12 @@
 }
 
 .toggle-menu a {
-  font-size: 14px;
+  font-size: 12px;
+}
+
+.shop-navigation-mobile a, .shop-navigation-mobile span{
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .toggle-menu span, .toggle-menu a, .shop-navigation-mobile span {
@@ -16,6 +21,10 @@
   line-height: 30px;
   color: #2a3039;
   cursor: pointer;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .toggle-menu ul {
@@ -51,6 +60,10 @@
   color: #2a3039;
 }
 
+.shop-navigation-mobile span:hover:before{
+  background: #2a3039;
+}
+
 .toggle-menu > li > ul{
   display: none;
 }
@@ -59,98 +72,51 @@
   display: flex;
 }
 
-/*header ul .toggle-menu {*/
-/*flex-direction: column;*/
-/*position: absolute;*/
-/*width: 100%;*/
-/*z-index: 999;*/
-/*}*/
+.shop-navigation-mobile .toggle-menu span{
+  position: relative;
+}
 
-/*.toggle-menu ul, .toggle-menu {*/
-/*background: #ecf0f1;*/
-/*}*/
+.shop-navigation-mobile .toggle-menu span:before{
+  content: "";
+  -webkit-mask: url(../../../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%;
+  mask: url(../../../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  background-color: #fff;
+  width: 18px;
+  height: 20px;
+  display: block;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-/*.toggle-menu > li > ul {*/
-/*display: none;*/
-/*}*/
+.shop-navigation-mobile .toggle-menu .shop-navigation-mobile-open span:before{
+  -webkit-mask: url(../../../../../public/icons/minus-square-regular.svg) no-repeat 50% 50%;
+  mask: url(../../../../../public/icons/minus-square-regular.svg) no-repeat 50% 50%;
+}
 
-/*.toggle-menu li {*/
-/*width: 100%;*/
-/*}*/
+.shop-navigation-mobile > ul > li > span{
+  position: relative;
+}
 
-/*.toggle-menu li span, .toggle-menu li a {*/
-/*border-bottom: 1px solid #9b59b6;*/
-/*width: 100%;*/
-/*cursor: pointer;*/
-/*color: #2a3039;*/
-/*}*/
+.shop-navigation-mobile > .shop-navigation-mobile-open > li > span:before{
+  transform: rotate(90deg) translateX(-50%);;
+}
 
-/*.shop-navigation .toggle-menu li:hover span,*/
-/*.shop-navigation .toggle-menu li ul a:hover:not(.disabled),*/
-/*.shop-navigation .toggle-menu li ul .active {*/
-/*color: #fff;*/
-/*font-weight: bold;*/
-/*background: rgba(174, 116, 198, 0.4);*/
-/*}*/
-
-/*.toggle-menu li:last-child span, .toggle-menu li:last-child a {*/
-/*border-bottom: none;*/
-/*}*/
-
-/*.shop-navigation .toggle-menu li:hover ul {*/
-/*display: flex;*/
-/*}*/
-
-/*.toggle-menu li .disabled, .toggle-menu li ul .active {*/
-/*cursor: not-allowed;*/
-/*}*/
-
-/*.shop-navigation ul li a.active, .shop-navigation-mobile ul li a.active {*/
-/*background: rgba(174, 116, 198, 0.4);*/
-/*color: #fff;*/
-/*font-weight: bold;*/
-/*}*/
-
-/*.shop-navigation ul li ul {*/
-/*display: none;*/
-/*border-bottom: 3px solid #9b59b6;*/
-/*border-left: 3px solid #9b59b6;*/
-/*border-right: 2px solid #9b59b6;*/
-/*}*/
-
-/*.shop-navigation ul li ul > li {*/
-/*font-size: 14px;*/
-/*display: block;*/
-/*padding: 12px;*/
-/*cursor: pointer;*/
-/*}*/
-
-/*.shop-navigation ul li ul > li:hover {*/
-/*background: rgba(174, 116, 198, 0.4);*/
-/*}*/
-
-/*.shop-navigation ul li > ul {*/
-/*position: absolute;*/
-/*top: 100%;*/
-/*width: 100%;*/
-/*background-color: #ecf0f1;*/
-/*left: 0;*/
-/*z-index: 555;*/
-/*text-align: left;*/
-/*margin: 0;*/
-/*padding: 0;*/
-/*flex-direction: column;*/
-/*box-sizing: border-box;*/
-/*}*/
-
-/*.shop-navigation ul li ul li ul{*/
-/*cursor: default;*/
-/*}*/
-
-/*.shop-navigation ul li:hover > ul {*/
-/*display: flex;*/
-/*}*/
-
-/*.disabled{*/
-/*cursor: not-allowed;*/
-/*}*/
+.shop-navigation-mobile > ul > li > span:before{
+  content: "";
+  -webkit-mask: url(../../../../../public/icons/bars-solid.svg) no-repeat 50% 50%;
+  mask: url(../../../../../public/icons/bars-solid.svg) no-repeat 50% 50%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  background-color: #fff;
+  width: 18px;
+  height: 20px;
+  display: block;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+}

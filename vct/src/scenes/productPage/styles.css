@@ -41,3 +41,41 @@
 .shop-full-descr-item-field{
   margin-left: 2%;
 }
+
+@media only screen and (max-width: 992px)  {
+
+  .products-in-stockroom{
+    text-align: center;
+  }
+
+  .brand-zone{
+    position: relative;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .product-img-wrapper{
+    padding-bottom: 0;
+  }
+
+  .product-info-name{
+    text-align: center;
+  }
+
+  .product-description{
+    flex: 0 0 100%;
+    margin-right: 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .product-description .shop-block-buy{
+    margin-bottom: 15px;
+  }
+
+  .product-info{
+    display: none;
+  }
+}

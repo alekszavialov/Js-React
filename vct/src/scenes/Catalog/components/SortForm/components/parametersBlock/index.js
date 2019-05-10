@@ -10,20 +10,31 @@ export default class ParametersBlock extends Component {
   static propTypes = {
     items: PropTypes.object,
     id: PropTypes.number
-  }
+  };
 
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      isActive: true
-    }
+      isActive: window.innerWidth >= 992
+    };
 
     this.toggleChange = this.toggleChange.bind(this);
+    this.updateIsMobile = this.updateIsMobile.bind(this);
   }
 
   toggleChange() {
     this.setState({isActive: !this.state.isActive});
+  }
+
+  updateIsMobile() {
+    this.setState({
+      isActive: window.innerWidth >= 992
+    });
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.updateIsMobile);
   }
 
   render() {
@@ -46,6 +57,10 @@ export default class ParametersBlock extends Component {
         </ul>
       </Fragment>
     )
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateIsMobile);
   }
 
 }
