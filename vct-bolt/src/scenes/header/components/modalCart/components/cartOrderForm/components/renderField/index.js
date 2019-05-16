@@ -13,12 +13,17 @@ export default class RenderField extends Component {
         this.createObject = this.createObject.bind(this);
     }
 
-
     createObject() {
+        const { input } = this.props;
+        const { meta: { touched, error, warning } } = this.props;
         switch (this.props.params.object) {
             case 'input' :
                 return (
                     <input
+                        className={
+                            (touched && (error || warning)) ? "errorField" : ""
+                        }
+                        {...input}
                         placeholder={this.props.params.placeholder}
                         type={this.props.params.type}
                         required={this.props.params.required}
@@ -26,14 +31,23 @@ export default class RenderField extends Component {
                 );
             case 'select' :
                 return (
-                    <select>
+                    <select
+                        {...input}
+                        className={
+                            (touched && (error || warning)) ? "errorField" : ""
+                        }
+                    >
                         {this.props.params.options.map(item => <option key={Math.random()}>{item}</option>)}
                     </select>
                 );
             case 'textarea' :
                 return (
                     <textarea
+                        {...input}
                         placeholder={this.props.params.placeholder}
+                        className={
+                            (touched && (error || warning)) ? "errorField" : ""
+                        }
                     />
                 );
             default:
@@ -41,13 +55,13 @@ export default class RenderField extends Component {
         }
     }
 
-//
-// <input {...input} placeholder={label} type={type}/>
-// {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-
     render() {
+        const { meta: { touched, error, warning } } = this.props;
         return (
             <Fragment>
+                {touched &&
+                ((error && <span>{error}</span>) ||
+                    (warning && <span>{warning}</span>))}
                 {this.createObject()}
             </Fragment>
         );

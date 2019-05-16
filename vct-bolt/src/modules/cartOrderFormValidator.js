@@ -1,40 +1,48 @@
-// const required = value => value ? undefined : 'Required';
-// const maxLength = max => value =>
-//     value && value.length > max ? `Must be ${max} characters or less` : undefined;
-// const maxLength15 = maxLength(15);
-// const number = value => value && isNaN(Number(value)) ? 'Must be a number' : undefined;
-// const minValue = min => value =>
-//     value && value < min ? `Must be at least ${min}` : undefined;
-// const minValue18 = minValue(18);
-// const email = value =>
-//     value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
-//         'Invalid email address' : undefined;
-// const tooOld = value =>
-//     value && value > 65 ? 'You might be too old for this' : undefined;
-// const aol = value =>
-//     value && /.+@aol\.com/.test(value) ?
-//         'Really? You still use AOL for your email?' : undefined;
+const requiredCheck = data => (data ? undefined : 'Поле обязательное для заполнения');
+const maxLengthCheck = (data, max) =>
+    data && data.length > max ? `Должно быть ${max} символов или меньше` : undefined;
+const minLengthCheck = (data, min) =>
+    data && data.length < min ? `Должно быть ${min} символов или больше` : undefined;
+const wordsCheck = data =>
+    data && !/^([a-zA-Z]|[\u0400-\u04FF])+$/i.test(data) ? 'Доступны только буквы' : undefined;
+const emailCheck = data =>
+    data && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data)
+        ? 'Неверный EMail'
+        : undefined;
+const phoneNumberCheck = data =>
+    data && !/^(\+380(50|66|95|99|63|93|73|67|96|97|98|68)[0-9]{7})$/i.test(data) ?
+        'Неверный номер телефона, должно быть 13 символов' :
+        undefined;
 
-const validate = values => {
-    console.log(values), 'values';
-    const errors = {}
-    if (!values.firstName) {
-        errors.firstName = 'Required'
-    } else if (values.firstName.length < 2) {
-        errors.firstName = 'Minimum be 2 characters or more'
+export default function cartOrderFormValidator(value, allValues, formProps, name) {
+    let errors = [];
+    if (value !== undefined){
+        value = value.trim();
     }
-    if (!values.email) {
-        errors.email = 'Required'
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address'
+    switch (name) {
+        case 'name':
+        case 'surname' :
+        case 'town' :
+            errors.push(requiredCheck(value));
+            errors.push(maxLengthCheck(value, 25));
+            errors.push(minLengthCheck(value, 2));
+            errors.push(wordsCheck(value));
+            break;
+        case 'phone':
+            errors.push(requiredCheck(value));
+            errors.push(phoneNumberCheck(value));
+            break;
+        case 'email':
+            errors.push(requiredCheck(value));
+            errors.push(emailCheck(value));
+            break;
+        case 'payOptions':
+        case 'deliveryOption':
+            errors.push(requiredCheck(value));
+            break;
+        default:
+            break;
     }
-    if (!values.lastName) {
-        errors.lastName = 'Required'
-    } else if (values.lastName.length < 2) {
-        errors.lastName = 'Minimum be 2 characters or more'
-    }
-    console.log(errors);
-    return errors;
+    errors = errors.filter(item => item !== undefined);
+    return errors.length > 0 ? errors[0] : undefined;
 };
-
-export default validate;
