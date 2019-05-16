@@ -1,0 +1,25 @@
+{
+  "params": {
+    "dots": true,
+    "arrows": false,
+    "infinite": true,
+    "autoplay": true,
+    "autoplaySpeed": 6000,
+    "speed": 500,
+    "slidesToShow": 1,
+    "slidesToScroll": 1,
+    "pauseOnHover": true
+  },
+  "items": [
+    {
+      "url": "#",
+      "src": "https://vct1.com/img/slider/epson_service.jpg.pagespeed.ce.CzIKBqmjM-.jpg",
+      "text": "Банер слайдера."
+    },
+    {
+      "url": "#",
+      "src": "https://vct1.com/img/slider/pantum.jpg.pagespeed.ce.934YCqpgyu.jpg",
+      "text": "Банер слайдера."
+    }
+  ]
+}

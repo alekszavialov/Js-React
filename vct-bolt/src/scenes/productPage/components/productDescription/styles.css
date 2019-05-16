@@ -1,0 +1,127 @@
+.product-img-wrapper{
+  padding-bottom: 180px;
+  position: relative;
+}
+
+.product-img-block{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 380px;
+  margin: 0 auto;
+  height: 320px;
+}
+
+.product-img-block img{
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.products-in-stockroom{
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.brand-zone {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 15px;
+  padding: 10px;
+  position: absolute;
+  bottom: 0;
+  left: 120px;
+  width: 750px;
+}
+
+.brand-zone img {
+  display: flex;
+  width: 128px;
+  height: 128px;
+}
+
+.brand-zone img:before, .brand-zone img:after{
+  content: '';
+  display: table;
+}
+
+.brand-zone img:after{
+  clear: both;
+}
+
+.product-info-wrapper{
+  display: flex;
+  flex-direction: row;
+}
+
+.product-description{
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+  flex: 0 0 59%;
+
+}
+
+.product-description p {
+  min-height: 60px;
+  color: #2a67aa;
+  font-family: "SegoeUILight",sans-serif;
+  display: block;
+  margin: 10px 0;
+}
+
+.product-description-price{
+  font-size: 51px;
+  letter-spacing: -1px;
+  font-family: "Vegur-Bold",sans-serif;
+  color: #9b59b6;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.product-description-price p {
+  font-size: 30px;
+  margin: 0;
+  color: #9b59b6;
+}
+
+.product-description .shop-block-buy {
+  margin: 10px 0 0 0;
+  font-size: 19px;
+  color: #fff;
+  font-family: "Lato-Heavy",sans-serif;
+  cursor: pointer;
+}
+
+.product-description .shop-block-buy:before{
+  margin-right: 10px;
+}
+
+.product-info{
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 41%
+}
+
+.product-info-delivery-info-block{
+  margin-bottom: 10px;
+}
+
+.product-info-delivery-info-block p {
+  color: #414e5c;
+  margin-bottom: 5px;
+  font-size: 12px;
+  display: block;
+}
+
+.product-info-delivery-info-block p:first-child {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.product-info h3 {
+  font-size: 18px;
+  margin: 5px 0;
+}

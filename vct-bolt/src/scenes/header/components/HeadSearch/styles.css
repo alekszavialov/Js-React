@@ -1,0 +1,121 @@
+.head-search{
+  display: flex;
+  margin-top: 25px;
+  align-items: center;
+  flex-direction: column;
+}
+
+.head-search input {
+  border: 1px solid #cdcccc;
+  border-radius: 4px 0 0 4px;
+  padding: 0 10px;
+  border-right: none;
+  font-size: 12px;
+  background: none;
+  outline: none;
+  height: 26px;
+  color: #ababab;
+  width: 263px;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.head-search button {
+  background: #ababab;
+  height: 26px;
+  width: 30px;
+  border-radius: 0 4px 4px 0;
+  border: 1px solid #cdcccc;
+  border-left: none;
+  position: relative;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.head-search form{
+  display: inline-flex;
+}
+
+.head-search form:hover input, .head-search form:hover button{
+  border-color: #995bb8;
+}
+
+/*.shop-navigation-mobile{*/
+  /*position: relative;*/
+/*}*/
+
+.head-search > .shop-navigation-mobile{
+  margin-top: 5px;
+}
+
+/*.head-search .toggle-menu{*/
+  /*max-height: 470px;*/
+  /*overflow-y: auto;*/
+/*}*/
+
+/*.head-search .shop-navigation-mobile li:before{*/
+  /*top: 6px;*/
+/*}*/
+
+/*.toggle-menu ul, .toggle-menu{*/
+  /*background: #ecf0f1;*/
+/*}*/
+
+/*.toggle-menu li{*/
+  /*position: relative;*/
+/*}*/
+
+/*.toggle-menu a{*/
+  /*display: block;*/
+  /*width: 100%;*/
+  /*color: #995bb8;*/
+/*}*/
+
+/*.toggle-menu a:hover{*/
+  /*background: rgba(174,116,198,0.4);*/
+  /*color: #334150;*/
+/*}*/
+
+/*.head-search .shop-navigation-mobile li:before{*/
+  /*background: #334150;*/
+/*}*/
+
+/*.shop-navigation-mobile, .shop-navigation-mobile ul{*/
+  /*display: flex;*/
+  /*flex-direction: column;*/
+  /*width: 100%;*/
+  /*align-items: center;*/
+/*}*/
+
+/*.shop-navigation-mobile .toggle-menu{*/
+  /*display: none;*/
+  /*position: absolute;*/
+  /*top: 100%;*/
+/*}*/
+
+/*.shop-navigation-mobile .toggle-menu li ul {*/
+  /*display: none;*/
+  /*cursor: auto;*/
+/*}*/
+
+/*.shop-navigation-mobile li {*/
+  /*-moz-user-select: none;*/
+  /*-webkit-user-select: none;*/
+  /*-ms-user-select: none;*/
+  /*user-select: none;*/
+  /*line-height: 32px;*/
+  /*width: 100%;*/
+  /*text-align: center;*/
+  /*cursor: pointer;*/
+/*}*/
+
+/*.shop-navigation-mobile li:hover{*/
+  /*background: rgba(174,116,198,0.4);*/
+/*}*/
+
+/*.shop-navigation-mobile .toggle-menu .shop-navigation-mobile-open ul,*/
+/*.shop-navigation-mobile .shop-navigation-mobile-open .toggle-menu{*/
+  /*display: flex;*/
+/*}*/

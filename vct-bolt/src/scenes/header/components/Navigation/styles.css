@@ -1,0 +1,16 @@
+.top-nav ul {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  line-height: 18px;
+}
+
+.top-nav ul li {
+  padding: 2px 19px;
+}
+
+.top-nav ul li a {
+  display: block;
+}

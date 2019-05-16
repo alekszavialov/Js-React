@@ -1,0 +1,59 @@
+.parameters-block-head{
+  font-size: 15px;
+  color: #334150;
+  border-bottom: 1px solid #334150;
+  word-wrap: break-word;
+  display: flex;
+  line-height: 18px;
+  cursor: pointer;
+  padding-bottom: 10px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  justify-content: space-between;
+}
+
+.parameters-block-head:hover{
+  color: #9b59b6;
+}
+
+.parameters-block-head:hover:after{
+  background: #9b59b6;
+}
+
+.parameters-block-head.active:after{
+  -webkit-mask: url(../../../../../../public/icons/minus-square-regular.svg) no-repeat 50% 50%;
+  mask: url(../../../../../../public/icons/minus-square-regular.svg) no-repeat 50% 50%;
+}
+
+.parameters-block-head:after {
+  content: "-";
+  font-size: 16px;
+  color: #334150;
+  position: relative;
+  margin: 0 0 0 20px;
+  top: 1px;
+  width: 15px;
+  height: 15px;
+  -webkit-mask: url(../../../../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%;
+  mask: url(../../../../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  background-color: #334150;
+  display: block;
+  right: 5px;
+}
+
+.shop-sort-block ul{
+  display: none;
+  padding: 10px 0 0 0;
+}
+
+.shop-sort-block ul.active{
+  display: block;
+}
+
+.shop-sort-block ul li {
+  display: block;
+  margin: 5px 0 0 10px;
+}

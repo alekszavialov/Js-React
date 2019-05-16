@@ -1,0 +1,117 @@
+.slick-slide
+  a
+    display: block
+  img
+    max-width: 100%
+    height: auto
+
+.slick-dots
+  padding-right: 35px
+  position: absolute
+  bottom: 10px
+  right: 0
+  display: flex !important
+  flex-direction: row
+  justify-content: flex-end
+  li
+    width: 16px
+    height: 16px
+    margin: 0 4px
+  button
+    font-size: 0
+    border-radius: 0
+    background: rgba(42, 48, 57, 0.7)
+    position: relative
+    border: 1px solid rgba(160, 122, 176, 0.7)
+    box-shadow: none
+    outline: none
+    cursor: pointer
+    display: block
+    width: 100%
+    height: 100%
+    opacity: 0.8
+    transition: all 0.3s ease
+    &:hover
+      opacity: 1
+  .slick-active
+    button
+      opacity: 1
+      &:before
+        content: ""
+        display: block
+        width: 6px
+        height: 6px
+        border: 1px solid rgba(160, 122, 176, 0.7)
+        position: absolute
+        left: 50%
+        top: 50%
+        background: #ABABAB
+        transform: translateX(-50%) translateY(-50%)
+
+.slick-arrow
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+  font-size: 0
+  display: block
+  width: 35px
+  height: 60px
+  opacity: 0.2
+  background-color: #bdc3c7
+  border: none
+  outline: none
+  transition: all 0.3s ease
+  z-index: 1
+  &:hover
+    background-color: #9b59b6
+    opacity: 1
+
+.slick-prev
+  left: 0
+  -webkit-mask: url(../../public/icons/caret-left-solid.svg) no-repeat 50% 50%
+  mask: url(../../public/icons/caret-left-solid.svg) no-repeat 50% 50%
+  mask-size: cover
+
+.slick-next
+  right: 0
+  -webkit-mask: url(../../public/icons/caret-right-solid.svg) no-repeat 50% 50%
+  mask: url(../../public/icons/caret-right-solid.svg) no-repeat 50% 50%
+  mask-size: cover
+
+.accompanying-product-item
+  margin: 0 10px
+  display: flex
+  flex-direction: column
+  align-items: center
+  a
+    display: block
+    margin: 5px 0
+    height: 52px
+    overflow: hidden
+    color: #334150
+    font-weight: bold
+    font-family: "MyriadProSemibold", sans-serif
+  .accompanying-product-item-img-wrapper
+    display: block
+    max-width: 140px
+    max-height: 140px
+
+.accompanying-product-item-bottom
+  display: flex
+  flex-direction: row
+  width: 100%
+  align-items: center
+  justify-content: space-between
+
+.accompanying-product-item-price
+  font-size: 17px
+  font-weight: bold
+  color: #9b59b6
+  display: flex
+  flex-direction: row
+  align-items: baseline
+  p
+    color: #9b59b6
+    font-size: 12px
+
+

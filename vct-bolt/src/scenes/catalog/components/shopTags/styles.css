@@ -1,0 +1,16 @@
+.shop-tags {
+  background: #ecf0f1;
+  margin: 10px 15px 0 0;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.shop-tags a {
+  padding: 5px;
+  color: #334150;
+  font-size: 12px;
+  line-height: 12px;
+  margin: 5px;
+}
