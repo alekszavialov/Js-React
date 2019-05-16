@@ -44,10 +44,6 @@ export default class ShoppingCartModal extends Component {
         this.props.handleSubmit();
     }
 
-    submit = values => {
-        window.alert (JSON.stringify (values));
-    };
-
     render() {
         const { items } = this.props;
         const totalPrice = this.props.items.reduce((acc, item) => acc + item.price * item.quantity, 0);

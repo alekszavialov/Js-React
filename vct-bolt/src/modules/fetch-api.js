@@ -6,6 +6,3 @@ export default function fetchApi(url = './fakeAPI/headerItemNavigationItems.json
     return fetch(url)
         .then(results => results.json());
 };
-
-
-
