@@ -79,7 +79,8 @@ class Catalog extends Component {
         //     ));
 
         const result = require('../../fakeAPI/catalogProductItemsData.json');
-        this.setState({
+        this.setState(
+            {
                 catalogItems: result
             }
         );
@@ -97,7 +98,8 @@ class Catalog extends Component {
         //     ));
 
         const result = require('../../fakeAPI/carouselOneItemData.json');
-        this.setState({
+        this.setState(
+            {
                 carouselAdData: result
             }
         );

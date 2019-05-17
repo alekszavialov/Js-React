@@ -6,6 +6,7 @@
   "productParameters": [
     {
       "head": "Производитель:",
+      "name": "Brand",
       "options": [
         "Epson",
         "HP",
@@ -14,6 +15,7 @@
     },
     {
       "head": "Производитель:",
+      "name": "parametr1",
       "options": [
         "Epson",
         "HP",
@@ -22,6 +24,7 @@
     },
     {
       "head": "Производитель:",
+      "name": "parametr2",
       "options": [
         "Epson",
         "HP",
@@ -30,6 +33,7 @@
     },
     {
       "head": "Производитель:",
+      "name": "parametr3",
       "options": [
         "Epson",
         "HP",
@@ -38,6 +42,7 @@
     },
     {
       "head": "Производитель:",
+      "name": "parametr4",
       "options": [
         "Epson",
         "HP",

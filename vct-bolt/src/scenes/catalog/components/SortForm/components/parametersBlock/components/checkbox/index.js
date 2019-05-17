@@ -7,7 +7,8 @@ import { Field } from 'redux-form';
 export default class Checkbox extends Component {
 
     static propTypes = {
-        name: PropTypes.string
+        name: PropTypes.string,
+        onChange: PropTypes.func
     };
 
     constructor(props) {
@@ -22,22 +23,16 @@ export default class Checkbox extends Component {
 
     toggleChange() {
         this.setState({ isChecked: !this.state.isChecked });
+        this.props.onChange({ value: !this.state.isChecked === true ? this.props.name : null });
     }
 
     render() {
         const checkboxClass = this.state.isChecked ? 'check' : 'unchecked';
         return (
-            <Fragment>
-                <Field name={this.props.name}
-                       value={this.props.name}
-                       component="input"
-                       type="checkbox"
-                       checked={this.state.isChecked}/>
-                <div className="custom-checkbox-container" onClick={this.toggleChange}>
-                    <span className={`custom-checkbox-${checkboxClass}`}></span>
-                    {this.props.name}
-                </div>
-            </Fragment>
+            <div className="custom-checkbox-container" onClick={this.toggleChange}>
+                <span className={`custom-checkbox-${checkboxClass}`}/>
+                {this.props.name}
+            </div>
         );
     }
 

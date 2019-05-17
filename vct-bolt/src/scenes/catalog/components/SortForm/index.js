@@ -3,7 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import RangeSlider from './components/rangeSlider';
-import ParametersBlock from './components/parametersBlock';
+import RenderField from './components';
 
 import './styles.css';
 
@@ -14,56 +14,53 @@ class SortForm extends Component {
         productParameters: PropTypes.array
     };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
+
+        this.state = {
+            sortData: []
+        };
+
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    handleSubmit(e){
-        console.log(e);
+    handleSubmit(e) {
+        e.preventDefault();
+        console.log();
     }
 
-// <div className="shop-sort-block">
-// <RangeSlider values={this.props.sliderValues}/>
-// </div>
+    handleChange(data) {
+        // this.setState({
+        //     sortData: [...this.state.sortData, data]
+        // });
+        // console.log(this.state.sortData);
+    }
+
+//
 // {this.props.productParameters.map((item, index) =>
 // <div className="shop-sort-block" key={index}>
-// <ParametersBlock items={item} id={index}/>
+// <ParametersBlock items={item} onChange={this.handleChange}/>
 // </div>
 // )}
 
     render() {
+        const { sliderValues } = this.props;
         return (
             <form onSubmit={this.handleSubmit}>
-                <Field
-                    name="firstName"
-                    component="input"
-                    type="text"
-                    placeholder="First Name"
-                />
-                <Field
-                    name="lastName"
-                    component="input"
-                    type="text"
-                    placeholder="Last Name"
-                />
-                <Field
-                    name="employed"
-                    component="input"
-                    type="checkbox"
-                />
-                <Field
-                    name="employed1"
-                    component="input"
-                    type="checkbox"
-                />
-                <button type="submit" title="Применить текущие параметры" className="shop-block-buy">Применить</button>
+                <div className="shop-sort-block">
+                    <RangeSlider values={this.props.sliderValues}/>
+                </div>
+                <button type="submit" className="shop-block-buy">Применить</button>
             </form>
         );
     }
 }
 
-export default reduxForm({
-    form: 'sortData'
+SortForm = reduxForm({
+    form: 'SortForm'
 })(SortForm);
+
+export default SortForm;
+

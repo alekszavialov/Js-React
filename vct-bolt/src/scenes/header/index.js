@@ -48,7 +48,7 @@ class Header extends Component {
     }
 
     handleSubmit(){
-        console.log(this.props.cartOrderForm);
+        console.log(JSON.stringify(this.props.cartOrderForm));
     }
 
     componentDidMount() {
