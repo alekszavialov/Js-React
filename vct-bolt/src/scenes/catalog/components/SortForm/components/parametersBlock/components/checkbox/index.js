@@ -1,15 +1,8 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import './styles.css';
-import { Field } from 'redux-form';
 
 export default class Checkbox extends Component {
-
-    static propTypes = {
-        name: PropTypes.string,
-        onChange: PropTypes.func
-    };
 
     constructor(props) {
         super(props);
@@ -17,21 +10,27 @@ export default class Checkbox extends Component {
         this.state = {
             isChecked: false
         };
-
-        this.toggleChange = this.toggleChange.bind(this);
+        this.input = React.createRef();
+        this.toggleCheck = this.toggleCheck.bind(this);
     }
 
-    toggleChange() {
-        this.setState({ isChecked: !this.state.isChecked });
-        this.props.onChange({ value: !this.state.isChecked === true ? this.props.name : null });
+    toggleCheck() {
+        this.input.current.click();
     }
 
     render() {
         const checkboxClass = this.state.isChecked ? 'check' : 'unchecked';
+        const { input } = this.props;
         return (
-            <div className="custom-checkbox-container" onClick={this.toggleChange}>
+            <div className="custom-checkbox-container" onClick={this.toggleCheck}>
                 <span className={`custom-checkbox-${checkboxClass}`}/>
-                {this.props.name}
+                <input ref={this.input} type="checkbox" {...input}
+                       onClick={() => {
+                           input.onChange();
+                           this.setState({
+                               isChecked: !this.state.isChecked
+                           });
+                       }}/>
             </div>
         );
     }

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import RangeSlider from './components/rangeSlider';
+import ParametersBlock from './components/parametersBlock';
 import RenderField from './components';
 
 import './styles.css';
@@ -38,20 +39,20 @@ class SortForm extends Component {
         // console.log(this.state.sortData);
     }
 
-//
-// {this.props.productParameters.map((item, index) =>
-// <div className="shop-sort-block" key={index}>
-// <ParametersBlock items={item} onChange={this.handleChange}/>
-// </div>
-// )}
+
 
     render() {
-        const { sliderValues } = this.props;
+        const { sliderValues, productParameters } = this.props;
         return (
             <form onSubmit={this.handleSubmit}>
                 <div className="shop-sort-block">
-                    <RangeSlider values={this.props.sliderValues}/>
+                    <RangeSlider values={sliderValues}/>
                 </div>
+                {productParameters.map((item, index) =>
+                    <div className="shop-sort-block" key={index}>
+                        <ParametersBlock items={item} onChange={this.handleChange}/>
+                    </div>
+                )}
                 <button type="submit" className="shop-block-buy">Применить</button>
             </form>
         );

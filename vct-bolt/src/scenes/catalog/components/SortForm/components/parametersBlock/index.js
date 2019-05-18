@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import Checkbox from './components/checkbox';
@@ -36,10 +37,14 @@ export default class ParametersBlock extends Component {
         window.addEventListener('resize', this.updateIsMobile);
     }
 
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateIsMobile);
+    }
+
     render() {
-        console.log(this.props.items);
         const checkboxClass = this.state.isActive ? 'active' : '';
         const { items } = this.props;
+        console.log(items);
         return (
             <Fragment>
                 <span className={`parameters-block-head ${checkboxClass}`} onClick={this.toggleChange}>
@@ -51,7 +56,10 @@ export default class ParametersBlock extends Component {
                             const itemID = `option${  items.name  }${  index}`;
                             return (
                                 <li key={itemID}>
-                                    <Checkbox name={item} onChange={this.handleChange}/>
+                                    <Field
+                                        name={`${items.name}_${item}`}
+                                        component={Checkbox}
+                                    />
                                 </li>
                             );
                         }
@@ -61,9 +69,7 @@ export default class ParametersBlock extends Component {
         );
     }
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateIsMobile);
-    }
+
 
 }
 
