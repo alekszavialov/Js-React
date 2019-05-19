@@ -4,6 +4,7 @@ import {getFormValues} from 'redux-form';
 import PropTypes from 'prop-types';
 
 import { addToCart, removeFromCart, decreaseInCart } from '../../data/Store/actions';
+import { getData } from '../../data/Data/actions';
 
 import HeaderComponent from './components/index';
 
@@ -18,7 +19,10 @@ class Header extends Component {
         cartOrderForm: PropTypes.object,
         onAddToCart: PropTypes.func,
         onDecreaseInCart: PropTypes.func,
-        onRemoveFromCart: PropTypes.func
+        onRemoveFromCart: PropTypes.func,
+
+        data: PropTypes.object,
+        onGetData: PropTypes.func,
     };
 
     constructor(props) {
@@ -61,6 +65,7 @@ class Header extends Component {
 
     findProduct(article) {
         const { cart } = this.props;
+        this.props.onGetData('../fakeAPI/catalogItems.json', 'test1');
         return cart.filter(cartItem => cartItem.article === article)[0];
     };
 
@@ -164,6 +169,8 @@ class Header extends Component {
         const { catalogListFixed } = this.state;
         const { mobileListIsOpen } = this.state;
 
+
+        console.log(this.props.data);
         return (
             <HeaderComponent
                 navigationList={list}
@@ -188,7 +195,9 @@ class Header extends Component {
 const mapStateToProps = (state) => {
     return {
         cart: state.Store,
-        cartOrderForm: getFormValues('submitOrder')(state)
+        cartOrderForm: getFormValues('submitOrder')(state),
+
+        data: state.Data,
     };
 };
 
@@ -196,7 +205,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onAddToCart: (item, value) => dispatch(addToCart(item, value)),
         onDecreaseInCart: (item, value) => dispatch(decreaseInCart(item, value)),
-        onRemoveFromCart: (item) => dispatch(removeFromCart(item))
+        onRemoveFromCart: (item) => dispatch(removeFromCart(item)),
+
+        onGetData: (url, name) => dispatch(getData(url, name))
     };
 };
 

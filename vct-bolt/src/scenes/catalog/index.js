@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import { reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import CatalogComponent from './components';
@@ -36,6 +38,8 @@ class Catalog extends Component {
         this.loadCarouselItems = this.loadCarouselItems.bind(this);
         this.loadMoreProducts = this.loadMoreProducts.bind(this);
         this.addToCart = this.addToCart.bind(this);
+
+        this.changeFormField = this.changeFormField.bind(this);
     }
 
     componentWillMount() {
@@ -47,6 +51,17 @@ class Catalog extends Component {
         this.loadTabsData();
         this.loadCarouselItems();
     }
+
+    changeFormField(data) {
+        if (!data.remove) {
+            for (let key in data) {
+                this.props.change(key, data[key]);
+            }
+        } else {
+            this.props.change(data.remove, '');
+        }
+
+    };
 
     loadMoreProducts() {
         this.setState({
@@ -72,6 +87,10 @@ class Catalog extends Component {
     }
 
     loadProductList() {
+        // axios.get(`../../fakeAPI/catalogProductItemsData.json`)
+        //     .then(res => {
+        //         console.log(res, 'ads');
+        //     })
         // fetchApi('../../fakeAPI/catalogProductItemsData.json')
         //     .then(result => this.setState({
         //         catalogItems: result
@@ -116,6 +135,8 @@ class Catalog extends Component {
         this.setState(
             {
                 productOptions: result
+            }, () => {
+                this.changeFormField({ ...result.sliderValues });
             }
         );
     };
@@ -222,6 +243,7 @@ class Catalog extends Component {
             tabsData,
             carouselProductsData
         } = this.state;
+        console.log(productOptions, 'render options');
         return (
             <CatalogComponent
                 productOptions={productOptions}
@@ -233,6 +255,8 @@ class Catalog extends Component {
                 carouselProductsData={carouselProductsData}
                 onAddToCart={this.addToCart}
                 onLoadMoreProducts={this.loadMoreProducts}
+
+                changeFormField={this.changeFormField}
             />
         );
     }
@@ -244,4 +268,12 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(Catalog);
+// export default connect(null, mapDispatchToProps)(Catalog);
+export default reduxForm({
+    form: 'sortForm'
+})(
+    connect(
+        null,
+        mapDispatchToProps
+    )(Catalog)
+);

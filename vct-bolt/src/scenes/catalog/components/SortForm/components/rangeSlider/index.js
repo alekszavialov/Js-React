@@ -1,73 +1,65 @@
-import React, { Component, Fragment } from 'react';
-import { Field } from 'redux-form';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
 
 import './styles.css';
-import cartOrderFormValidator from '../../../../../../modules/cartOrderFormValidator';
-import RenderField from '../../../../../header/components/modalCart/components/cartOrderForm/components/renderField';
 
 export default class RangeSlider extends Component {
 
     static propTypes = {
-        values: PropTypes.object
+        values: PropTypes.object,
+        changeFormField: PropTypes.func
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            value: { min: this.props.values.min, max: this.props.values.max }
+            values: { min: this.props.values.min, max: this.props.values.max }
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.changeFormField = this.changeFormField.bind(this);
     }
 
+    changeFormField(){
+        this.props.changeFormField({...this.state.values});
+    }
 
-    handleChange(name, event) {
-        let value = Number(event.target.value.replace(/0+(?!$)/, ''));
-        if (isNaN(value)){
-            event.preventDefault();
-            return;
-        }
-        if (value < this.props.values.min || value > this.props.values.max) {
-            value = this.props.values[name];
+    handleChange(event) {
+        const value = event.target ? {[event.target.name]: Number(event.target.value.replace(/0+(?!$)/, ''))} : event;
+        if (event.target){
+            if (isNaN(value[event.target.name])){
+                event.preventDefault();
+                return;
+            }
+            if (value[event.target.name] < this.props.values.min || value[event.target.name] > this.props.values.max) {
+                value[event.target.name] = this.props.values[event.target.name];
+            }
         }
         this.setState({
-            value: { ...this.state.value, [name]: value }
-        });
+            values: { ...this.state.values, ...value }
+        }, () => this.changeFormField());
     }
 
     render() {
+        const {values} = this.state;
         return (
-            <Fragment>
+            <div className="shop-sort-block">
                 <div className="priceslider-head">
                     <p>Цена</p>
                     <span>от</span>
-
-                    <Field
-                        name="priceMin"
-                        component="input"
-                        type="text"
-                        props={{value: this.state.value.min}}
-                        onChange={this.handleChange.bind(this, 'min')}
-                    />
+                    <input type="text" name="min" value={values.min} onChange={this.handleChange}/>
                     <span>до</span>
-                    <Field
-                        name="priceMax"
-                        component="input"
-                        type="text"
-                        props={{value: this.state.value.max}}
-                        onChange={this.handleChange.bind(this, 'max')}
-                    />
+                    <input type="text" name="max" value={values.max} onChange={this.handleChange}/>
                 </div>
                 <InputRange
-                    maxValue={this.props.values.max}
                     minValue={this.props.values.min}
-                    value={this.state.value}
-                    onChange={value => this.setState({ value })}/>
-            </Fragment>
+                    maxValue={this.props.values.max}
+                    value={values}
+                    onChange={value => this.handleChange(value)}/>
+            </div>
         );
     }
 }

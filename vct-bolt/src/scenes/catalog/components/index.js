@@ -18,7 +18,8 @@ export default class CatalogComponent extends Component {
         tabsData: PropTypes.object,
         carouselProductsData: PropTypes.object,
         onAddToCart: PropTypes.func,
-        onLoadMoreProducts: PropTypes.func
+        onLoadMoreProducts: PropTypes.func,
+        changeFormField: PropTypes.func
     };
 
     constructor(props) {
@@ -26,6 +27,11 @@ export default class CatalogComponent extends Component {
 
         this.loadMoreProducts = this.loadMoreProducts.bind(this);
         this.addToCart = this.addToCart.bind(this);
+        this.changeFormField = this.changeFormField.bind(this);
+    }
+
+    changeFormField(data) {
+        this.props.changeFormField(data);
     }
 
     loadMoreProducts(item) {
@@ -56,6 +62,7 @@ export default class CatalogComponent extends Component {
                                 <SortForm
                                     sliderValues={productOptions.sliderValues}
                                     productParameters={productOptions.productParameters}
+                                    changeFormField={this.changeFormField}
                                 />
                             }
                         </div>
