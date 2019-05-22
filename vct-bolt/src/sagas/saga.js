@@ -1,20 +1,20 @@
 import axios from 'axios';
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import { addToData } from '../data/Data/actions';
 import { mutateData } from './requireRoots';
 
-function getData(url) {
-    return axios.get(`${'https://cors-anywhere.herokuapp.com/'}${url}`);
+function getData(url, name) {
+    return axios.get(url)
+        .then(response => mutateData(name, response.data));
 }
 
 /** saga worker that is responsible for the side effects */
 function* loginEffectSaga(action) {
     try {
-        const data = yield call(getData, action.url);
-        yield put(addToData(action.name, mutateData(action.name, data.data)));
+        const data = yield call(getData, action.url, action.name);
+        yield put(addToData(action.name, data));
     } catch (e) {
-        // catch error on a bad axios call
-        // alert using an alert library
+        console.log(e);
     }
 }
 
@@ -23,5 +23,5 @@ function* loginEffectSaga(action) {
  * 'LOGIN_WATCHER'
  */
 export function* loginWatcherSaga() {
-    yield takeLatest('GET_DATA', loginEffectSaga);
+    yield takeEvery('GET_DATA', loginEffectSaga);
 }

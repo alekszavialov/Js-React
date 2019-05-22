@@ -1,4 +1,6 @@
-export default function requireFiles(url) {
+import cyrillicToTranslit from 'cyrillic-to-translit-js';
+
+export function requireFiles(url) {
     switch (url) {
         case 'catalogProductItemsData':
             return require('../fakeAPI/catalogProductItemsData.json');
@@ -32,7 +34,7 @@ export default function requireFiles(url) {
 }
 
 const mutateSales = (data) => data.map(item => {
-        return { ...item, url: `/${item.url.replace(/\//gi, '-').substring(1)}` };
+        return { ...item, url: `/product-${item.id}-${cyrillicToTranslit().transform(item.title.replace(/\//g, ''), '_')}` };
     }
 );
 

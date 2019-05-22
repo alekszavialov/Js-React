@@ -34,17 +34,22 @@ class ProductPage extends Component {
     }
 
     componentDidMount() {
+        const id = this.props.match.url.match(/\d+/)[0];
+        this.props.onGetData(`http://api.vct1.com/product/${id}`, 'productData');
+        this.props.onGetData(`http://api.vct1.com/specifications/${id}`, 'specifications');
+        this.props.onGetData(`http://api.vct1.com/comments/${id}`, 'comments');
         Promise.all([
-            !this.props.productPageData && this.props.onGetData('productPageData', 'productPageData'),
-            !this.props.productPageBreadCrumbs && this.props.onGetData('productPageBreadCrumbs', 'productPageBreadCrumbs'),
-            !this.props.productPageTabsData && this.props.onGetData('productPageTabsData', 'productPageTabsData'),
-            !this.props.carouselManyItemsData && this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
+
+            // !this.props.productPageData && this.props.onGetData('productPageData', 'productPageData'),
+            // !this.props.productPageBreadCrumbs && this.props.onGetData('productPageBreadCrumbs', 'productPageBreadCrumbs'),
+            // !this.props.productPageTabsData && this.props.onGetData('productPageTabsData', 'productPageTabsData'),
+            // !this.props.carouselManyItemsData && this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
         ]).then(
             () => {
-                this.loadProductData();
-                this.loadBreadCrumbs();
-                this.loadPageTabs();
-                this.loadCarouselItems();
+                // this.loadProductData();
+                // this.loadBreadCrumbs();
+                // this.loadPageTabs();
+                // this.loadCarouselItems();
             }
         );
     }
@@ -140,7 +145,7 @@ class ProductPage extends Component {
     }
 
     render() {
-        console.log(this.props);
+        console.log(this.props.data);
         const {
             breadCrumbs,
             productData,

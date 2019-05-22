@@ -30,7 +30,7 @@ class MainPage extends Component {
             carouselProductsData: null,
             popularItemsData: null,
             catalogItems: null,
-            tabItems: null,
+            tabItems: null
         };
 
         this.addToCart = this.addToCart.bind(this);
@@ -40,13 +40,16 @@ class MainPage extends Component {
         this.loadCatalogItemsData = this.loadCatalogItemsData.bind(this);
         this.loadCarouselItems = this.loadCarouselItems.bind(this);
         this.loadPageTabItems = this.loadPageTabItems.bind(this);
+
+        this.setAndMutateData = this.setAndMutateData.bind(this);
+        this.mutateSales = this.mutateSales.bind(this);
     }
 
     componentDidMount() {
         Promise.all([
             // this.props.onGetData('carouselOneItemData', 'carouselOneItemData'),
             // this.props.onGetData('mainPopularCategoriesItems', 'mainPopularCategoriesItems'),
-            this.props.onGetData('http://api.vct1.com/topsales/', 'topSales'),
+            this.props.onGetData('http://api.vct1.com/topsales/', 'topSales')
             // this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
             // this.props.onGetData('mainPageTabsData', 'mainPageTabsData'),
         ]).then(
@@ -56,6 +59,22 @@ class MainPage extends Component {
                 // this.loadCatalogItemsData();
                 // this.loadCarouselItems();
                 // this.loadPageTabItems();
+                this.setAndMutateData();
+            }
+        );
+    }
+
+
+    setAndMutateData() {
+        const { topSales } = this.props.data;
+        this.setState({
+            catalogItems: topSales && this.mutateSales(topSales)
+        });
+    }
+
+    mutateSales(data) {
+        return data.map(item => {
+                return { ...item, url: `/${item.url.replace(/\//gi, '-').substring(1)}` };
             }
         );
     }
@@ -112,7 +131,7 @@ class MainPage extends Component {
         // this.props.onGetData('catalogItems', 'catalogItems');
     };
 
-    loadCarouselItems(){
+    loadCarouselItems() {
         // fetchApi('../../fakeAPI/carouselManyItemsData.json')
         //     .then(result => this.setState({
         //         carouselItemsData: {
@@ -136,7 +155,7 @@ class MainPage extends Component {
         // this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData');
     };
 
-    loadPageTabItems(){
+    loadPageTabItems() {
         // fetchApi('../../fakeAPI/mainPageTabsData.json')
         //     .then(result => this.setState({
         //             tabItems: {
@@ -200,7 +219,7 @@ class MainPage extends Component {
 
     render() {
         console.log(this.props.data);
-        const {topSales} = this.props.data;
+        const { topSales } = this.props.data;
         const {
             carouselAdData,
             popularItemsData,
