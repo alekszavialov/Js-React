@@ -14,11 +14,11 @@ export default class ShopItem extends Component {
         super(props);
 
         this.state = {
-            name: this.props.item.name,
+            name: this.props.item.title,
             description: this.props.item.description,
-            src: this.props.item.src,
+            src: this.props.item.img,
             price: this.props.item.price,
-            article: this.props.item.article
+            article: this.props.item.id
         };
 
         this.addToCart = this.addToCart.bind(this);
@@ -31,14 +31,16 @@ export default class ShopItem extends Component {
     }
 
     createItemBlock() {
+        const {name, description, src, price} = this.state;
+        const {url} = this.props.item;
         return (
             <div className="shop-block">
                 <div className="shop-block-container">
-                    <img src={this.props.item.src} alt="123"/>
-                    <NavLink className="shop-block-name" to={this.props.item.href}>{this.props.item.name}</NavLink>
-                    <p className="shop-block-descr">{this.props.item.description}</p>
+                    <img src={src} alt="123"/>
+                    <NavLink className="shop-block-name" to={url}>{name}</NavLink>
+                    <p className="shop-block-descr">{description}</p>
                     <div className="shop-block-price">
-                        {this.props.item.price}
+                        {price}
                         <p>грн</p>
                     </div>
                     <div className="shop-block-buy not-selected-text" onClick={this.addToCart}>

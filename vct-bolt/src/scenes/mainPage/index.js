@@ -44,18 +44,18 @@ class MainPage extends Component {
 
     componentDidMount() {
         Promise.all([
-            this.props.onGetData('carouselOneItemData', 'carouselOneItemData'),
-            this.props.onGetData('mainPopularCategoriesItems', 'mainPopularCategoriesItems'),
-            this.props.onGetData('catalogItems', 'catalogItems'),
-            this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
-            this.props.onGetData('mainPageTabsData', 'mainPageTabsData'),
+            // this.props.onGetData('carouselOneItemData', 'carouselOneItemData'),
+            // this.props.onGetData('mainPopularCategoriesItems', 'mainPopularCategoriesItems'),
+            this.props.onGetData('http://api.vct1.com/topsales/', 'topSales'),
+            // this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
+            // this.props.onGetData('mainPageTabsData', 'mainPageTabsData'),
         ]).then(
             () => {
-                this.loadCarouselData();
-                this.loadPopularItemsData();
-                this.loadCatalogItemsData();
-                this.loadCarouselItems();
-                this.loadPageTabItems();
+                // this.loadCarouselData();
+                // this.loadPopularItemsData();
+                // this.loadCatalogItemsData();
+                // this.loadCarouselItems();
+                // this.loadPageTabItems();
             }
         );
     }
@@ -200,6 +200,7 @@ class MainPage extends Component {
 
     render() {
         console.log(this.props.data);
+        const {topSales} = this.props.data;
         const {
             carouselAdData,
             popularItemsData,
@@ -211,7 +212,7 @@ class MainPage extends Component {
             <MainPageComponent
                 carouselAdData={carouselAdData}
                 popularItemsData={popularItemsData}
-                catalogItems={catalogItems}
+                catalogItems={topSales}
                 carouselProductsData={carouselProductsData}
                 tabItems={tabItems}
                 onAddToCart={this.addToCart}

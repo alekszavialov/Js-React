@@ -24,8 +24,8 @@ export default class ItemCatalog extends Component {
     render() {
         return (
             <div className="shop-items">
-                {this.props.items.map(item =>
-                    <ShopItem item={item} key={item.name + Math.random()} addToCart={this.onAddToCart}/>
+                {this.props.items.map((item, index) =>
+                    <ShopItem item={item} key={item.title + index} addToCart={this.onAddToCart}/>
                 )}
             </div>
 

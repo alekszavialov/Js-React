@@ -1,5 +1,5 @@
 export default function requireFiles(url) {
-    switch (url){
+    switch (url) {
         case 'catalogProductItemsData':
             return require('../fakeAPI/catalogProductItemsData.json');
         case 'carouselOneItemData':
@@ -30,3 +30,18 @@ export default function requireFiles(url) {
             return null;
     }
 }
+
+const mutateSales = (data) => data.map(item => {
+        return { ...item, url: `/${item.url.replace(/\//gi, '-').substring(1)}` };
+    }
+);
+
+export function mutateData(name, data) {
+    switch (name) {
+        case 'topSales':
+            return mutateSales(data);
+        default:
+            return data;
+    }
+}
+

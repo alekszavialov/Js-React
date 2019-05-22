@@ -140,7 +140,7 @@ class ProductPage extends Component {
     }
 
     render() {
-        console.log(this.props.data);
+        console.log(this.props);
         const {
             breadCrumbs,
             productData,
