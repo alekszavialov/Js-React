@@ -5,6 +5,7 @@ module.exports = {
     outputPath: path.resolve(__dirname, '../', '../', 'build'),
     entryPath: path.resolve(__dirname, '../', '../', 'src/index.js'),
     templatePath: path.resolve(__dirname, '../', '../', 'src/index.html'),
+    apiPath: path.resolve(__dirname, '../', '../', 'src/fakeAPI'),
     imagesFolder: 'images',
     fontsFolder: 'fonts',
     cssFolder: 'css',

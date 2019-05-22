@@ -7,7 +7,7 @@ import MainPage from '../scenes/mainPage';
 import Catalog from '../scenes/catalog';
 import ProductPage from "../scenes/productPage";
 
-class App extends React.Component {
+export default class App extends React.Component {
     render() {
         return (
             <Fragment>
@@ -15,9 +15,9 @@ class App extends React.Component {
                 <main>
                     <Switch>
                         <Route exact path='/' component={MainPage}/>
-                        <Route path='/catalog' component={Catalog}/>
-                        <Route path='/product' component={ProductPage}/>
-                        <Route render={() => <Redirect to="/"/>}/>
+                        <Route path='/catalog/:catName' exact strict component={Catalog}/>
+                        <Route path='/product/:productName' exact strict component={ProductPage}/>
+                        <Redirect to="/" />
                     </Switch>
                 </main>
                 <Footer/>
@@ -25,5 +25,3 @@ class App extends React.Component {
         );
     }
 }
-
-export default App;

@@ -4,7 +4,6 @@ import {getFormValues} from 'redux-form';
 import PropTypes from 'prop-types';
 
 import { addToCart, removeFromCart, decreaseInCart } from '../../data/Store/actions';
-import { getData } from '../../data/Data/actions';
 
 import HeaderComponent from './components/index';
 
@@ -20,9 +19,6 @@ class Header extends Component {
         onAddToCart: PropTypes.func,
         onDecreaseInCart: PropTypes.func,
         onRemoveFromCart: PropTypes.func,
-
-        data: PropTypes.object,
-        onGetData: PropTypes.func,
     };
 
     constructor(props) {
@@ -65,7 +61,6 @@ class Header extends Component {
 
     findProduct(article) {
         const { cart } = this.props;
-        this.props.onGetData('../fakeAPI/catalogItems.json', 'test1');
         return cart.filter(cartItem => cartItem.article === article)[0];
     };
 
@@ -153,13 +148,21 @@ class Header extends Component {
 
     render() {
         const list = [
-            { text: 'Главная', url: 'main-page' },
-            { text: 'О нас', url: 'contacts' },
-            { text: 'Новости', url: 'contacts' },
-            { text: 'Магазин', url: 'contacts' },
-            { text: 'Сервисный центр', url: 'contacts' },
-            { text: 'Контакты', url: '/catalog' },
-            { text: 'Вход', url: '/product' }
+            { text: 'Главная', url: '/' },
+            { text: 'О нас', url: '/' },
+            { text: 'Новости', url: '/' },
+            { text: 'Магазин', url: '/' },
+            { text: 'Сервисный центр', url: {
+                    pathname: "/catalog"
+                } },
+            { text: 'Контакты', url: {
+                    pathname: "/catalog/595212758daa6810cbba4104",
+                    param1: "Par1"
+                } },
+            { text: 'Вход', url: {
+                    pathname: "/product/595212758daa6810cbba4104",
+                    param1: "Par1"
+                } }
         ];
 
         const { cart } = this.props;
@@ -196,8 +199,6 @@ const mapStateToProps = (state) => {
     return {
         cart: state.Store,
         cartOrderForm: getFormValues('submitOrder')(state),
-
-        data: state.Data,
     };
 };
 
@@ -206,8 +207,6 @@ const mapDispatchToProps = (dispatch) => {
         onAddToCart: (item, value) => dispatch(addToCart(item, value)),
         onDecreaseInCart: (item, value) => dispatch(decreaseInCart(item, value)),
         onRemoveFromCart: (item) => dispatch(removeFromCart(item)),
-
-        onGetData: (url, name) => dispatch(getData(url, name))
     };
 };
 

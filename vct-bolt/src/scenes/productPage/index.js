@@ -8,6 +8,7 @@ import { addToCart } from '../../data/Store/actions';
 // import fetchApi from '../../modules/fetch-api';
 
 import './styles.css';
+import { getData } from '../../data/Data/actions';
 
 class ProductPage extends Component {
 
@@ -33,10 +34,19 @@ class ProductPage extends Component {
     }
 
     componentDidMount() {
-        this.loadProductData();
-        this.loadBreadCrumbs();
-        this.loadPageTabs();
-        this.loadCarouselItems();
+        Promise.all([
+            !this.props.productPageData && this.props.onGetData('productPageData', 'productPageData'),
+            !this.props.productPageBreadCrumbs && this.props.onGetData('productPageBreadCrumbs', 'productPageBreadCrumbs'),
+            !this.props.productPageTabsData && this.props.onGetData('productPageTabsData', 'productPageTabsData'),
+            !this.props.carouselManyItemsData && this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
+        ]).then(
+            () => {
+                this.loadProductData();
+                this.loadBreadCrumbs();
+                this.loadPageTabs();
+                this.loadCarouselItems();
+            }
+        );
     }
 
     loadProductData() {
@@ -46,10 +56,9 @@ class ProductPage extends Component {
         //         }
         //     ));
 
-        const result = require('../../fakeAPI/productPageData.json');
         this.setState(
             {
-                productData: result
+                productData: this.props.data.productPageData
             }
         );
     };
@@ -68,11 +77,11 @@ class ProductPage extends Component {
         //     }
         //   ));
 
-        const result = require('../../fakeAPI/productPageTabsData.json');
+        // const result = require('../../fakeAPI/productPageTabsData.json');
         this.setState(
             {
                 tabsItems: {
-                    ...result, items: result.items.map
+                    ...this.props.data.productPageTabsData, items: this.props.data.productPageTabsData.items.map
                     (item =>
                         (
                             item.map
@@ -98,7 +107,7 @@ class ProductPage extends Component {
         const result = require('../../fakeAPI/productPageBreadCrumbs.json');
         this.setState(
             {
-                breadCrumbs: result
+                breadCrumbs: this.props.data.productPageBreadCrumbs
             }
         );
     };
@@ -114,12 +123,12 @@ class ProductPage extends Component {
         //         }
         //     }));
 
-        const result = require('../../fakeAPI/carouselManyItemsData.json');
+        // const result = require('../../fakeAPI/carouselManyItemsData.json');
         this.setState(
             {
                 carouselProductsData:
                     {
-                        ...result,
+                        ...this.props.data.carouselManyItemsData,
                         onAddToCart: this.addToCart
                     }
             }
@@ -131,6 +140,7 @@ class ProductPage extends Component {
     }
 
     render() {
+        console.log(this.props.data);
         const {
             breadCrumbs,
             productData,
@@ -149,10 +159,17 @@ class ProductPage extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
     return {
-        onAddToCart: (item) => dispatch(addToCart(item))
+        data: state.Data
     };
 };
 
-export default connect(null, mapDispatchToProps)(ProductPage);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onAddToCart: (item) => dispatch(addToCart(item)),
+        onGetData: (url, name) => dispatch(getData(url, name))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductPage);

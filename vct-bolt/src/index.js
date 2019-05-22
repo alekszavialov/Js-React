@@ -13,18 +13,16 @@ import './libs/bootstrap/bootstrap-theme.css';
 import './css/styles.css';
 
 const mainImport = configureStore();
-const {store} = mainImport;
-const {persistor} = mainImport;
+const { store } = mainImport;
+const { persistor } = mainImport;
 
 ReactDOM.render(
     <BrowserRouter>
-        <Fragment>
-            <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <App/>
-                </PersistGate>
-            </Provider>
-        </Fragment>
+        <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+                <App/>
+            </PersistGate>
+        </Provider>
     </BrowserRouter>,
     document.getElementById('root')
 );

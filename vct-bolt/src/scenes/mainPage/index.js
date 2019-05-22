@@ -6,14 +6,18 @@ import PropTypes from 'prop-types';
 import MainPageComponent from './components';
 
 import { addToCart } from '../../data/Store/actions';
+import { getData } from '../../data/Data/actions';
 
 // import fetchApi from '../../modules/fetch-api';
 
 import './styles.css';
+import { getFormValues } from 'redux-form';
 
 class MainPage extends Component {
 
     static propTypes = {
+        data: PropTypes.object,
+        onGetData: PropTypes.func,
         onAddToCart: PropTypes.func
     };
 
@@ -26,23 +30,37 @@ class MainPage extends Component {
             carouselProductsData: null,
             popularItemsData: null,
             catalogItems: null,
-            tabItems: null
+            tabItems: null,
         };
 
         this.addToCart = this.addToCart.bind(this);
+
+        this.loadCarouselData = this.loadCarouselData.bind(this);
+        this.loadPopularItemsData = this.loadPopularItemsData.bind(this);
+        this.loadCatalogItemsData = this.loadCatalogItemsData.bind(this);
+        this.loadCarouselItems = this.loadCarouselItems.bind(this);
+        this.loadPageTabItems = this.loadPageTabItems.bind(this);
     }
 
     componentDidMount() {
         Promise.all([
-            this.loadCarouselData(),
-            this.loadPopularItemsData(),
-            this.loadCatalogItemsData(),
-            this.loadCarouselItems(),
-            this.loadPageTabItems()
-        ]).then(() => this.setState({ loading: false }));
+            this.props.onGetData('carouselOneItemData', 'carouselOneItemData'),
+            this.props.onGetData('mainPopularCategoriesItems', 'mainPopularCategoriesItems'),
+            this.props.onGetData('catalogItems', 'catalogItems'),
+            this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
+            this.props.onGetData('mainPageTabsData', 'mainPageTabsData'),
+        ]).then(
+            () => {
+                this.loadCarouselData();
+                this.loadPopularItemsData();
+                this.loadCatalogItemsData();
+                this.loadCarouselItems();
+                this.loadPageTabItems();
+            }
+        );
     }
 
-    loadCarouselData = () => {
+    loadCarouselData() {
         // fetchApi('../../fakeAPI/carouselOneItemData.json')
         //     .then(result => this.setState({
         //             carouselData: {
@@ -52,45 +70,49 @@ class MainPage extends Component {
         //             }
         //         }
         //     ));
-        const result = require('../../fakeAPI/carouselOneItemData.json');
+        // const result = require('../../fakeAPI/carouselOneItemData.json');
         this.setState(
             {
-                carouselAdData: result
+                carouselAdData: this.props.data.carouselOneItemData
             }
         );
     };
 
-    loadPopularItemsData = () => {
+    loadPopularItemsData() {
         // fetchApi('../../fakeAPI/mainPopularCategoriesItems.json')
         //     .then(result => this.setState({
         //             popularItemsData: result
         //         }
         //     ));
 
-        const result = require('../../fakeAPI/mainPopularCategoriesItems.json');
+        // const result = require('../../fakeAPI/mainPopularCategoriesItems.json');
         this.setState(
             {
-                popularItemsData: result
+                popularItemsData: this.props.data.mainPopularCategoriesItems
             }
         );
+
+        // this.props.onGetData('mainPopularCategoriesItems', 'mainPopularCategoriesItems');
     };
 
-    loadCatalogItemsData = () => {
+    loadCatalogItemsData() {
         // fetchApi('../../fakeAPI/catalogItems.json')
         //     .then(result => this.setState({
         //             catalogItems: result
         //         }
         //     ));
 
-        const result = require('../../fakeAPI/catalogItems.json');
+        // const result = require('../../fakeAPI/catalogItems.json');
         this.setState(
             {
-                catalogItems: result
+                catalogItems: this.props.data.catalogItems
             }
         );
+
+        // this.props.onGetData('catalogItems', 'catalogItems');
     };
 
-    loadCarouselItems = () => {
+    loadCarouselItems(){
         // fetchApi('../../fakeAPI/carouselManyItemsData.json')
         //     .then(result => this.setState({
         //         carouselItemsData: {
@@ -101,18 +123,20 @@ class MainPage extends Component {
         //         }
         //     }));
 
-        const result = require('../../fakeAPI/carouselManyItemsData.json');
+        // const result = require('../../fakeAPI/carouselManyItemsData.json');
         this.setState(
             {
                 carouselProductsData: {
-                    ...result,
+                    ...this.props.data.carouselManyItemsData,
                     onAddToCart: this.addToCart
                 }
             }
         );
+
+        // this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData');
     };
 
-    loadPageTabItems = () => {
+    loadPageTabItems(){
         // fetchApi('../../fakeAPI/mainPageTabsData.json')
         //     .then(result => this.setState({
         //             tabItems: {
@@ -140,10 +164,11 @@ class MainPage extends Component {
         //         }
         //     ));
 
-        const result = require('../../fakeAPI/mainPageTabsData.json');
+        // const result = require('../../fakeAPI/mainPageTabsData.json');
+        console.log(this.props.data.mainPageTabsData, 'asd');
         this.setState({
                 tabItems: {
-                    ...result, items: result.items.map(item =>
+                    ...this.props.data.mainPageTabsData, items: this.props.data.mainPageTabsData.items.map(item =>
                         (item.map(item =>
                             <div className="tabs-item" key={Math.random()}>
                                 <div className="tabs-item-image">
@@ -166,6 +191,7 @@ class MainPage extends Component {
                 }
             }
         );
+        // this.props.onGetData('mainPageTabsData', 'mainPageTabsData');
     };
 
     addToCart(item) {
@@ -173,6 +199,7 @@ class MainPage extends Component {
     }
 
     render() {
+        console.log(this.props.data);
         const {
             carouselAdData,
             popularItemsData,
@@ -193,10 +220,17 @@ class MainPage extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
     return {
-        onAddToCart: (item) => dispatch(addToCart(item))
+        data: state.Data
     };
 };
 
-export default connect(null, mapDispatchToProps)(MainPage);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onAddToCart: (item) => dispatch(addToCart(item)),
+        onGetData: (url, name) => dispatch(getData(url, name))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainPage);

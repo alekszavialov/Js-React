@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import CatalogComponent from './components';
 
 import { addToCart } from '../../data/Store/actions';
+import { getData } from '../../data/Data/actions';
 // import fetchApi from '../../modules/fetch-api'
 
 import './styles.css';
 
 class Catalog extends Component {
     static propTypes = {
-        onAddToCart: PropTypes.func
+        onAddToCart: PropTypes.func,
+        data: PropTypes.object,
+        onGetData: PropTypes.func
     };
 
     constructor(props) {
@@ -42,14 +44,31 @@ class Catalog extends Component {
         this.changeFormField = this.changeFormField.bind(this);
     }
 
-    componentWillMount() {
-        this.loadProductList();
-        this.loadProductOptions();
-        this.loadBreadCrumbs();
-        this.loadCarouselData();
-        this.loadShopTags();
-        this.loadTabsData();
-        this.loadCarouselItems();
+    componentDidMount() {
+        Promise.all([
+            this.props.onGetData('catalogItems', 'catalogItems'),
+            this.props.onGetData('productOptionsData', 'productOptionsData'),
+            this.props.onGetData('catalogBreadCrumbs', 'catalogBreadCrumbs'),
+            this.props.onGetData('carouselOneItemData', 'carouselOneItemData'),
+            this.props.onGetData('catalogShopTags', 'catalogShopTags'),
+            this.props.onGetData('catalogPageTabsData', 'catalogPageTabsData'),
+            this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
+            // this.loadCarouselData(),
+            // this.loadPopularItemsData(),
+            // this.loadCatalogItemsData(),
+            // this.loadCarouselItems(),
+            // this.loadPageTabItems()
+        ]).then(
+            () => {
+                this.loadProductList();
+                this.loadProductOptions();
+                this.loadBreadCrumbs();
+                this.loadCarouselData();
+                this.loadShopTags();
+                this.loadTabsData();
+                this.loadCarouselItems();
+            }
+        );
     }
 
     changeFormField(data) {
@@ -97,10 +116,10 @@ class Catalog extends Component {
         //     }
         //     ));
 
-        const result = require('../../fakeAPI/catalogProductItemsData.json');
+        // const result = require('../../fakeAPI/catalogProductItemsData.json');
         this.setState(
             {
-                catalogItems: result
+                catalogItems: this.props.data.catalogItems
             }
         );
     };
@@ -116,10 +135,10 @@ class Catalog extends Component {
         //         }
         //     ));
 
-        const result = require('../../fakeAPI/carouselOneItemData.json');
+        // const result = require('../../fakeAPI/carouselOneItemData.json');
         this.setState(
             {
-                carouselAdData: result
+                carouselAdData: this.props.data.carouselOneItemData
             }
         );
     };
@@ -131,12 +150,12 @@ class Catalog extends Component {
         //         }
         //     ));
 
-        const result = require('../../fakeAPI/productOptionsData.json');
+        // const result = require('../../fakeAPI/productOptionsData.json');
         this.setState(
             {
-                productOptions: result
+                productOptions: this.props.data.productOptionsData
             }, () => {
-                this.changeFormField({ ...result.sliderValues });
+                this.changeFormField({ ...this.props.data.productOptionsData.sliderValues });
             }
         );
     };
@@ -148,10 +167,10 @@ class Catalog extends Component {
         //         }
         //     ));
 
-        const result = require('../../fakeAPI/catalogBreadCrumbs.json');
+        // const result = require('../../fakeAPI/catalogBreadCrumbs.json');
         this.setState(
             {
-                breadCrumbs: result
+                breadCrumbs: this.props.data.catalogBreadCrumbs
             }
         );
     };
@@ -163,10 +182,10 @@ class Catalog extends Component {
         //         }
         //     ));
 
-        const result = require('../../fakeAPI/catalogShopTags.json');
+        // const result = require('../../fakeAPI/catalogShopTags.json');
         this.setState(
             {
-                shopTags: result
+                shopTags: this.props.data.catalogShopTags
             }
         );
     };
@@ -186,12 +205,12 @@ class Catalog extends Component {
         //         }
         //     }));
 
-        const result = require('../../fakeAPI/catalogPageTabsData.json');
+        // const result = require('../../fakeAPI/catalogPageTabsData.json');
         this.setState(
             {
                 tabsData:
                     {
-                        ...result, items: result.items.map
+                        ...this.props.data.catalogPageTabsData, items: this.props.data.catalogPageTabsData.items.map
                         (item =>
                             (item.map
                                 (item =>
@@ -217,12 +236,12 @@ class Catalog extends Component {
         //         }
         //     }));
 
-        const result = require('../../fakeAPI/carouselManyItemsData.json');
+        // const result = require('../../fakeAPI/carouselManyItemsData.json');
         this.setState(
             {
                 carouselProductsData:
                     {
-                        ...result,
+                        ...this.props.data.carouselManyItemsData,
                         onAddToCart: this.addToCart
                     }
             }
@@ -243,7 +262,7 @@ class Catalog extends Component {
             tabsData,
             carouselProductsData
         } = this.state;
-        console.log(productOptions, 'render options');
+        console.log(this.props.data, 'render options');
         return (
             <CatalogComponent
                 productOptions={productOptions}
@@ -262,9 +281,16 @@ class Catalog extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        data: state.Data
+    };
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        onAddToCart: (item) => dispatch(addToCart(item))
+        onAddToCart: (item) => dispatch(addToCart(item)),
+        onGetData: (url, name) => dispatch(getData(url, name))
     };
 };
 
@@ -273,7 +299,7 @@ export default reduxForm({
     form: 'sortForm'
 })(
     connect(
-        null,
+        mapStateToProps,
         mapDispatchToProps
     )(Catalog)
 );
