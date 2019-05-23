@@ -172,8 +172,6 @@ class Header extends Component {
         const { catalogListFixed } = this.state;
         const { mobileListIsOpen } = this.state;
 
-
-        console.log(this.props.data);
         return (
             <HeaderComponent
                 navigationList={list}

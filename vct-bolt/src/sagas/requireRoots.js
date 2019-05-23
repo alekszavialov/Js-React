@@ -34,16 +34,19 @@ export function requireFiles(url) {
 }
 
 const mutateSales = (data) => data.map(item => {
-        return { ...item, url: `/product-${item.id}-${cyrillicToTranslit().transform(item.title.replace(/\//g, ''), '_')}` };
+        return { ...item, url: `/product-${item.id}-${cyrillicToTranslit().transform(item.title.replace(/\//g, ''), '_').toLowerCase()}` };
     }
 );
+
+const mutateSpecifications = (data) => data.filter(item => item.description);
 
 export function mutateData(name, data) {
     switch (name) {
         case 'topSales':
             return mutateSales(data);
+        case 'specifications':
+            return mutateSpecifications(data);
         default:
             return data;
     }
 }
-

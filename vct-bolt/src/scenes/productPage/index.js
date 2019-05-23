@@ -54,6 +54,20 @@ class ProductPage extends Component {
         );
     }
 
+    // componentWillReceiveProps(nextProps) {
+    //     console.log(nextProps.data.productData);
+    //     if (nextProps.data.productData && !this.state.breadCrumbs) {
+    //         console.log('load bread');
+    //         this.loadBreadCrumbs();
+    //     }
+    // }
+
+    componentWillUpdate(nextProps, nextState) {
+        if (nextProps.data.productData && !nextState.breadCrumbs) {
+            this.loadBreadCrumbs(nextProps.data.productData[0]);
+        }
+    }
+
     loadProductData() {
         // fetchApi('../../fakeAPI/productPageData.json')
         //     .then(result => this.setState({
@@ -102,17 +116,19 @@ class ProductPage extends Component {
         );
     };
 
-    loadBreadCrumbs() {
-        // fetchApi('../../fakeAPI/productPageBreadCrumbs.json')
-        //     .then(result => this.setState({
-        //             breadCrumbs: result
-        //         }
-        //     ));
-
-        const result = require('../../fakeAPI/productPageBreadCrumbs.json');
+    loadBreadCrumbs(data) {
+        console.log('load bread crumbs!@');
+        const result = [
+            { 'href': '/', 'name': 'Главная' },
+            {
+                'href': `/catalog-${data.brand.toLowerCase()}`,
+                'name': data.brand
+            },
+            { 'href': '', 'name': data.title }
+        ];
         this.setState(
             {
-                breadCrumbs: this.props.data.productPageBreadCrumbs
+                breadCrumbs: result
             }
         );
     };
@@ -146,16 +162,20 @@ class ProductPage extends Component {
 
     render() {
         console.log(this.props.data);
+        const { productData, specifications } = this.props.data;
         const {
             breadCrumbs,
-            productData,
             carouselProductsData,
             tabsItems
         } = this.state;
+        if (!productData) {
+            return false;
+        }
         return (
             <ProductPageComponent
                 breadCrumbs={breadCrumbs}
-                productData={productData}
+                productData={productData[0]}
+
                 carouselProductsData={carouselProductsData}
                 tabsItems={tabsItems}
                 onAddToCart={this.addToCart}
