@@ -25,7 +25,10 @@ export default class ProductDescription extends Component {
             article: this.props.data.id
         });
     }
-
+// <div className="brand-zone">
+// <img src={this.props.data.brandImage} alt=""/>
+// <span>{this.props.data.brandData}</span>
+// </div>
     render() {
         console.log(this.props.data);
         return (
@@ -38,10 +41,7 @@ export default class ProductDescription extends Component {
                         <div className="products-in-stockroom">
                             Остаток на складе: {this.props.data.inStockroom} шт.
                         </div>
-                        <div className="brand-zone">
-                            <img src={this.props.data.brandImage} alt=""/>
-                            <span>{this.props.data.brandData}</span>
-                        </div>
+
                     </div>
                 </div>
                 <div className="col-md-7">

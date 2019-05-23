@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import ProductPageComponent from './components';
+import DeliveryAndPay from './components/deliveryAndPay';
+import ProductSpecification from './components/productSpecifications';
 
 import { addToCart } from '../../data/Store/actions';
 // import fetchApi from '../../modules/fetch-api';
@@ -54,17 +56,18 @@ class ProductPage extends Component {
         );
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     console.log(nextProps.data.productData);
-    //     if (nextProps.data.productData && !this.state.breadCrumbs) {
-    //         console.log('load bread');
-    //         this.loadBreadCrumbs();
-    //     }
-    // }
-
     componentWillUpdate(nextProps, nextState) {
         if (nextProps.data.productData && !nextState.breadCrumbs) {
             this.loadBreadCrumbs(nextProps.data.productData[0]);
+        }
+        const productData = nextProps.data.productData || this.props.data.productData;
+        console.log(productData, ' ', !productData, ' prodData');
+        const specifications = nextProps.data.specifications || this.props.data.specifications;
+        console.log(specifications, ' ', !specifications, ' specifications');
+        const comments = nextProps.data.comments || this.props.data.comments;
+        console.log(comments, ' ', !comments, ' comments');
+        if (!nextState.tabsItems && productData && specifications && comments){
+            this.loadPageTabs(productData, specifications, comments);
         }
     }
 
@@ -82,42 +85,69 @@ class ProductPage extends Component {
         );
     };
 
-    loadPageTabs() {
-        // fetchApi('../../fakeAPI/productPageTabsData.json')
-        //   .then(result => this.setState({
-        //       tabsItems: {
-        //         ...result, items: result.items.map(item =>
-        //           (item.map(item =>
-        //             <div className="tabs-item" key={Math.random()} dangerouslySetInnerHTML={{__html: item.content}}>
-        //             </div>
-        //           ))
-        //         )
-        //       }
-        //     }
-        //   ));
+    // loadPageTabs() {
+    //     // fetchApi('../../fakeAPI/productPageTabsData.json')
+    //     //   .then(result => this.setState({
+    //     //       tabsItems: {
+    //     //         ...result, items: result.items.map(item =>
+    //     //           (item.map(item =>
+    //     //             <div className="tabs-item" key={Math.random()} dangerouslySetInnerHTML={{__html: item.content}}>
+    //     //             </div>
+    //     //           ))
+    //     //         )
+    //     //       }
+    //     //     }
+    //     //   ));
+    //
+    //     // const result = require('../../fakeAPI/productPageTabsData.json');
+    //     this.setState(
+    //         {
+    //             tabsItems: {
+    //                 ...this.props.data.productPageTabsData,
+    //                 items: this.props.data.productPageTabsData.items.map
+    //                 (item =>
+    //                     (
+    //                         item.map
+    //                         (item =>
+    //                             <div className="tabs-item" key={Math.random()}
+    //                                  dangerouslySetInnerHTML={{ __html: item.content }}>
+    //                             </div>
+    //                         )
+    //                     )
+    //                 )
+    //             }
+    //         }
+    //     );
+    // };
 
-        // const result = require('../../fakeAPI/productPageTabsData.json');
+    loadPageTabs(productData, specifications, comments) {
+        console.log('tabs');
+        const defaultIndex = specifications ? 0 : 1;
+        const specification = <ProductSpecification
+            title={productData[0].title}
+            data={specifications}/>;
+        console.log(specification);
+        const delivery = <DeliveryAndPay
+            title={productData[0].title}/>;
+        const result = {
+            'defaultIndex': defaultIndex,
+            'title': [
+                'Характеристики',
+                'Доставка и оплата'
+            ],
+            'items': [
+                specification,
+                delivery
+            ]
+        };
         this.setState(
             {
-                tabsItems: {
-                    ...this.props.data.productPageTabsData, items: this.props.data.productPageTabsData.items.map
-                    (item =>
-                        (
-                            item.map
-                            (item =>
-                                <div className="tabs-item" key={Math.random()}
-                                     dangerouslySetInnerHTML={{ __html: item.content }}>
-                                </div>
-                            )
-                        )
-                    )
-                }
+                tabsItems: result
             }
         );
     };
 
     loadBreadCrumbs(data) {
-        console.log('load bread crumbs!@');
         const result = [
             { 'href': '/', 'name': 'Главная' },
             {
@@ -161,7 +191,6 @@ class ProductPage extends Component {
     }
 
     render() {
-        console.log(this.props.data);
         const { productData, specifications } = this.props.data;
         const {
             breadCrumbs,
