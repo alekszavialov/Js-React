@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import ProductPageComponent from './components';
 import DeliveryAndPay from './components/deliveryAndPay';
 import ProductSpecification from './components/productSpecifications';
+import ProductCommentBlock from './components/productComment';
 
 import { addToCart } from '../../data/Store/actions';
 // import fetchApi from '../../modules/fetch-api';
@@ -126,18 +127,22 @@ class ProductPage extends Component {
         const specification = <ProductSpecification
             title={productData[0].title}
             data={specifications}/>;
-        console.log(specification);
         const delivery = <DeliveryAndPay
             title={productData[0].title}/>;
+        const comment = <ProductCommentBlock
+            title={productData[0].title}
+            data={comments}/>;
         const result = {
             'defaultIndex': defaultIndex,
             'title': [
                 'Характеристики',
-                'Доставка и оплата'
+                'Доставка и оплата',
+                `Комментарии ${comments.length}`
             ],
             'items': [
                 specification,
-                delivery
+                delivery,
+                comment
             ]
         };
         this.setState(

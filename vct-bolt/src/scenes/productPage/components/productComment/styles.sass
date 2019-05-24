@@ -1,0 +1,55 @@
+.product-comments-head
+  display: flex
+  flex-direction: row
+  align-items: center
+  flex-wrap: wrap
+  img
+    cursor: pointer
+    margin-left: 20px
+    opacity: 0.6
+    transition: all 0.3s ease
+    &:hover
+      opacity: 1
+.product-comments-item
+  display: flex
+  margin-top: 20px
+  flex-direction: row
+  flex-wrap: wrap
+  align-items: center
+  position: relative
+  p
+    margin-bottom: 0
+  .product-comments-item-stars
+    position: absolute
+    right: 0
+    top: 0
+  >span
+    display: flex
+    align-items: center
+    margin-left: 10px
+    &:before
+      content: ""
+      width: 26px
+      height: 20px
+      margin-right: 5px
+      -webkit-mask-size: cover
+      mask-size: cover
+      display: block
+  .product-comments-item-name
+    color: #467bb5
+    font-size: 18px
+.product-comments-item-buy
+  color: #9b59b6
+  &:before
+    -webkit-mask: url(../../../../public/icons/cart-plus-solid.svg) no-repeat 50% 50%
+    mask: url(../../../../public/icons/cart-plus-solid.svg) no-repeat 50% 50%
+    background-color: #9b59b6
+.product-comments-item-not
+  color: #919293
+  &:before
+    -webkit-mask: url(../../../../public/icons/shopping-cart-solid.svg) no-repeat 50% 50%
+    mask: url(../../../../public/icons/shopping-cart-solid.svg) no-repeat 50% 50%
+    background-color: #919293
+.product-comments-item-comment
+  flex: 0 0 100%
+  margin-top: 10px

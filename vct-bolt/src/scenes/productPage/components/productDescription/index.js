@@ -39,7 +39,7 @@ export default class ProductDescription extends Component {
                             <img src={this.props.data.img} alt={this.props.data.title}/>
                         </div>
                         <div className="products-in-stockroom">
-                            Остаток на складе: {this.props.data.inStockroom} шт.
+                            Остаток на складе: {this.props.data.balance ? `${this.props.data.balance} шт.` : "уточняйте у менеджера" }
                         </div>
 
                     </div>
