@@ -14,20 +14,22 @@ export default class ProductCommentBlock extends Component {
         };
 
         this.toggleAddComment = this.toggleAddComment.bind(this);
+        this.changeFormField = this.changeFormField.bind(this);
+    }
+
+    changeFormField(data){
+        this.props.changeFormField(data);
     }
 
     toggleAddComment(){
         this.setState({
-            isVisibleCommentForm: !this.state.isVisibleCommentForm
-        })
-    }
-
-    ratingChanged = (newRating) => {
-        console.log(newRating)
+            isVisibleCommentForm : !this.state.isVisibleCommentForm
+        });
     }
 
     render() {
         const { title, data } = this.props;
+        console.log(this.state.isVisibleCommentForm, 'render');
         return (
             <div className="product-comments">
                 <div className="product-comments-head">
@@ -39,7 +41,7 @@ export default class ProductCommentBlock extends Component {
                         onClick={this.toggleAddComment}
                     />
                     {this.state.isVisibleCommentForm &&
-                        <AddCommentBlock/>
+                        <AddCommentBlock changeFormField={this.changeFormField}/>
                     }
                 </div>
                 {data.map(item =>

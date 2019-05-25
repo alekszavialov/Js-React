@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
+import ImageCarousel from './components/imageCarousel';
+
 import './styles.css';
 
 export default class ProductDescription extends Component {
@@ -25,6 +27,7 @@ export default class ProductDescription extends Component {
             article: this.props.data.id
         });
     }
+
 // <div className="brand-zone">
 // <img src={this.props.data.brandImage} alt=""/>
 // <span>{this.props.data.brandData}</span>
@@ -36,10 +39,23 @@ export default class ProductDescription extends Component {
                 <div className="col-md-5">
                     <div className="product-img-wrapper">
                         <div className="product-img-block">
-                            <img src={this.props.data.img} alt={this.props.data.title}/>
+                            {
+                                this.props.data.img2 ?
+                                    <ImageCarousel
+                                        images={[
+                                            this.props.data.img,
+                                            this.props.data.img2,
+                                            this.props.data.img3,
+                                            this.props.data.img4
+                                        ]}
+                                    /> :
+                                    <img src={this.props.data.img} alt={this.props.data.title}/>
+                            }
+
                         </div>
                         <div className="products-in-stockroom">
-                            Остаток на складе: {this.props.data.balance ? `${this.props.data.balance} шт.` : "уточняйте у менеджера" }
+                            Остаток на
+                            складе: {this.props.data.balance ? `${this.props.data.balance} шт.` : 'уточняйте у менеджера'}
                         </div>
 
                     </div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import ProductPageComponent from './components';
@@ -34,6 +35,9 @@ class ProductPage extends Component {
         this.loadPageTabs = this.loadPageTabs.bind(this);
         this.loadCarouselItems = this.loadCarouselItems.bind(this);
         this.addToCart = this.addToCart.bind(this);
+
+        this.toggleAddComment = this.toggleAddComment.bind(this);
+        this.changeFormField = this.changeFormField.bind(this);
     }
 
     componentDidMount() {
@@ -41,20 +45,6 @@ class ProductPage extends Component {
         this.props.onGetData(`http://api.vct1.com/product/${id}`, 'productData');
         this.props.onGetData(`http://api.vct1.com/specifications/${id}`, 'specifications');
         this.props.onGetData(`http://api.vct1.com/comments/${id}`, 'comments');
-        Promise.all([
-
-            // !this.props.productPageData && this.props.onGetData('productPageData', 'productPageData'),
-            // !this.props.productPageBreadCrumbs && this.props.onGetData('productPageBreadCrumbs', 'productPageBreadCrumbs'),
-            // !this.props.productPageTabsData && this.props.onGetData('productPageTabsData', 'productPageTabsData'),
-            // !this.props.carouselManyItemsData && this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
-        ]).then(
-            () => {
-                // this.loadProductData();
-                // this.loadBreadCrumbs();
-                // this.loadPageTabs();
-                // this.loadCarouselItems();
-            }
-        );
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -62,14 +52,28 @@ class ProductPage extends Component {
             this.loadBreadCrumbs(nextProps.data.productData[0]);
         }
         const productData = nextProps.data.productData || this.props.data.productData;
-        console.log(productData, ' ', !productData, ' prodData');
         const specifications = nextProps.data.specifications || this.props.data.specifications;
-        console.log(specifications, ' ', !specifications, ' specifications');
         const comments = nextProps.data.comments || this.props.data.comments;
-        console.log(comments, ' ', !comments, ' comments');
         if (!nextState.tabsItems && productData && specifications && comments){
             this.loadPageTabs(productData, specifications, comments);
         }
+    }
+
+    changeFormField(data) {
+        if (!data.remove) {
+            for (let key in data) {
+                this.props.change(key, data[key]);
+            }
+        } else {
+            this.props.change(data.remove, '');
+        }
+
+    };
+
+    toggleAddComment(){
+        this.setState({
+            isVisibleCommentForm: !this.state.isVisibleCommentForm
+        });
     }
 
     loadProductData() {
@@ -130,6 +134,7 @@ class ProductPage extends Component {
         const delivery = <DeliveryAndPay
             title={productData[0].title}/>;
         const comment = <ProductCommentBlock
+            changeFormField={this.changeFormField}
             title={productData[0].title}
             data={comments}/>;
         const result = {
@@ -231,4 +236,14 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductPage);
+export default reduxForm({
+    form: 'commentForm',
+    initialValues : {
+        starsValue: 1
+    }
+})(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(ProductPage)
+);

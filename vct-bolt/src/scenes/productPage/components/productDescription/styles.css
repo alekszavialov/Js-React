@@ -5,16 +5,32 @@
 
 .product-img-block{
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 380px;
+  flex-wrap: wrap;
+  width: 380px;
   margin: 0 auto;
+  position: relative;
   height: 320px;
 }
 
+.slick-slider, .slick-slide, .slick-track, .slick-slide div{
+  width: 100%;
+  height: 100%;
+}
+
+.slick-slide div{
+  text-align: center;
+}
+
+.slick-list{
+  width: 100%;
+  height: 100%;
+}
+
 .product-img-block img{
-  max-width: 100%;
+  max-width: 100% !important;
+  width: auto !important;
   max-height: 100%;
 }
 

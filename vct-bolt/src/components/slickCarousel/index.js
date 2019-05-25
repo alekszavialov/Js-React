@@ -20,7 +20,7 @@ export default class SlickCarousel extends Component {
     }
 
     fillItems() {
-        return this.props.carouselData.items.map(item =>
+        return this.props.carouselData.items ? this.props.carouselData.items.map(item =>
             this.props.carouselData.onAddToCart ?
                 <CarouselProduct
                     key={Math.random()}
@@ -31,7 +31,7 @@ export default class SlickCarousel extends Component {
                     key={Math.random()}
                     item={item}
                 />
-        );
+        ) : this.props.carouselData.images;
     }
 
     render() {

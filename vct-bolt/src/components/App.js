@@ -15,7 +15,7 @@ export default class App extends React.Component {
                 <main>
                     <Switch>
                         <Route exact path='/' component={MainPage}/>
-                        <Route path='/catalog/:catName' exact strict component={Catalog}/>
+                        <Route path='/catalog:catName' exact strict component={Catalog}/>
                         <Route path='/product:productName' exact strict component={ProductPage}/>
                         <Redirect to="/" />
                     </Switch>
