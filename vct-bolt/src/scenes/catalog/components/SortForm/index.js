@@ -6,7 +6,7 @@ import ParametersBlock from './components/parametersBlock';
 
 import './styles.css';
 
-class SortForm extends Component {
+export default class SortForm extends Component {
 
     static propTypes = {
         sliderValues: PropTypes.object,
@@ -16,7 +16,7 @@ class SortForm extends Component {
 
     constructor(props) {
         super(props);
-
+        console.log('construc');
         this.handleSubmit = this.handleSubmit.bind(this);
         this.changeFormField = this.changeFormField.bind(this);
     }
@@ -46,6 +46,4 @@ class SortForm extends Component {
         );
     }
 }
-
-export default SortForm;
 

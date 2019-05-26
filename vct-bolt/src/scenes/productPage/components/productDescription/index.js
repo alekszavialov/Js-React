@@ -33,7 +33,6 @@ export default class ProductDescription extends Component {
 // <span>{this.props.data.brandData}</span>
 // </div>
     render() {
-        console.log(this.props.data);
         return (
             <Fragment>
                 <div className="col-md-5">

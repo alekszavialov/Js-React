@@ -46,13 +46,13 @@ class Catalog extends Component {
 
     componentDidMount() {
         Promise.all([
-            this.props.onGetData('catalogItems', 'catalogItems'),
-            this.props.onGetData('productOptionsData', 'productOptionsData'),
-            this.props.onGetData('catalogBreadCrumbs', 'catalogBreadCrumbs'),
-            this.props.onGetData('carouselOneItemData', 'carouselOneItemData'),
-            this.props.onGetData('catalogShopTags', 'catalogShopTags'),
-            this.props.onGetData('catalogPageTabsData', 'catalogPageTabsData'),
-            this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
+            // this.props.onGetData('catalogItems', 'catalogItems'),
+            // this.props.onGetData('productOptionsData', 'productOptionsData'),
+            // this.props.onGetData('catalogBreadCrumbs', 'catalogBreadCrumbs'),
+            // this.props.onGetData('carouselOneItemData', 'carouselOneItemData'),
+            // this.props.onGetData('catalogShopTags', 'catalogShopTags'),
+            // this.props.onGetData('catalogPageTabsData', 'catalogPageTabsData'),
+            // this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
             // this.loadCarouselData(),
             // this.loadPopularItemsData(),
             // this.loadCatalogItemsData(),
@@ -60,13 +60,13 @@ class Catalog extends Component {
             // this.loadPageTabItems()
         ]).then(
             () => {
-                this.loadProductList();
+                // this.loadProductList();
                 this.loadProductOptions();
-                this.loadBreadCrumbs();
-                this.loadCarouselData();
-                this.loadShopTags();
-                this.loadTabsData();
-                this.loadCarouselItems();
+                // this.loadBreadCrumbs();
+                // this.loadCarouselData();
+                // this.loadShopTags();
+                // this.loadTabsData();
+                // this.loadCarouselItems();
             }
         );
     }
@@ -150,12 +150,19 @@ class Catalog extends Component {
         //         }
         //     ));
 
-        // const result = require('../../fakeAPI/productOptionsData.json');
+        const result = require('../../fakeAPI/productOptionsData.json');
+        // this.setState(
+        //     {
+        //         productOptions: this.props.data.productOptionsData
+        //     }, () => {
+        //         this.changeFormField({ ...this.props.data.productOptionsData.sliderValues });
+        //     }
+        // );
         this.setState(
             {
-                productOptions: this.props.data.productOptionsData
+                productOptions: result
             }, () => {
-                this.changeFormField({ ...this.props.data.productOptionsData.sliderValues });
+                this.changeFormField({ ...result.sliderValues });
             }
         );
     };
@@ -262,7 +269,6 @@ class Catalog extends Component {
             tabsData,
             carouselProductsData
         } = this.state;
-        console.log(this.props.data, 'render options');
         return (
             <CatalogComponent
                 productOptions={productOptions}

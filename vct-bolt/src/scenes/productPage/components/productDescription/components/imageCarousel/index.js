@@ -29,7 +29,7 @@ export default class ImageCarousel extends Component {
         console.log(images);
         return (
             <Slider {...this.state.params}>
-                {images.filter(item => item).map(item => <img src={item} alt=""/>)}
+                {images.filter(item => item).map(item => <img key={item} src={item} alt=""/>)}
             </Slider>
         );
     }

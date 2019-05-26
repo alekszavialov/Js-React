@@ -38,10 +38,18 @@ export default class RangeSlider extends Component {
                 value[event.target.name] = this.props.values[event.target.name];
             }
         }
+        // this.setState({
+        //     values: { ...this.state.values, ...value }
+        // }, () => this.changeFormField());
         this.setState({
             values: { ...this.state.values, ...value }
-        }, () => this.changeFormField());
+        });
     }
+
+    test = () => {
+        this.changeFormField()
+    }
+
 
     render() {
         const {values} = this.state;
@@ -58,7 +66,9 @@ export default class RangeSlider extends Component {
                     minValue={this.props.values.min}
                     maxValue={this.props.values.max}
                     value={values}
-                    onChange={value => this.handleChange(value)}/>
+                    onChange={value => this.handleChange(value)}
+                    onChangeComplete={this.test}
+                />
             </div>
         );
     }

@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import ReactStars from 'react-stars';
+import PropTypes from 'prop-types';
 
 import AddCommentBlock from './components/addCommentForm';
 import './styles.css';
 
 export default class ProductCommentBlock extends Component {
+
+    static propTypes = {
+        title : PropTypes.string,
+        data : PropTypes.array,
+        changeFormField : PropTypes.func
+    };
 
     constructor(props) {
         super(props);
@@ -29,7 +36,6 @@ export default class ProductCommentBlock extends Component {
 
     render() {
         const { title, data } = this.props;
-        console.log(this.state.isVisibleCommentForm, 'render');
         return (
             <div className="product-comments">
                 <div className="product-comments-head">
@@ -46,10 +52,10 @@ export default class ProductCommentBlock extends Component {
                 </div>
                 {data.map(item =>
                     <div className="product-comments-item"
-                         key={item.comment.split('').reduce((a, b) => {
-                             a = ((a << 5) - a) + b.charCodeAt(0);
-                             return a & a;
-                         }, 0)}>
+                        key={item.comment.split('').reduce((a, b) => {
+                            a = ((a << 5) - a) + b.charCodeAt(0);
+                            return a & a;
+                        }, 0)}>
                         <p className="product-comments-item-name">{item.date} {item.name}</p>
                         <span className={`product-comments-item-${item.bought === 1 ? 'buy' : 'not'}`}>{item.bought === 1 ? 'Купил' : 'Не купил'}</span>
                         <div className="product-comments-item-stars">
@@ -58,7 +64,7 @@ export default class ProductCommentBlock extends Component {
                                 value={Number(item.rank)}
                                 edit={false}
                                 size={24}
-                                color2={'#ffd700'} />
+                                color2="#ffd700" />
                         </div>
                         <p className="product-comments-item-comment">{item.comment}</p>
                     </div>

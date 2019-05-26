@@ -2,10 +2,11 @@ import React, { Component, Fragment } from 'react';
 
 import './styles.css';
 
-export default class productSpecification extends Component {
+export default class ProductSpecification extends Component {
 
     constructor(props) {
         super(props);
+        console.log('ProductSpecification');
     }
 
     render() {

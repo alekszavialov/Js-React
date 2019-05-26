@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm } from 'redux-form';
+import { reduxForm, change } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import ProductPageComponent from './components';
@@ -22,8 +22,9 @@ class ProductPage extends Component {
 
     constructor(props) {
         super(props);
-
+        console.log('ProductPage');
         this.state = {
+            id : this.props.match.url.match(/\d+/)[0],
             productData: null,
             tabsItems: null,
             breadCrumbs: null,
@@ -41,10 +42,11 @@ class ProductPage extends Component {
     }
 
     componentDidMount() {
-        const id = this.props.match.url.match(/\d+/)[0];
-        this.props.onGetData(`http://api.vct1.com/product/${id}`, 'productData');
-        this.props.onGetData(`http://api.vct1.com/specifications/${id}`, 'specifications');
-        this.props.onGetData(`http://api.vct1.com/comments/${id}`, 'comments');
+        // const id = this.props.match.url.match(/\d+/)[0];
+        const {id} = this.state.id;
+        this.props.onGetData(`http://api.vct1.com/product/${id}`, `productData${id}`);
+        this.props.onGetData(`http://api.vct1.com/specifications/${id}`, `specifications${id}`);
+        this.props.onGetData(`http://api.vct1.com/comments/${id}`, `comments${id}`);
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -54,29 +56,36 @@ class ProductPage extends Component {
         const productData = nextProps.data.productData || this.props.data.productData;
         const specifications = nextProps.data.specifications || this.props.data.specifications;
         const comments = nextProps.data.comments || this.props.data.comments;
-        if (!nextState.tabsItems && productData && specifications && comments){
+        if (!nextState.comments && productData && specifications && comments) {
             this.loadPageTabs(productData, specifications, comments);
         }
     }
 
     changeFormField(data) {
-        if (!data.remove) {
-            for (let key in data) {
-                this.props.change(key, data[key]);
-            }
-        } else {
-            this.props.change(data.remove, '');
+        // if (!data.remove) {
+        //     console.log(data, 'asaas log');
+        //
+        // } else {
+        //     console.log('else');
+        //     this.props.change(data.remove, '');
+        // }
+        console.log(data, 'asaas log');
+        for (const key in data) {
+            // this.props.change(key, data[key]);
+            // dispatch(change("form name", "foo", response.data.foo))
+            this.props.onChangeField(key, data[key]);
+            break;
         }
-
     };
 
-    toggleAddComment(){
+    toggleAddComment() {
         this.setState({
             isVisibleCommentForm: !this.state.isVisibleCommentForm
         });
     }
 
     loadProductData() {
+        const {id} = this.state.id;
         // fetchApi('../../fakeAPI/productPageData.json')
         //     .then(result => this.setState({
         //             productData: result
@@ -127,24 +136,36 @@ class ProductPage extends Component {
 
     loadPageTabs(productData, specifications, comments) {
         console.log('tabs');
-        const defaultIndex = specifications ? 0 : 1;
-        const specification = <ProductSpecification
-            title={productData[0].title}
-            data={specifications}/>;
-        const delivery = <DeliveryAndPay
-            title={productData[0].title}/>;
-        const comment = <ProductCommentBlock
-            changeFormField={this.changeFormField}
-            title={productData[0].title}
-            data={comments}/>;
+        const defaultIndex = specifications ? 1 : 2;
+        const descr = false;
+        // const specification = <ProductSpecification
+        //     title={productData[0].title}
+        //     data={specifications}/>;
+        // const delivery = <DeliveryAndPay
+        //     title={productData[0].title}/>;
+        // const comment = <ProductCommentBlock
+        //     changeFormField={this.changeFormField}
+        //     title={productData[0].title}
+        //     data={comments}/>;
+        const specification = {
+            title: productData[0].title,
+            data: specifications
+        };
+        const delivery = { title: productData[0].title };
+        const comment = {
+            title:productData[0].title,
+            data:comments,
+            changeFormField: this.changeFormField};
         const result = {
             'defaultIndex': defaultIndex,
             'title': [
-                'Характеристики',
-                'Доставка и оплата',
-                `Комментарии ${comments.length}`
+                { name: 'Описание', enabled: descr },
+                { name: 'Характеристики', enabled: specification },
+                { name: 'Доставка и оплата', enabled: true },
+                { name: `Комментарии ${comments.length}`, enabled: true }
             ],
             'items': [
+                descr,
                 specification,
                 delivery,
                 comment
@@ -152,7 +173,8 @@ class ProductPage extends Component {
         };
         this.setState(
             {
-                tabsItems: result
+                specification: specification,
+                comments: comment
             }
         );
     };
@@ -205,7 +227,8 @@ class ProductPage extends Component {
         const {
             breadCrumbs,
             carouselProductsData,
-            tabsItems
+            comments,
+            specification
         } = this.state;
         if (!productData) {
             return false;
@@ -216,7 +239,8 @@ class ProductPage extends Component {
                 productData={productData[0]}
 
                 carouselProductsData={carouselProductsData}
-                tabsItems={tabsItems}
+                comments={comments}
+                specification={specification}
                 onAddToCart={this.addToCart}
             />
         );
@@ -232,15 +256,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onAddToCart: (item) => dispatch(addToCart(item)),
-        onGetData: (url, name) => dispatch(getData(url, name))
+        onGetData: (url, name) => dispatch(getData(url, name)),
+        onChangeField: (name, value) => dispatch(change('commentForm', name, value))
     };
 };
 
 export default reduxForm({
-    form: 'commentForm',
-    initialValues : {
-        starsValue: 1
-    }
+    form: 'commentForm'
 })(
     connect(
         mapStateToProps,

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactStars from 'react-stars';
 
 import './styles.css';
+import { Field } from 'redux-form';
 
 export default class AddCommentForm extends Component {
 
@@ -9,8 +10,10 @@ export default class AddCommentForm extends Component {
         super(props);
 
         this.state = {
+            userName: null,
             starsValue: 1,
-            checkedBuy: null
+            checkedBuy: null,
+            comment: null
         };
 
         this.ratingChanged = this.ratingChanged.bind(this);
@@ -20,11 +23,15 @@ export default class AddCommentForm extends Component {
     }
 
     handleChangeField(e) {
-        this.changeFormField({[e.target.name]: e.target.value})
+        e.preventDefault();
+        this.setState({
+            [e.target.name]: e.target.value
+        });
     }
 
-    changeFormField(data) {
-        this.props.changeFormField(data);
+    changeFormField(e) {
+        e.preventDefault();
+        this.props.changeFormField(this.state);
     }
 
     toggleChange(e, name) {
@@ -33,20 +40,20 @@ export default class AddCommentForm extends Component {
         this.setState({
             checkedBuy: value
         });
-        this.changeFormField({ checkedBuy: value });
+        // this.changeFormField({ checkedBuy: value });
     }
 
     ratingChanged(newRating) {
         this.setState({
             starsValue: newRating
         });
-        this.changeFormField({ starsValue: newRating });
+        // this.changeFormField({ starsValue: newRating });
     }
 
     render() {
         const { starsValue, checkedBuy } = this.state;
         return (
-            <form className="product-comments-head-addComment">
+            <form className="product-comments-head-addComment" onSubmit={this.changeFormField}>
                 <div className="product-comments-head-addComment-stars">
                     <ReactStars
                         count={5}
@@ -59,8 +66,8 @@ export default class AddCommentForm extends Component {
                 <div className="product-comments-head-addComment-item">
                     <span>Ваше имя</span>
                     <input
-                        name="comment-buy-name"
                         type="text"
+                        name="userName"
                         placeholder="Иван Иванович"
                         onChange={this.handleChangeField}
                         required
@@ -82,6 +89,7 @@ export default class AddCommentForm extends Component {
                                onChange={this.toggleChange}
                                required
                         />
+
                     </div>
                     <div
                         className="product-comments-head-addComment-item-radio"
@@ -104,7 +112,7 @@ export default class AddCommentForm extends Component {
                 <div className="product-comments-head-addComment-item">
                     <span>Комментарий</span>
                     <textarea
-                        name="comment-buy-textarea"
+                        name="comment"
                         cols="30"
                         rows="10"
                         placeholder="Ваш комментарий к товару"
