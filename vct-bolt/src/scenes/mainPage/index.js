@@ -25,7 +25,7 @@ class MainPage extends Component {
         super(props);
 
         this.state = {
-            loading: true,
+            id: 'mainPage',
             carouselAdData: null,
             carouselProductsData: null,
             popularItemsData: null,
@@ -45,30 +45,27 @@ class MainPage extends Component {
         this.mutateSales = this.mutateSales.bind(this);
     }
 
-    componentDidMount() {
-        Promise.all([
-            // this.props.onGetData('carouselOneItemData', 'carouselOneItemData'),
-            // this.props.onGetData('mainPopularCategoriesItems', 'mainPopularCategoriesItems'),
-            this.props.onGetData('http://api.vct1.com/topsales/', 'topSales')
-            // this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
-            // this.props.onGetData('mainPageTabsData', 'mainPageTabsData'),
-        ]).then(
-            () => {
-                // this.loadCarouselData();
-                // this.loadPopularItemsData();
-                // this.loadCatalogItemsData();
-                // this.loadCarouselItems();
-                // this.loadPageTabItems();
-                this.setAndMutateData();
-            }
-        );
+    componentWillMount() {
+        const { id } = this.state;
+        this.props.onGetData(id, 'http://api.vct1.com/topsales/', 'topSales');
     }
 
+    componentWillUpdate(nextProps, nextState) {
+        console.log(nextProps, '12312');
+        if (nextProps.data.topSales && !nextState.catalogItems) {
+            this.setAndMutateData(nextProps.data.topSales);
+        }
+        // const productData = nextProps.data.productData || this.props.data.productData;
+        // const specifications = nextProps.data.specifications || this.props.data.specifications;
+        // const comments = nextProps.data.comments || this.props.data.comments;
+        // if (!nextState.comments && productData && specifications && comments) {
+        //     this.loadPageTabs(productData, specifications, comments);
+        // }
+    }
 
-    setAndMutateData() {
-        const { topSales } = this.props.data;
+    setAndMutateData(data) {
         this.setState({
-            catalogItems: topSales && this.mutateSales(topSales)
+            catalogItems: this.mutateSales(data)
         });
     }
 
@@ -219,7 +216,7 @@ class MainPage extends Component {
 
     render() {
         console.log(this.props.data);
-        const { topSales } = this.props.data;
+        // const { topSales } = this.props.data;
         const {
             carouselAdData,
             popularItemsData,
@@ -228,10 +225,11 @@ class MainPage extends Component {
             tabItems
         } = this.state;
         return (
+            catalogItems &&
             <MainPageComponent
                 carouselAdData={carouselAdData}
                 popularItemsData={popularItemsData}
-                catalogItems={topSales}
+                catalogItems={catalogItems}
                 carouselProductsData={carouselProductsData}
                 tabItems={tabItems}
                 onAddToCart={this.addToCart}
@@ -242,14 +240,14 @@ class MainPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        data: state.Data
+        data: state.Data['mainPage']
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onAddToCart: (item) => dispatch(addToCart(item)),
-        onGetData: (url, name) => dispatch(getData(url, name))
+        onGetData: (id, url, name) => dispatch(getData(id, url, name))
     };
 };
 

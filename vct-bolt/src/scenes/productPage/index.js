@@ -22,7 +22,6 @@ class ProductPage extends Component {
 
     constructor(props) {
         super(props);
-        console.log('ProductPage');
         this.state = {
             id : this.props.match.url.match(/\d+/)[0],
             productData: null,
@@ -41,24 +40,24 @@ class ProductPage extends Component {
         this.changeFormField = this.changeFormField.bind(this);
     }
 
-    componentDidMount() {
-        // const id = this.props.match.url.match(/\d+/)[0];
-        const {id} = this.state.id;
-        this.props.onGetData(`http://api.vct1.com/product/${id}`, `productData${id}`);
-        this.props.onGetData(`http://api.vct1.com/specifications/${id}`, `specifications${id}`);
-        this.props.onGetData(`http://api.vct1.com/comments/${id}`, `comments${id}`);
+    componentWillMount() {
+        const {id} = this.state;
+        console.log('mount');
+        this.props.onGetData(id, `http://api.vct1.com/product/${id}`, `productData`);
+        this.props.onGetData(id,`http://api.vct1.com/specifications/${id}`, `specifications`);
+        this.props.onGetData(id,`http://api.vct1.com/comments/${id}`, `comments`);
     }
 
     componentWillUpdate(nextProps, nextState) {
-        if (nextProps.data.productData && !nextState.breadCrumbs) {
-            this.loadBreadCrumbs(nextProps.data.productData[0]);
-        }
-        const productData = nextProps.data.productData || this.props.data.productData;
-        const specifications = nextProps.data.specifications || this.props.data.specifications;
-        const comments = nextProps.data.comments || this.props.data.comments;
-        if (!nextState.comments && productData && specifications && comments) {
-            this.loadPageTabs(productData, specifications, comments);
-        }
+        // if (nextProps.data.productData && !nextState.breadCrumbs) {
+        //     this.loadBreadCrumbs(nextProps.data.productData[0]);
+        // }
+        // const productData = nextProps.data.productData || this.props.data.productData;
+        // const specifications = nextProps.data.specifications || this.props.data.specifications;
+        // const comments = nextProps.data.comments || this.props.data.comments;
+        // if (!nextState.comments && productData && specifications && comments) {
+        //     this.loadPageTabs(productData, specifications, comments);
+        // }
     }
 
     changeFormField(data) {
@@ -85,7 +84,7 @@ class ProductPage extends Component {
     }
 
     loadProductData() {
-        const {id} = this.state.id;
+        const {id} = this.state;
         // fetchApi('../../fakeAPI/productPageData.json')
         //     .then(result => this.setState({
         //             productData: result
@@ -223,14 +222,15 @@ class ProductPage extends Component {
     }
 
     render() {
-        const { productData, specifications } = this.props.data;
+        console.log(this.props.data);
+        // const { productData, specifications } = this.props.data;
         const {
             breadCrumbs,
             carouselProductsData,
             comments,
             specification
         } = this.state;
-        if (!productData) {
+        if (!breadCrumbs) {
             return false;
         }
         return (
@@ -247,16 +247,17 @@ class ProductPage extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
+    const id = props.match.url.match(/\d+/)[0];
     return {
-        data: state.Data
+        data: state.Data[id]
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onAddToCart: (item) => dispatch(addToCart(item)),
-        onGetData: (url, name) => dispatch(getData(url, name)),
+        onGetData: (id, url, name) => dispatch(getData(id, url, name)),
         onChangeField: (name, value) => dispatch(change('commentForm', name, value))
     };
 };

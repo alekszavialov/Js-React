@@ -5,7 +5,7 @@ export default function Data(state = initialState, action) {
         case 'ADD_TO_DATA':
             return {
                 ...state,
-                [action.name]: action.data
+                [action.id] : {...state[action.id], [action.name]: action.data}
             };
         default:
             return state;

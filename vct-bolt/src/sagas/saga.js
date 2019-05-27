@@ -12,7 +12,7 @@ function getData(url, name) {
 function* loginEffectSaga(action) {
     try {
         const data = yield call(getData, action.url, action.name);
-        yield put(addToData(action.name, data));
+        yield put(addToData(action.id, action.name, data));
     } catch (e) {
         console.log(e, 'error');
     }
