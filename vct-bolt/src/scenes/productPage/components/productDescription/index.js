@@ -28,18 +28,14 @@ export default class ProductDescription extends Component {
         });
     }
 
-// <div className="brand-zone">
-// <img src={this.props.data.brandImage} alt=""/>
-// <span>{this.props.data.brandData}</span>
-// </div>
     render() {
         return (
             <Fragment>
                 <div className="col-md-5">
                     <div className="product-img-wrapper">
-                        <div className="product-img-block">
-                            {
-                                this.props.data.img2 ?
+                        {
+                            this.props.data.img2 ?
+                                <div className="slider-wrapper">
                                     <ImageCarousel
                                         images={[
                                             this.props.data.img,
@@ -47,11 +43,13 @@ export default class ProductDescription extends Component {
                                             this.props.data.img3,
                                             this.props.data.img4
                                         ]}
-                                    /> :
+                                    />
+                                </div>
+                                :
+                                <div className="product-img-block">
                                     <img src={this.props.data.img} alt={this.props.data.title}/>
-                            }
-
-                        </div>
+                                </div>
+                        }
                         <div className="products-in-stockroom">
                             Остаток на
                             складе: {this.props.data.balance ? `${this.props.data.balance} шт.` : 'уточняйте у менеджера'}

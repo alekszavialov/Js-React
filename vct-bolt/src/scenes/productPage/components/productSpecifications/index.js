@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 import './styles.css';
 
@@ -13,7 +13,7 @@ export default class ProductSpecification extends Component {
         const { title, data } = this.props;
 
         return (
-            <Fragment>
+            <div className="product-specification-block">
                 <h2>Характеристики {title}</h2>
                 {data.map(item =>
                     <div className="product-specification-item" key={item.description.split('').reduce((a, b) => {
@@ -28,7 +28,7 @@ export default class ProductSpecification extends Component {
                         </div>
                     </div>
                 )}
-            </Fragment>
+            </div>
         );
     }
 

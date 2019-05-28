@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import BreadCrumbs from '../../../components/breadCrumbs';
@@ -17,7 +17,7 @@ export default class ProductPageComponent extends Component {
         productData: PropTypes.object,
         comments: PropTypes.object,
         specification: PropTypes.object,
-        carouselProductsData: PropTypes.object,
+        relatedCarouseData: PropTypes.object,
 
         onAddToCart: PropTypes.func
     };
@@ -33,8 +33,7 @@ export default class ProductPageComponent extends Component {
     }
 
     render() {
-        const { breadCrumbs, productData, carouselProductsData, comments, specification } = this.props;
-        console.log(specification, '123123sad');
+        const { breadCrumbs, productData, carouselProductsData, relatedCarouseData,  comments, specification } = this.props;
         return (
             <div className="container">
                 <div className="bg-white">
@@ -64,28 +63,26 @@ export default class ProductPageComponent extends Component {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="accompanying-carousel-block">
-                                <h2 className="seal-lead">Сопутствующие товары:</h2>
                                 {
-                                    carouselProductsData &&
+                                    relatedCarouseData &&
                                     (
-                                        <SlickCarousel
-                                            carouselData={carouselProductsData}
-                                        />
+                                        <Fragment>
+                                            <h2 className="seal-lead">Сопутствующие товары:</h2>
+                                            <SlickCarousel
+                                                carouselData={relatedCarouseData}
+                                            />
+                                        </Fragment>
                                     )
                                 }
                             </div>
                         </div>
-                        <div className="col-md-8">
+                        <div className="col-md-12">
                             {
                                 specification &&
                                 (
                                     <ProductSpecification {...specification}/>
                                 )
                             }
-
-                            <DeliveryAndPay title={productData.title}/>
-                        </div>
-                        <div className="col-md-4">
                             {
                                 comments &&
                                 (
@@ -97,6 +94,7 @@ export default class ProductPageComponent extends Component {
                                     </div>
                                 )
                             }
+                            <DeliveryAndPay title={productData.title}/>
                         </div>
                         <div className="col-md-12">
                             <div className="accompanying-carousel-block">

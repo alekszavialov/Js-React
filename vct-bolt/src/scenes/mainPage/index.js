@@ -47,20 +47,20 @@ class MainPage extends Component {
 
     componentWillMount() {
         const { id } = this.state;
-        this.props.onGetData(id, 'http://api.vct1.com/topsales/', 'topSales');
+        (this.props.data && this.props.data.topSales) || this.props.onGetData(id, 'http://api.vct1.com/topsales/', 'topSales');
+    }
+
+    componentDidMount() {
+        const topSales = this.props.data && this.props.data.topSales;
+        if (topSales && !this.state.catalogItems) {
+            this.setAndMutateData(topSales);
+        }
     }
 
     componentWillUpdate(nextProps, nextState) {
-        console.log(nextProps, '12312');
         if (nextProps.data.topSales && !nextState.catalogItems) {
             this.setAndMutateData(nextProps.data.topSales);
         }
-        // const productData = nextProps.data.productData || this.props.data.productData;
-        // const specifications = nextProps.data.specifications || this.props.data.specifications;
-        // const comments = nextProps.data.comments || this.props.data.comments;
-        // if (!nextState.comments && productData && specifications && comments) {
-        //     this.loadPageTabs(productData, specifications, comments);
-        // }
     }
 
     setAndMutateData(data) {

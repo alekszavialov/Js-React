@@ -3,7 +3,7 @@
   position: relative;
 }
 
-.product-img-block{
+.slider-wrapper, .product-img-block{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,6 +11,10 @@
   width: 380px;
   margin: 0 auto;
   position: relative;
+  margin-bottom: 10px;
+}
+
+.product-img-block{
   height: 320px;
 }
 
@@ -28,7 +32,7 @@
   height: 100%;
 }
 
-.product-img-block img{
+.product-img-block img, .slider-wrapper img{
   max-width: 100% !important;
   width: auto !important;
   max-height: 100%;

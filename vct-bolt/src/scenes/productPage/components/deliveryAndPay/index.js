@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './styles.css'
@@ -29,10 +29,10 @@ export default class DeliveryAndPay extends Component {
         const { title } = this.props;
 
         return (
-            <Fragment>
-                <h2 onClick={this.toggleDisplay}>Доставка и оплата</h2>
+            <div className={`delivery-and-pay-block ${this.state.display && 'visible'}`}>
+                <h2>Доставка и оплата <button onClick={this.toggleDisplay}>{this.state.display ? "Скрыть" : "Показать все"}</button></h2>
                 <div
-                    className={`delivery-and-pay ${this.state.display && 'visible'}`}
+                    className="delivery-and-pay"
                 >
                     <h3><strong>Доставка {title}</strong></h3>
                     <p><strong>Самовывоз</strong></p>
@@ -141,7 +141,7 @@ export default class DeliveryAndPay extends Component {
                         <strong>Купить {title}</strong>
                     </p>
                 </div>
-            </Fragment>
+            </div>
         );
     }
 

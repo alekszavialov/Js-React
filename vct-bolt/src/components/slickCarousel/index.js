@@ -19,6 +19,7 @@ export default class SlickCarousel extends Component {
         this.fillItems = this.fillItems.bind(this);
     }
 
+
     fillItems() {
         return this.props.carouselData.items ? this.props.carouselData.items.map(item =>
             this.props.carouselData.onAddToCart ?
@@ -35,8 +36,12 @@ export default class SlickCarousel extends Component {
     }
 
     render() {
+
         const { params } = this.props.carouselData;
+
+        console.log(this.props, 'asdadsasd carouselll!!!');
         return (
+            this.props.carouselData &&
             <Slider {...params}>
                 {this.fillItems()}
             </Slider>

@@ -8,9 +8,9 @@ import './styles.css';
 export default class ProductCommentBlock extends Component {
 
     static propTypes = {
-        title : PropTypes.string,
-        data : PropTypes.array,
-        changeFormField : PropTypes.func
+        title: PropTypes.string,
+        data: PropTypes.array,
+        changeFormField: PropTypes.func
     };
 
     constructor(props) {
@@ -24,13 +24,13 @@ export default class ProductCommentBlock extends Component {
         this.changeFormField = this.changeFormField.bind(this);
     }
 
-    changeFormField(data){
+    changeFormField(data) {
         this.props.changeFormField(data);
     }
 
-    toggleAddComment(){
+    toggleAddComment() {
         this.setState({
-            isVisibleCommentForm : !this.state.isVisibleCommentForm
+            isVisibleCommentForm: !this.state.isVisibleCommentForm
         });
     }
 
@@ -47,28 +47,33 @@ export default class ProductCommentBlock extends Component {
                         onClick={this.toggleAddComment}
                     />
                     {this.state.isVisibleCommentForm &&
-                        <AddCommentBlock changeFormField={this.changeFormField}/>
+                    <AddCommentBlock changeFormField={this.changeFormField}/>
                     }
                 </div>
-                {data.map(item =>
-                    <div className="product-comments-item"
-                        key={item.comment.split('').reduce((a, b) => {
-                            a = ((a << 5) - a) + b.charCodeAt(0);
-                            return a & a;
-                        }, 0)}>
-                        <p className="product-comments-item-name">{item.date} {item.name}</p>
-                        <span className={`product-comments-item-${item.bought === 1 ? 'buy' : 'not'}`}>{item.bought === 1 ? 'Купил' : 'Не купил'}</span>
-                        <div className="product-comments-item-stars">
-                            <ReactStars
-                                count={5}
-                                value={Number(item.rank)}
-                                edit={false}
-                                size={24}
-                                color2="#ffd700" />
+                {data.length > 0 ?
+                    data.map(item =>
+                        <div className="product-comments-item"
+                             key={item.comment.split('').reduce((a, b) => {
+                                 a = ((a << 5) - a) + b.charCodeAt(0);
+                                 return a & a;
+                             }, 0)}>
+                            <p className="product-comments-item-name">{item.date} {item.name}</p>
+                            <span
+                                className={`product-comments-item-${item.bought === 1 ? 'buy' : 'not'}`}>{item.bought === 1 ? 'Купил' : 'Не купил'}</span>
+                            <div className="product-comments-item-stars">
+                                <ReactStars
+                                    count={5}
+                                    value={Number(item.rank)}
+                                    edit={false}
+                                    size={24}
+                                    color2="#ffd700"/>
+                            </div>
+                            <p className="product-comments-item-comment">{item.comment}</p>
                         </div>
-                        <p className="product-comments-item-comment">{item.comment}</p>
-                    </div>
-                )}
+                    ) :
+                    <p className="product-comments-item-empty">Комментариев еще нет. Оставьте свой</p>
+                }
+
             </div>
         );
     }

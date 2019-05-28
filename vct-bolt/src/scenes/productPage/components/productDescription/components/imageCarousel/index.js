@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Slider from 'react-slick';
 
 import 'slick-carousel/slick/slick.css';
-// import './styles.css';
+import './styles.css';
 
 export default class ImageCarousel extends Component {
 
@@ -12,10 +12,10 @@ export default class ImageCarousel extends Component {
         this.state = {
             params: {
                 'dots': true,
-                'arrows': false,
                 'infinite': true,
                 'autoplay': true,
                 'autoplaySpeed': 6000,
+                'dotsClass': "slick-dots-images",
                 'speed': 500,
                 'slidesToShow': 1,
                 'slidesToScroll': 1,
@@ -25,11 +25,17 @@ export default class ImageCarousel extends Component {
     }
 
     render() {
-        const { images } = this.props;
-        console.log(images);
+        const images = this.props.images.filter(item => item);
+        const settings = {
+            customPaging(item) {
+                return (
+                    <img key={images[item] + item} src={images[item]} alt=""/>
+                );
+            }
+        };
         return (
-            <Slider {...this.state.params}>
-                {images.filter(item => item).map(item => <img key={item} src={item} alt=""/>)}
+            <Slider {...settings} {...this.state.params}>
+                {images.map(item => <img key={item} src={item} alt=""/>)}
             </Slider>
         );
     }

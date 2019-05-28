@@ -38,7 +38,7 @@ const mutateSales = (data) => data.map(item => {
     }
 );
 
-const mutateSpecifications = (data) => data.filter(item => item.description);
+const mutateSpecifications = (data) => data.filter(item => item.description && item.value);
 
 export function mutateData(name, data) {
     switch (name) {

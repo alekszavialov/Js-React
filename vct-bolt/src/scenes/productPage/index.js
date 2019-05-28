@@ -9,10 +9,10 @@ import ProductSpecification from './components/productSpecifications';
 import ProductCommentBlock from './components/productComment';
 
 import { addToCart } from '../../data/Store/actions';
-// import fetchApi from '../../modules/fetch-api';
 
 import './styles.css';
 import { getData } from '../../data/Data/actions';
+import cyrillicToTranslit from 'cyrillic-to-translit-js/CyrillicToTranslit';
 
 class ProductPage extends Component {
 
@@ -23,14 +23,17 @@ class ProductPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id : this.props.match.url.match(/\d+/)[0],
+            id: this.props.match.url.match(/\d+/)[0],
             productData: null,
             tabsItems: null,
             breadCrumbs: null,
-            carouselProductsData: null
+            carouselProductsData: null,
+            relatedCarouseData: null,
+            relatedProducts: null
         };
 
         this.loadProductData = this.loadProductData.bind(this);
+        this.loadRelatedProducts = this.loadRelatedProducts.bind(this);
         this.loadBreadCrumbs = this.loadBreadCrumbs.bind(this);
         this.loadPageTabs = this.loadPageTabs.bind(this);
         this.loadCarouselItems = this.loadCarouselItems.bind(this);
@@ -41,23 +44,53 @@ class ProductPage extends Component {
     }
 
     componentWillMount() {
-        const {id} = this.state;
-        console.log('mount');
-        this.props.onGetData(id, `http://api.vct1.com/product/${id}`, `productData`);
-        this.props.onGetData(id,`http://api.vct1.com/specifications/${id}`, `specifications`);
-        this.props.onGetData(id,`http://api.vct1.com/comments/${id}`, `comments`);
+        const { id } = this.state;
+        (this.props.data[id] && this.props.data[id].productData) || this.props.onGetData(id, `http://api.vct1.com/product/${id}`, `productData`);
+        (this.props.data[id] && this.props.data[id].specifications) || this.props.onGetData(id, `http://api.vct1.com/specifications/${id}`, `specifications`);
+        (this.props.data[id] && this.props.data[id].comments) || this.props.onGetData(id, `http://api.vct1.com/comments/${id}`, `comments`);
+    }
+
+    componentDidMount() {
+        const { id } = this.state;
+        const productData = this.props.data[id] && this.props.data[id].productData;
+        if (productData && !this.state.productData) {
+            this.loadProductData(productData[0]);
+        }
+        if (productData && !this.state.breadCrumbs) {
+            this.loadBreadCrumbs(productData[0]);
+        }
+        const specifications = this.props.data[id] && this.props.data[id].specifications;
+        const comments = this.props.data[id] && this.props.data[id].comments;
+        if (!this.state.comments && productData && specifications && comments) {
+            this.loadPageTabs(productData, specifications, comments);
+        }
     }
 
     componentWillUpdate(nextProps, nextState) {
-        // if (nextProps.data.productData && !nextState.breadCrumbs) {
-        //     this.loadBreadCrumbs(nextProps.data.productData[0]);
-        // }
-        // const productData = nextProps.data.productData || this.props.data.productData;
-        // const specifications = nextProps.data.specifications || this.props.data.specifications;
-        // const comments = nextProps.data.comments || this.props.data.comments;
-        // if (!nextState.comments && productData && specifications && comments) {
-        //     this.loadPageTabs(productData, specifications, comments);
-        // }
+        console.log('update!!!');
+        const { id } = this.state;
+        const productData = nextProps.data[id].productData || this.props.data[id] && this.props.data[id].productData;
+        if (productData && !nextState.productData) {
+            this.loadProductData(productData[0]);
+        }
+        if (productData && productData[0]['related-products'] && !nextState.relatedCarouseData) {
+            const related = productData[0]['related-products'].split(',');
+            const loaded = related.map(item => {
+                    return nextProps.data[item];
+                }
+            ).filter(item => item);
+            if (loaded.length === related.length) {
+                this.loadRelatedProducts(loaded);
+            }
+        }
+        if (productData && !nextState.breadCrumbs) {
+            this.loadBreadCrumbs(productData[0]);
+        }
+        const specifications = nextProps.data[id].specifications || this.props.data[id] && this.props.data[id].specifications;
+        const comments = nextProps.data[id].comments || this.props.data[id] && this.props.data[id].comments;
+        if (!nextState.comments && productData && specifications && comments) {
+            this.loadPageTabs(productData, specifications, comments);
+        }
     }
 
     changeFormField(data) {
@@ -77,23 +110,77 @@ class ProductPage extends Component {
         }
     };
 
+    loadRelatedProducts(data) {
+        console.log('asddsaads carouserlll!!!');
+        const filterData = data.map(
+            item => {
+                const newItem = {
+                    src: item.productData[0].img,
+                    href: `/product-${item.productData[0].id}-${cyrillicToTranslit().transform(item.productData[0].title.replace(/\//g, ''), '_').toLowerCase()}`,
+                    name: item.productData[0].title,
+                    price: item.productData[0].price,
+                    article: item.productData[0].id
+                };
+                return newItem;
+            }
+        );
+        this.setState({
+            relatedCarouseData: {
+                'params': {
+                    'dots': false,
+                    'infinite': true,
+                    'speed': 500,
+                    'autoplay': true,
+                    'autoplaySpeed': 6000,
+                    'slidesToShow': data.length < 6 ? data.length : 6,
+                    'slidesToScroll': 1,
+                    'pauseOnHover': true,
+                    'responsive': [
+                        {
+                            'breakpoint': 1024,
+                            'settings': {
+                                'slidesToShow': 4
+                            }
+                        },
+                        {
+                            'breakpoint': 992,
+                            'settings': {
+                                'slidesToShow': 2
+                            }
+                        }
+                    ]
+                },
+                'items': filterData,
+                onAddToCart: this.addToCart
+            }
+        });
+    }
+
+// {
+//     "src": "https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg",
+//     "href": "#",
+//     "name": "Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)",
+//     "description": "M6500/M6607/P2200/P2207/ P2500/P2507",
+//     "price": 324,
+//     "article": 121221
+// },
+
     toggleAddComment() {
         this.setState({
             isVisibleCommentForm: !this.state.isVisibleCommentForm
         });
     }
 
-    loadProductData() {
-        const {id} = this.state;
-        // fetchApi('../../fakeAPI/productPageData.json')
-        //     .then(result => this.setState({
-        //             productData: result
-        //         }
-        //     ));
-
+    loadProductData(data) {
+        if (data['related-products']) {
+            const related = data['related-products'].split(',');
+            related.forEach((item) =>
+                this.props.data[item] || this.props.onGetData(item, `http://api.vct1.com/product/${item}`, `productData`)
+            );
+        }
         this.setState(
             {
-                productData: this.props.data.productPageData
+                productData: data
             }
         );
     };
@@ -134,41 +221,14 @@ class ProductPage extends Component {
     // };
 
     loadPageTabs(productData, specifications, comments) {
-        console.log('tabs');
-        const defaultIndex = specifications ? 1 : 2;
-        const descr = false;
-        // const specification = <ProductSpecification
-        //     title={productData[0].title}
-        //     data={specifications}/>;
-        // const delivery = <DeliveryAndPay
-        //     title={productData[0].title}/>;
-        // const comment = <ProductCommentBlock
-        //     changeFormField={this.changeFormField}
-        //     title={productData[0].title}
-        //     data={comments}/>;
         const specification = {
             title: productData[0].title,
             data: specifications
         };
-        const delivery = { title: productData[0].title };
         const comment = {
-            title:productData[0].title,
-            data:comments,
-            changeFormField: this.changeFormField};
-        const result = {
-            'defaultIndex': defaultIndex,
-            'title': [
-                { name: 'Описание', enabled: descr },
-                { name: 'Характеристики', enabled: specification },
-                { name: 'Доставка и оплата', enabled: true },
-                { name: `Комментарии ${comments.length}`, enabled: true }
-            ],
-            'items': [
-                descr,
-                specification,
-                delivery,
-                comment
-            ]
+            title: productData[0].title,
+            data: comments,
+            changeFormField: this.changeFormField
         };
         this.setState(
             {
@@ -222,23 +282,24 @@ class ProductPage extends Component {
     }
 
     render() {
+        console.log(this.state);
         console.log(this.props.data);
-        // const { productData, specifications } = this.props.data;
         const {
             breadCrumbs,
-            carouselProductsData,
+            relatedCarouseData,
+            productData,
             comments,
             specification
         } = this.state;
-        if (!breadCrumbs) {
+        if (!productData) {
             return false;
         }
         return (
             <ProductPageComponent
                 breadCrumbs={breadCrumbs}
-                productData={productData[0]}
+                productData={productData}
 
-                carouselProductsData={carouselProductsData}
+                relatedCarouseData={relatedCarouseData}
                 comments={comments}
                 specification={specification}
                 onAddToCart={this.addToCart}
@@ -248,9 +309,9 @@ class ProductPage extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-    const id = props.match.url.match(/\d+/)[0];
+    // const id = props.match.url.match(/\d+/)[0];
     return {
-        data: state.Data[id]
+        data: state.Data
     };
 };
 
