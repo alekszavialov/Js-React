@@ -42,39 +42,88 @@ class MainPage extends Component {
         this.loadCarouselItems = this.loadCarouselItems.bind(this);
         this.loadPageTabItems = this.loadPageTabItems.bind(this);
 
-        this.setAndMutateData = this.setAndMutateData.bind(this);
-        this.mutateSales = this.mutateSales.bind(this);
+        this.setStateSales = this.setStateSales.bind(this);
+        this.setStateCarouselAd = this.setStateCarouselAd.bind(this);
     }
 
     componentWillMount() {
         const { id } = this.state;
         (this.props.data && this.props.data.topSales) || this.props.onGetData(id, 'http://api.vct1.com/topsales/', 'topSales');
+        (this.props.data && this.props.data.carouselAdData) || this.props.onGetData('carouselAdData', 'http://api.vct1.com/slider/', 'carouselAdData');
+
+        // fetch('http://api.vct1.com/slider/')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data, 'slioder');
+        //     });
+        // fetch('http://api.vct1.com/related-products/150,151')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data, 'related');
+        //     });
+        // fetch('http://api.vct1.com/parameters/?category=%D0%9F%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data, 'parameters');
+        //     });
     }
 
     componentDidMount() {
         const topSales = this.props.data && this.props.data.topSales;
+        const carouselAdData = this.props.data && this.props.data.carouselAdData;
         if (topSales && !this.state.catalogItems) {
-            this.setAndMutateData(topSales);
+            this.setStateSales(topSales);
+        }
+        if (carouselAdData && !this.state.carouselAdData) {
+            this.setStateCarouselAd(carouselAdData);
         }
     }
 
     componentWillUpdate(nextProps, nextState) {
         if (nextProps.data.topSales && !nextState.catalogItems) {
-            this.setAndMutateData(nextProps.data.topSales);
+            this.setStateSales(nextProps.data.topSales);
+        }
+        if (nextProps.data.carouselAdData && !nextState.carouselAdData) {
+            this.setStateCarouselAd(nextProps.data.carouselAdData);
         }
     }
 
-    setAndMutateData(data) {
+    setStateSales(data) {
         this.setState({
-            catalogItems: this.mutateSales(data)
+            catalogItems: data.map(item => {
+                return { ...item, url: `/${item.url.replace(/\//gi, '-').substring(1)}` };
+            })
         });
     }
 
-    mutateSales(data) {
-        return data.map(item => {
-                return { ...item, url: `/${item.url.replace(/\//gi, '-').substring(1)}` };
-            }
-        );
+    setStateCarouselAd(data) {
+        console.log(data, 'caroused');
+        const stateData = {
+            'params': {
+                'dots': true,
+                'arrows': false,
+                'infinite': true,
+                'autoplay': true,
+                'autoplaySpeed': 6000,
+                'speed': 500,
+                'slidesToShow': 1,
+                'slidesToScroll': 1,
+                'pauseOnHover': true
+            },
+            'items':
+                data.map(item => {
+                    return {
+                        'url': item.url.match(/product/) ? `/product-${item.url.match(/\d+/)[0]}` : `/catalog-${item.url.match(/([^/]*)\/$/)[1]}`,
+                        'src': item.img,
+                        'text': item.url.match(/([^/]*)\/$/)[1]
+                    };
+                })
+
+        };
+        console.log(stateData);
+        this.setState({
+            carouselAdData: stateData
+        });
     }
 
     loadCarouselData() {
@@ -241,7 +290,7 @@ class MainPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        data: state.Data['mainPage']
+        data: { ...state.Data['mainPage'], ...state.Data['carouselAdData'] }
     };
 };
 

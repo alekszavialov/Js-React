@@ -29,6 +29,7 @@ export default class MainPageComponent extends Component {
 
     render() {
         const { carouselAdData, popularItemsData, catalogItems, carouselProductsData, tabItems } = this.props;
+
         return (
             <Fragment>
                 <div className="container">
