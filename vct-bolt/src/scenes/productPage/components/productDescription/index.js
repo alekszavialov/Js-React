@@ -58,7 +58,7 @@ export default class ProductDescription extends Component {
                     </div>
                 </div>
                 <div className="col-md-7">
-                    <h1 className="product-info-name">{this.props.data.name}</h1>
+                    <h1 className="product-info-name">{this.props.data.title}</h1>
                     <div className="product-info-wrapper">
                         <div className="product-description">
                             <p>{this.props.data.description}</p>

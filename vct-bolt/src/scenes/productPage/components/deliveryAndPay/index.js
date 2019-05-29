@@ -6,14 +6,15 @@ import './styles.css'
 export default class DeliveryAndPay extends Component {
 
     static propTypes = {
-        title : PropTypes.string
+        title : PropTypes.string,
+        open: PropTypes.bool
     };
 
     constructor(props) {
         super(props);
 
         this.state = {
-            display: false
+            display: this.props.open
         };
 
         this.toggleDisplay = this.toggleDisplay.bind(this);
@@ -26,11 +27,11 @@ export default class DeliveryAndPay extends Component {
     }
 
     render() {
-        const { title } = this.props;
+        const { title, open } = this.props;
 
         return (
             <div className={`delivery-and-pay-block ${this.state.display && 'visible'}`}>
-                <h2>Доставка и оплата <button onClick={this.toggleDisplay}>{this.state.display ? "Скрыть" : "Показать все"}</button></h2>
+                <h2>Доставка и оплата {open || <button onClick={this.toggleDisplay}>{this.state.display ? "Скрыть" : "Показать все"}</button>}</h2>
                 <div
                     className="delivery-and-pay"
                 >

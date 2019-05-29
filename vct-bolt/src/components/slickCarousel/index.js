@@ -36,10 +36,7 @@ export default class SlickCarousel extends Component {
     }
 
     render() {
-
         const { params } = this.props.carouselData;
-
-        console.log(this.props, 'asdadsasd carouselll!!!');
         return (
             this.props.carouselData &&
             <Slider {...params}>

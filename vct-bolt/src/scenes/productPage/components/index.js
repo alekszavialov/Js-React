@@ -2,12 +2,11 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import BreadCrumbs from '../../../components/breadCrumbs';
+import ProductPageNavigation from './productPageNavigation';
 import SlickCarousel from '../../../components/slickCarousel';
-import SiteTabs from '../../../components/tabs';
 import ProductDescription from './productDescription';
 import ProductCommentBlock from './productComment';
 import DeliveryAndPay from './deliveryAndPay';
-import ProductTabs from './tabs';
 import ProductSpecification from './productSpecifications';
 
 export default class ProductPageComponent extends Component {
@@ -16,9 +15,10 @@ export default class ProductPageComponent extends Component {
         breadCrumbs: PropTypes.array,
         productData: PropTypes.object,
         comments: PropTypes.object,
-        specification: PropTypes.object,
+        specifications: PropTypes.object,
         relatedCarouseData: PropTypes.object,
-
+        url: PropTypes.string,
+        subPage: PropTypes.string,
         onAddToCart: PropTypes.func
     };
 
@@ -33,7 +33,7 @@ export default class ProductPageComponent extends Component {
     }
 
     render() {
-        const { breadCrumbs, productData, carouselProductsData, relatedCarouseData,  comments, specification } = this.props;
+        const { breadCrumbs, productData, relatedCarouseData, comments, specifications, url, subPage } = this.props;
         return (
             <div className="container">
                 <div className="bg-white">
@@ -48,15 +48,45 @@ export default class ProductPageComponent extends Component {
                                         </div>
                                     )
                                 }
+                                <ProductPageNavigation
+                                    url={url}
+                                    images={productData.img2}
+                                    relatedProducts={relatedCarouseData && relatedCarouseData.items}
+                                />
                             </div>
                             {
-                                productData &&
+                                (!subPage && productData) &&
                                 (
                                     <ProductDescription
                                         data={productData}
                                         onAddToCart={this.addToCart}
                                     />
                                 )
+                            }
+                            {
+                                subPage && subPage === 'specifications' && specifications &&
+                                <div className="col-md-12">
+                                    <ProductSpecification {...specifications}/>
+                                </div>
+                            }
+                            {
+                                subPage && subPage === 'comments' && comments &&
+                                (
+                                    <div className="product-card-tabs">
+                                        <ProductCommentBlock
+                                            title={comments.title} data={comments.data}
+                                            changeFormField={comments.changeFormField}
+                                        />
+                                    </div>
+                                )
+
+                            }
+                            {
+                                subPage && subPage === 'delivery' &&
+                                <div className="col-md-12">
+                                    <DeliveryAndPay title={productData.title} open/>
+                                </div>
+
                             }
                         </div>
                     </div>
@@ -78,9 +108,9 @@ export default class ProductPageComponent extends Component {
                         </div>
                         <div className="col-md-12">
                             {
-                                specification &&
+                                specifications &&
                                 (
-                                    <ProductSpecification {...specification}/>
+                                    <ProductSpecification {...specifications}/>
                                 )
                             }
                             {
@@ -101,10 +131,10 @@ export default class ProductPageComponent extends Component {
                                 <h2 className="seal-lead">Похожие товары на Принтер фабрика печати Epson L132
                                     C11CE58403:</h2>
                                 {
-                                    carouselProductsData &&
+                                    relatedCarouseData &&
                                     (
                                         <SlickCarousel
-                                            carouselData={carouselProductsData}
+                                            carouselData={relatedCarouseData}
                                         />
                                     )
                                 }
@@ -114,10 +144,10 @@ export default class ProductPageComponent extends Component {
                             <div className="accompanying-carousel-block">
                                 <h2 className="seal-lead block-with-icon icon-eye">Недавно просмотренные товары:</h2>
                                 {
-                                    carouselProductsData &&
+                                    relatedCarouseData &&
                                     (
                                         <SlickCarousel
-                                            carouselData={carouselProductsData}
+                                            carouselData={relatedCarouseData}
                                         />
                                     )
                                 }

@@ -4,9 +4,6 @@ import { reduxForm, change } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import ProductPageComponent from './components';
-import DeliveryAndPay from './components/deliveryAndPay';
-import ProductSpecification from './components/productSpecifications';
-import ProductCommentBlock from './components/productComment';
 
 import { addToCart } from '../../data/Store/actions';
 
@@ -17,65 +14,80 @@ import cyrillicToTranslit from 'cyrillic-to-translit-js/CyrillicToTranslit';
 class ProductPage extends Component {
 
     static propTypes = {
-        onAddToCart: PropTypes.func
+        data: PropTypes.object,
+        match: PropTypes.object,
+        onAddToCart: PropTypes.func,
+        onGetData: PropTypes.func
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            id: this.props.match.url.match(/\d+/)[0],
             productData: null,
-            tabsItems: null,
             breadCrumbs: null,
-            carouselProductsData: null,
             relatedCarouseData: null,
-            relatedProducts: null
+            specifications: null,
+            comments: null
         };
 
+        this.loadDataAPI = this.loadDataAPI.bind(this);
+        this.fillPageState = this.fillPageState.bind(this);
         this.loadProductData = this.loadProductData.bind(this);
         this.loadRelatedProducts = this.loadRelatedProducts.bind(this);
         this.loadBreadCrumbs = this.loadBreadCrumbs.bind(this);
-        this.loadPageTabs = this.loadPageTabs.bind(this);
-        this.loadCarouselItems = this.loadCarouselItems.bind(this);
-        this.addToCart = this.addToCart.bind(this);
+        this.loadComments = this.loadComments.bind(this);
+        this.loadSpecifications = this.loadSpecifications.bind(this);
 
+        this.addToCart = this.addToCart.bind(this);
         this.toggleAddComment = this.toggleAddComment.bind(this);
         this.changeFormField = this.changeFormField.bind(this);
-    }
 
-    componentWillMount() {
-        const { id } = this.state;
-        (this.props.data[id] && this.props.data[id].productData) || this.props.onGetData(id, `http://api.vct1.com/product/${id}`, `productData`);
-        (this.props.data[id] && this.props.data[id].specifications) || this.props.onGetData(id, `http://api.vct1.com/specifications/${id}`, `specifications`);
-        (this.props.data[id] && this.props.data[id].comments) || this.props.onGetData(id, `http://api.vct1.com/comments/${id}`, `comments`);
     }
 
     componentDidMount() {
-        const { id } = this.state;
-        const productData = this.props.data[id] && this.props.data[id].productData;
-        if (productData && !this.state.productData) {
-            this.loadProductData(productData[0]);
-        }
-        if (productData && !this.state.breadCrumbs) {
-            this.loadBreadCrumbs(productData[0]);
-        }
-        const specifications = this.props.data[id] && this.props.data[id].specifications;
-        const comments = this.props.data[id] && this.props.data[id].comments;
-        if (!this.state.comments && productData && specifications && comments) {
-            this.loadPageTabs(productData, specifications, comments);
+        window.scrollTo(0, 0);
+        const id = this.props.match.url.match(/\d+/)[0];
+        this.loadDataAPI(id);
+        if (this.props.data[id]) {
+            const productData = this.props.data[id].productData[0];
+            const { comments, specifications } = this.props.data[id];
+            if (productData && specifications && comments) {
+                document.title = productData.title;
+                this.fillPageState(productData, specifications, comments);
+            }
         }
     }
 
     componentWillUpdate(nextProps, nextState) {
-        console.log('update!!!');
-        const { id } = this.state;
-        const productData = nextProps.data[id].productData || this.props.data[id] && this.props.data[id].productData;
-        if (productData && !nextState.productData) {
-            this.loadProductData(productData[0]);
+        if (nextProps.match.url !== this.props.match.url) {
+            window.scrollTo(0, 0);
+            this.setState({
+                productData: null,
+                breadCrumbs: null,
+                relatedCarouseData: null,
+                specifications: null,
+                comments: null
+            });
+            this.loadDataAPI(nextProps.match.url.match(/\d+/)[0]);
+            return;
         }
-        if (productData && productData[0]['related-products'] && !nextState.relatedCarouseData) {
-            const related = productData[0]['related-products'].split(',');
-            const loaded = related.map(item => {
+        const id = this.props.match.url.match(/\d+/)[0];
+        const data = nextProps.data[id];
+        if (!data) {
+            return;
+        }
+        const productData = data.productData && data.productData[0];
+        if (!productData) {
+            return;
+        }
+        if (!nextState.productData) {
+            document.title = productData.title;
+            this.loadProductData(productData);
+        }
+        if (productData['related-products'] && !nextState.relatedCarouseData) {
+            const related = productData['related-products'].split(',').filter(item => item);
+            const loaded = related.map(
+                item => {
                     return nextProps.data[item];
                 }
             ).filter(item => item);
@@ -83,15 +95,123 @@ class ProductPage extends Component {
                 this.loadRelatedProducts(loaded);
             }
         }
-        if (productData && !nextState.breadCrumbs) {
-            this.loadBreadCrumbs(productData[0]);
+        if (!nextState.breadCrumbs) {
+            this.loadBreadCrumbs(productData);
         }
-        const specifications = nextProps.data[id].specifications || this.props.data[id] && this.props.data[id].specifications;
-        const comments = nextProps.data[id].comments || this.props.data[id] && this.props.data[id].comments;
-        if (!nextState.comments && productData && specifications && comments) {
-            this.loadPageTabs(productData, specifications, comments);
+
+        const { comments } = data;
+        if (!nextState.comments && comments) {
+            this.loadComments(productData, comments);
+        }
+        const { specifications } = data;
+        if (!nextState.specifications && specifications) {
+            this.loadSpecifications(productData, specifications);
         }
     }
+
+    loadDataAPI(id) {
+        (this.props.data[id] && this.props.data[id].productData) || this.props.onGetData(id, `http://api.vct1.com/product/${id}`, `productData`);
+        (this.props.data[id] && this.props.data[id].specifications) || this.props.onGetData(id, `http://api.vct1.com/specifications/${id}`, `specifications`);
+        (this.props.data[id] && this.props.data[id].comments) || this.props.onGetData(id, `http://api.vct1.com/comments/${id}`, `comments`);
+    }
+
+    fillPageState(productData, specifications, comments) {
+        if (productData['related-products']) {
+            const related = productData['related-products'].split(',').filter(item => item);
+            related.forEach((item) =>
+                this.props.data[item] || this.props.onGetData(item, `http://api.vct1.com/product/${item}`, `productData`)
+            );
+            const loaded = related.map(
+                item => {
+                    return this.props.data[item];
+                }
+            ).filter(item => item);
+            if (loaded.length === related.length) {
+                this.loadRelatedProducts(loaded);
+            }
+        }
+        const stateBreadCrumbs = [
+            { 'href': '/', 'name': 'Главная' },
+            {
+                'href': `/catalog-${productData.brand.toLowerCase()}`,
+                'name': productData.brand
+            },
+            { 'href': '', 'name': productData.title }
+        ];
+        const stateSpecification = {
+            title: productData.title,
+            data: specifications
+        };
+        const stateComments = {
+            title: productData.title,
+            data: comments,
+            changeFormField: this.changeFormField
+        };
+        this.setState(
+            {
+                productData: productData,
+                breadCrumbs: stateBreadCrumbs,
+                specifications: stateSpecification,
+                comments: stateComments
+            }
+        );
+
+    }
+
+    loadBreadCrumbs(data) {
+        const breadCrumbs = [
+            { 'href': '/', 'name': 'Главная' },
+            {
+                'href': `/catalog-${data.brand.toLowerCase()}`,
+                'name': data.brand
+            },
+            { 'href': '', 'name': data.title }
+        ];
+        this.setState(
+            {
+                breadCrumbs: breadCrumbs
+            }
+        );
+    };
+
+    loadProductData(data) {
+        if (data['related-products']) {
+            const related = data['related-products'].split(',');
+            related.forEach((item) =>
+                this.props.data[item] || this.props.onGetData(item, `http://api.vct1.com/product/${item}`, `productData`)
+            );
+        }
+        this.setState(
+            {
+                productData: data
+            }
+        );
+    };
+
+    loadSpecifications(productData, specifications) {
+        const stateSpecification = {
+            title: productData.title,
+            data: specifications
+        };
+        this.setState(
+            {
+                specifications: stateSpecification
+            }
+        );
+    };
+
+    loadComments(productData, comments) {
+        const stateComment = {
+            title: productData.title,
+            data: comments,
+            changeFormField: this.changeFormField
+        };
+        this.setState(
+            {
+                comments: stateComment
+            }
+        );
+    };
 
     changeFormField(data) {
         // if (!data.remove) {
@@ -111,7 +231,6 @@ class ProductPage extends Component {
     };
 
     loadRelatedProducts(data) {
-        console.log('asddsaads carouserlll!!!');
         const filterData = data.map(
             item => {
                 const newItem = {
@@ -156,160 +275,42 @@ class ProductPage extends Component {
         });
     }
 
-// {
-//     "src": "https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg",
-//     "href": "#",
-//     "name": "Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)",
-//     "description": "M6500/M6607/P2200/P2207/ P2500/P2507",
-//     "price": 324,
-//     "article": 121221
-// },
-
     toggleAddComment() {
         this.setState({
             isVisibleCommentForm: !this.state.isVisibleCommentForm
         });
     }
 
-    loadProductData(data) {
-        if (data['related-products']) {
-            const related = data['related-products'].split(',');
-            related.forEach((item) =>
-                this.props.data[item] || this.props.onGetData(item, `http://api.vct1.com/product/${item}`, `productData`)
-            );
-        }
-        this.setState(
-            {
-                productData: data
-            }
-        );
-    };
-
-    // loadPageTabs() {
-    //     // fetchApi('../../fakeAPI/productPageTabsData.json')
-    //     //   .then(result => this.setState({
-    //     //       tabsItems: {
-    //     //         ...result, items: result.items.map(item =>
-    //     //           (item.map(item =>
-    //     //             <div className="tabs-item" key={Math.random()} dangerouslySetInnerHTML={{__html: item.content}}>
-    //     //             </div>
-    //     //           ))
-    //     //         )
-    //     //       }
-    //     //     }
-    //     //   ));
-    //
-    //     // const result = require('../../fakeAPI/productPageTabsData.json');
-    //     this.setState(
-    //         {
-    //             tabsItems: {
-    //                 ...this.props.data.productPageTabsData,
-    //                 items: this.props.data.productPageTabsData.items.map
-    //                 (item =>
-    //                     (
-    //                         item.map
-    //                         (item =>
-    //                             <div className="tabs-item" key={Math.random()}
-    //                                  dangerouslySetInnerHTML={{ __html: item.content }}>
-    //                             </div>
-    //                         )
-    //                     )
-    //                 )
-    //             }
-    //         }
-    //     );
-    // };
-
-    loadPageTabs(productData, specifications, comments) {
-        const specification = {
-            title: productData[0].title,
-            data: specifications
-        };
-        const comment = {
-            title: productData[0].title,
-            data: comments,
-            changeFormField: this.changeFormField
-        };
-        this.setState(
-            {
-                specification: specification,
-                comments: comment
-            }
-        );
-    };
-
-    loadBreadCrumbs(data) {
-        const result = [
-            { 'href': '/', 'name': 'Главная' },
-            {
-                'href': `/catalog-${data.brand.toLowerCase()}`,
-                'name': data.brand
-            },
-            { 'href': '', 'name': data.title }
-        ];
-        this.setState(
-            {
-                breadCrumbs: result
-            }
-        );
-    };
-
-    loadCarouselItems() {
-        // fetchApi('../../fakeAPI/carouselManyItemsData.json')
-        //     .then(result => this.setState({
-        //         carouselData: {
-        //             ...result,
-        //             items: result.items.map(item =>
-        //                 <CarouselSmallItem key={Math.random()} item={item} onAddToCart={this.addToCart}/>
-        //             )
-        //         }
-        //     }));
-
-        // const result = require('../../fakeAPI/carouselManyItemsData.json');
-        this.setState(
-            {
-                carouselProductsData:
-                    {
-                        ...this.props.data.carouselManyItemsData,
-                        onAddToCart: this.addToCart
-                    }
-            }
-        );
-    };
-
     addToCart(item) {
         this.props.onAddToCart(item);
     }
 
     render() {
-        console.log(this.state);
-        console.log(this.props.data);
+        console.log(this.props.match);
         const {
             breadCrumbs,
             relatedCarouseData,
             productData,
             comments,
-            specification
+            specifications
         } = this.state;
-        if (!productData) {
-            return false;
-        }
         return (
+            productData &&
             <ProductPageComponent
                 breadCrumbs={breadCrumbs}
                 productData={productData}
-
                 relatedCarouseData={relatedCarouseData}
                 comments={comments}
-                specification={specification}
+                specifications={specifications}
+                url={this.props.match.params.productName}
+                subPage={this.props.match.params.subPage}
                 onAddToCart={this.addToCart}
             />
         );
     }
 }
 
-const mapStateToProps = (state, props) => {
-    // const id = props.match.url.match(/\d+/)[0];
+const mapStateToProps = (state) => {
     return {
         data: state.Data
     };

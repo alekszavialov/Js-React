@@ -19,7 +19,7 @@ export default class ImageCarousel extends Component {
                 'speed': 500,
                 'slidesToShow': 1,
                 'slidesToScroll': 1,
-                'pauseOnHover': true
+                'pauseOnHover': true,
             }
         };
     }
@@ -34,6 +34,7 @@ export default class ImageCarousel extends Component {
             }
         };
         return (
+
             <Slider {...settings} {...this.state.params}>
                 {images.map(item => <img key={item} src={item} alt=""/>)}
             </Slider>

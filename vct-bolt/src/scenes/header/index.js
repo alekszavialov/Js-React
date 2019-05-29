@@ -156,11 +156,11 @@ class Header extends Component {
                     pathname: "/catalog"
                 } },
             { text: 'Контакты', url: {
-                    pathname: "/catalog/595212758daa6810cbba4104",
+                    pathname: "/product-30632-komplekt_zapravki_pantum_(tn-210)",
                     param1: "Par1"
                 } },
             { text: 'Вход', url: {
-                    pathname: "/product/595212758daa6810cbba4104",
+                    pathname: "/product-38220-skaniruyush'ii_modul_epson_l605_(1704031)",
                     param1: "Par1"
                 } }
         ];
