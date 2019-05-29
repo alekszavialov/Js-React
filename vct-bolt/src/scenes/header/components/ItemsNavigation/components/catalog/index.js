@@ -27,10 +27,10 @@ export default class CatalogItem extends Component {
 
   fillEmptySpace = () => {
     let newList = this.props.item.items.map((item, index) =>
-      <NavLink key={item.text + index} to={item.url}>{item.text}</NavLink>
+      <NavLink key={item.text + index} to={`/catalog-${item.text}`}>{item.text}</NavLink>
     );
     while (newList.length < maxElementsValue) {
-      newList.push(<a key={newList.length} className="disabled"/>)
+      newList.push(<a key={newList.length} className="disabled"/>);
     }
     return newList;
   };

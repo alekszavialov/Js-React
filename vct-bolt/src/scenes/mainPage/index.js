@@ -17,6 +17,7 @@ class MainPage extends Component {
 
     static propTypes = {
         data: PropTypes.object,
+        getData: PropTypes.func,
         onGetData: PropTypes.func,
         onAddToCart: PropTypes.func
     };

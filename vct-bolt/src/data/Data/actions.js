@@ -7,11 +7,12 @@ export function addToData(id, name, data) {
     };
 }
 
-export function getData(id, url, name) {
+export function getData(id, url, name, params) {
     return {
         type: 'GET_DATA',
         id,
         url,
-        name
+        name,
+        params
     };
 }

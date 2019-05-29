@@ -72,11 +72,13 @@ export default class ProductPageComponent extends Component {
                             {
                                 subPage && subPage === 'comments' && comments &&
                                 (
-                                    <div className="product-card-tabs">
-                                        <ProductCommentBlock
-                                            title={comments.title} data={comments.data}
-                                            changeFormField={comments.changeFormField}
-                                        />
+                                    <div className="col-md-12">
+                                        <div className="product-card-tabs">
+                                            <ProductCommentBlock
+                                                title={comments.title} data={comments.data}
+                                                changeFormField={comments.changeFormField}
+                                            />
+                                        </div>
                                     </div>
                                 )
 
@@ -94,7 +96,7 @@ export default class ProductPageComponent extends Component {
                         <div className="col-md-12">
                             <div className="accompanying-carousel-block">
                                 {
-                                    relatedCarouseData &&
+                                    !subPage && relatedCarouseData &&
                                     (
                                         <Fragment>
                                             <h2 className="seal-lead">Сопутствующие товары:</h2>
@@ -108,13 +110,13 @@ export default class ProductPageComponent extends Component {
                         </div>
                         <div className="col-md-12">
                             {
-                                specifications &&
+                                !subPage && specifications &&
                                 (
                                     <ProductSpecification {...specifications}/>
                                 )
                             }
                             {
-                                comments &&
+                                !subPage && comments &&
                                 (
                                     <div className="product-card-tabs">
                                         <ProductCommentBlock
@@ -124,7 +126,7 @@ export default class ProductPageComponent extends Component {
                                     </div>
                                 )
                             }
-                            <DeliveryAndPay title={productData.title}/>
+                            {!subPage && <DeliveryAndPay title={productData.title}/>}
                         </div>
                         <div className="col-md-12">
                             <div className="accompanying-carousel-block">

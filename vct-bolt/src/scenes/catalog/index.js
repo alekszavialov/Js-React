@@ -45,6 +45,8 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
+        (this.props.data && this.props.data.test) ||
+        this.props.onGetData('test', 'http://api.vct1.com/catalog/', 'test', {"brand": "Epson", "category": "Принтер"});
         Promise.all([
             // this.props.onGetData('catalogItems', 'catalogItems'),
             // this.props.onGetData('productOptionsData', 'productOptionsData'),
@@ -69,6 +71,18 @@ class Catalog extends Component {
                 // this.loadCarouselItems();
             }
         );
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+
+        if (nextProps.data.test && !nextState.test) {
+            console.log(nextProps.data.test, 'data form api');
+            this.setState(
+                {
+                    test: nextProps.data.test
+                }
+            );
+        }
     }
 
     changeFormField(data) {
@@ -296,7 +310,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onAddToCart: (item) => dispatch(addToCart(item)),
-        onGetData: (url, name) => dispatch(getData(url, name))
+        onGetData: (id, url, name, params) => dispatch(getData(id, url, name, params))
     };
 };
 
