@@ -9,6 +9,7 @@ import ProductCommentBlock from './productComment';
 import DeliveryAndPay from './deliveryAndPay';
 import ProductSpecification from './productSpecifications';
 import ProductImages from './productImages';
+import ProductRelated from './productRelated';
 
 export default class ProductPageComponent extends Component {
 
@@ -35,6 +36,7 @@ export default class ProductPageComponent extends Component {
 
     render() {
         const { breadCrumbs, productData, relatedCarouseData, comments, specifications, url, subPage } = this.props;
+        console.log(relatedCarouseData, '123213321');
         return (
             <div className="container">
                 <div className="bg-white">
@@ -56,7 +58,7 @@ export default class ProductPageComponent extends Component {
                                 />
                             </div>
                             {
-                                (!subPage && productData) &&
+                                !subPage &&
                                 (
                                     <ProductDescription
                                         data={productData}
@@ -65,7 +67,7 @@ export default class ProductPageComponent extends Component {
                                 )
                             }
                             {
-                                subPage && subPage === 'specifications' && specifications &&
+                                subPage && subPage === 'specifications' &&
                                 <div className="col-md-12">
                                     <ProductSpecification {...specifications}/>
                                 </div>
@@ -73,22 +75,35 @@ export default class ProductPageComponent extends Component {
                             {
                                 subPage && subPage === 'images' &&
                                 <div className="col-md-12">
-                                    <ProductImages title={productData.title} items={[productData.img, productData.img2, productData.img3, productData.img4]}/>
+                                    <ProductImages
+                                        title={productData.title}
+                                        items={[productData.img, productData.img2, productData.img3, productData.img4]}/>
                                 </div>
                             }
                             {
-                                subPage && subPage === 'comments' && comments &&
+                                subPage && subPage === 'comments' &&
                                 (
                                     <div className="col-md-12">
                                         <div className="product-card-tabs">
                                             <ProductCommentBlock
-                                                title={comments.title} data={comments.data}
+                                                title={comments.title}
+                                                data={comments.data}
                                                 changeFormField={comments.changeFormField}
                                             />
                                         </div>
                                     </div>
                                 )
 
+                            }
+                            {
+                                subPage && subPage === 'related' &&
+                                <div className="col-md-12">
+                                    <ProductRelated
+                                        title={productData.title}
+                                        items={relatedCarouseData.items}
+                                        onAddToCart={relatedCarouseData.onAddToCart}
+                                    />
+                                </div>
                             }
                             {
                                 subPage && subPage === 'delivery' &&

@@ -47,6 +47,7 @@ class ProductPage extends Component {
     componentDidMount() {
         window.scrollTo(0, 0);
         const id = this.props.match.url.match(/\d+/)[0];
+        console.log(id, '123231213 id');
         this.loadDataAPI(id);
         if (this.props.data[id]) {
             const productData = this.props.data[id].productData[0];
@@ -238,7 +239,8 @@ class ProductPage extends Component {
                     href: `/product-${item.productData[0].id}-${cyrillicToTranslit().transform(item.productData[0].title.replace(/\//g, ''), '_').toLowerCase()}`,
                     name: item.productData[0].title,
                     price: item.productData[0].price,
-                    article: item.productData[0].id
+                    article: item.productData[0].id,
+                    description: item.productData[0].description
                 };
                 return newItem;
             }
@@ -286,6 +288,7 @@ class ProductPage extends Component {
     }
 
     render() {
+        const { subPage, productName } = this.props.match.params;
         const {
             breadCrumbs,
             relatedCarouseData,
@@ -293,16 +296,22 @@ class ProductPage extends Component {
             comments,
             specifications
         } = this.state;
+        if (!productData ||
+            subPage === 'specifications' && !specifications ||
+            subPage === 'comments' && !comments ||
+            subPage === 'related' && !relatedCarouseData
+        ) {
+            return (<h1>Load</h1>);
+        }
         return (
-            productData &&
             <ProductPageComponent
                 breadCrumbs={breadCrumbs}
                 productData={productData}
                 relatedCarouseData={relatedCarouseData}
                 comments={comments}
                 specifications={specifications}
-                url={this.props.match.params.productName}
-                subPage={this.props.match.params.subPage}
+                url={productName}
+                subPage={subPage}
                 onAddToCart={this.addToCart}
             />
         );
