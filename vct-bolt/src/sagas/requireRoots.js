@@ -42,7 +42,7 @@ const mutateSpecifications = (data) => data.filter(item => item.description && i
 
 export function mutateData(name, data) {
     switch (name) {
-        case 'topSales':
+        case 'productItemsData':
             return mutateSales(data);
         case 'specifications':
             return mutateSpecifications(data);

@@ -286,7 +286,6 @@ class ProductPage extends Component {
     }
 
     render() {
-        console.log(this.props.match);
         const {
             breadCrumbs,
             relatedCarouseData,

@@ -8,6 +8,7 @@ import ProductDescription from './productDescription';
 import ProductCommentBlock from './productComment';
 import DeliveryAndPay from './deliveryAndPay';
 import ProductSpecification from './productSpecifications';
+import ProductImages from './productImages';
 
 export default class ProductPageComponent extends Component {
 
@@ -67,6 +68,12 @@ export default class ProductPageComponent extends Component {
                                 subPage && subPage === 'specifications' && specifications &&
                                 <div className="col-md-12">
                                     <ProductSpecification {...specifications}/>
+                                </div>
+                            }
+                            {
+                                subPage && subPage === 'images' &&
+                                <div className="col-md-12">
+                                    <ProductImages title={productData.title} items={[productData.img, productData.img2, productData.img3, productData.img4]}/>
                                 </div>
                             }
                             {

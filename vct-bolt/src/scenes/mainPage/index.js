@@ -26,78 +26,71 @@ class MainPage extends Component {
         super(props);
 
         this.state = {
-            id: 'mainPage',
-            carouselAdData: null,
+            dataNames: {
+                productItems: 'mainPageProductItems',
+                adSliderItems: 'mainPageAdSlider'
+            },
+            productItems: null,
+            adSliderItems: null,
+
             carouselProductsData: null,
             popularItemsData: null,
             catalogItems: null,
             tabItems: null
         };
 
-        this.addToCart = this.addToCart.bind(this);
 
-        this.loadCarouselData = this.loadCarouselData.bind(this);
+
         this.loadPopularItemsData = this.loadPopularItemsData.bind(this);
-        this.loadCatalogItemsData = this.loadCatalogItemsData.bind(this);
         this.loadCarouselItems = this.loadCarouselItems.bind(this);
         this.loadPageTabItems = this.loadPageTabItems.bind(this);
 
-        this.setStateSales = this.setStateSales.bind(this);
+        this.setStateProductItems = this.setStateProductItems.bind(this);
         this.setStateCarouselAd = this.setStateCarouselAd.bind(this);
+        this.loadDataAPI = this.loadDataAPI.bind(this);
+
+        this.addToCart = this.addToCart.bind(this);
     }
 
     componentWillMount() {
-        const { id } = this.state;
-        (this.props.data && this.props.data.topSales) || this.props.onGetData(id, 'http://api.vct1.com/topsales/', 'topSales');
-        (this.props.data && this.props.data.carouselAdData) || this.props.onGetData('carouselAdData', 'http://api.vct1.com/slider/', 'carouselAdData');
-
-        // fetch('http://api.vct1.com/slider/')
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data, 'slioder');
-        //     });
-        // fetch('http://api.vct1.com/related-products/150,151')
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data, 'related');
-        //     });
-        // fetch('http://api.vct1.com/parameters/?category=%D0%9F%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80')
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data, 'parameters');
-        //     });
+        this.loadDataAPI();
     }
 
     componentDidMount() {
-        const topSales = this.props.data && this.props.data.topSales;
-        const carouselAdData = this.props.data && this.props.data.carouselAdData;
-        if (topSales && !this.state.catalogItems) {
-            this.setStateSales(topSales);
+        const { data } = this.props;
+        if (!data) {
+            return;
         }
-        if (carouselAdData && !this.state.carouselAdData) {
-            this.setStateCarouselAd(carouselAdData);
+        const { productItemsData, adSliderItemsData } = data;
+        const { productItems, adSliderItems } = this.state;
+        if (productItemsData && !productItems) {
+            this.setStateProductItems(productItemsData);
+        }
+        if (adSliderItemsData && !adSliderItems) {
+            this.setStateCarouselAd(adSliderItemsData);
         }
     }
 
     componentWillUpdate(nextProps, nextState) {
-        if (nextProps.data.topSales && !nextState.catalogItems) {
-            this.setStateSales(nextProps.data.topSales);
+        const { productItemsData, adSliderItemsData } = nextProps.data;
+        const { productItems, adSliderItems } = nextState;
+        if (productItemsData && !productItems) {
+            this.setStateProductItems(productItemsData);
         }
-        if (nextProps.data.carouselAdData && !nextState.carouselAdData) {
-            this.setStateCarouselAd(nextProps.data.carouselAdData);
+        if (adSliderItemsData && !adSliderItems) {
+            this.setStateCarouselAd(adSliderItemsData);
         }
     }
 
-    setStateSales(data) {
+    setStateProductItems(data) {
         this.setState({
-            catalogItems: data.map(item => {
+            productItems: data.map(item => {
                 return { ...item, url: `/${item.url.replace(/\//gi, '-').substring(1)}` };
             })
         });
     }
 
     setStateCarouselAd(data) {
-        console.log(data, 'caroused');
         const stateData = {
             'params': {
                 'dots': true,
@@ -120,29 +113,17 @@ class MainPage extends Component {
                 })
 
         };
-        console.log(stateData);
         this.setState({
-            carouselAdData: stateData
+            adSliderItems: stateData
         });
     }
 
-    loadCarouselData() {
-        // fetchApi('../../fakeAPI/carouselOneItemData.json')
-        //     .then(result => this.setState({
-        //             carouselData: {
-        //                 ...result, items: result.items.map(item =>
-        //                     <CarouselBigItem item={item} key={Math.random()}/>
-        //                 )
-        //             }
-        //         }
-        //     ));
-        // const result = require('../../fakeAPI/carouselOneItemData.json');
-        this.setState(
-            {
-                carouselAdData: this.props.data.carouselOneItemData
-            }
-        );
-    };
+    loadDataAPI() {
+        const { productItems, adSliderItems } = this.state.dataNames;
+        (this.props.data && this.props.data.productItemsData) || this.props.onGetData(productItems, 'http://api.vct1.com/topsales/', 'productItemsData');
+        (this.props.data && this.props.data.adSliderItemsData) || this.props.onGetData(adSliderItems, 'http://api.vct1.com/slider/', 'adSliderItemsData');
+    }
+
 
     loadPopularItemsData() {
         // fetchApi('../../fakeAPI/mainPopularCategoriesItems.json')
@@ -160,24 +141,7 @@ class MainPage extends Component {
 
         // this.props.onGetData('mainPopularCategoriesItems', 'mainPopularCategoriesItems');
     };
-
-    loadCatalogItemsData() {
-        // fetchApi('../../fakeAPI/catalogItems.json')
-        //     .then(result => this.setState({
-        //             catalogItems: result
-        //         }
-        //     ));
-
-        // const result = require('../../fakeAPI/catalogItems.json');
-        this.setState(
-            {
-                catalogItems: this.props.data.catalogItems
-            }
-        );
-
-        // this.props.onGetData('catalogItems', 'catalogItems');
-    };
-
+    
     loadCarouselItems() {
         // fetchApi('../../fakeAPI/carouselManyItemsData.json')
         //     .then(result => this.setState({
@@ -265,32 +229,34 @@ class MainPage extends Component {
     }
 
     render() {
-        console.log(this.props.data);
-        // const { topSales } = this.props.data;
         const {
-            carouselAdData,
-            popularItemsData,
-            catalogItems,
-            carouselProductsData,
-            tabItems
+            productItems,
+            adSliderItems
         } = this.state;
         return (
-            catalogItems &&
+            productItems &&
             <MainPageComponent
-                carouselAdData={carouselAdData}
-                popularItemsData={popularItemsData}
-                catalogItems={catalogItems}
-                carouselProductsData={carouselProductsData}
-                tabItems={tabItems}
+                catalogItems={productItems}
+                carouselAdData={adSliderItems}
+
+
                 onAddToCart={this.addToCart}
             />
         );
     }
 }
 
+//
+// popularItemsData={popularItemsData}
+// carouselProductsData={carouselProductsData}
+// tabItems={tabItems}
+
 const mapStateToProps = (state) => {
     return {
-        data: { ...state.Data['mainPage'], ...state.Data['carouselAdData'] }
+        data: {
+            ...state.Data['mainPageProductItems'],
+            ...state.Data['mainPageAdSlider']
+        }
     };
 };
 

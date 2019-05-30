@@ -8,8 +8,6 @@ import { getData } from '../../data/Data/actions';
 
 import HeaderComponent from './components/index';
 
-// import fetchApi from '../../modules/fetch-api';
-
 import './styles.css';
 
 class Header extends Component {
@@ -51,8 +49,11 @@ class Header extends Component {
         this.props.onGetApiData('headNavigation', 'http://api.vct1.com/menu/', 'headNavigation');
     }
 
+    componentDidMount() {
+        window.addEventListener('resize', this.updateIsMobile);
+    }
+
     componentWillUpdate(nextProps, nextState) {
-        console.log(nextProps.data.headNavigation, 'data form api');
         if (nextProps.data.headNavigation && !nextState.catalogList) {
             this.setState(
                 {
@@ -62,16 +63,13 @@ class Header extends Component {
         }
     }
 
-    handleSubmit() {
-        console.log(JSON.stringify(this.props.cartOrderForm));
-    }
-
-    componentDidMount() {
-        window.addEventListener('resize', this.updateIsMobile);
-    }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateIsMobile);
+    }
+
+    handleSubmit() {
+        console.log(JSON.stringify(this.props.cartOrderForm));
     }
 
     findProduct(article) {
