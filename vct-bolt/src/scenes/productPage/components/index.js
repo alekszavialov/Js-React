@@ -19,6 +19,7 @@ export default class ProductPageComponent extends Component {
         comments: PropTypes.object,
         specifications: PropTypes.object,
         relatedCarouseData: PropTypes.object,
+        recentlyCarouseData: PropTypes.object,
         url: PropTypes.string,
         subPage: PropTypes.string,
         onAddToCart: PropTypes.func
@@ -35,8 +36,7 @@ export default class ProductPageComponent extends Component {
     }
 
     render() {
-        const { breadCrumbs, productData, relatedCarouseData, comments, specifications, url, subPage } = this.props;
-        console.log(relatedCarouseData, '123213321');
+        const { breadCrumbs, productData, relatedCarouseData, recentlyCarouseData, comments, specifications, url, subPage } = this.props;
         return (
             <div className="container">
                 <div className="bg-white">
@@ -150,33 +150,33 @@ export default class ProductPageComponent extends Component {
                             }
                             {!subPage && <DeliveryAndPay title={productData.title}/>}
                         </div>
-                        <div className="col-md-12">
-                            <div className="accompanying-carousel-block">
-                                <h2 className="seal-lead">Похожие товары на Принтер фабрика печати Epson L132
-                                    C11CE58403:</h2>
-                                {
-                                    relatedCarouseData &&
-                                    (
+                        {
+                            relatedCarouseData &&
+                            (
+                                <div className="col-md-12">
+                                    <div className="accompanying-carousel-block">
+                                        <h2 className="seal-lead">Похожие товары на {productData.title} :</h2>
                                         <SlickCarousel
                                             carouselData={relatedCarouseData}
                                         />
-                                    )
-                                }
-                            </div>
-                        </div>
-                        <div className="col-md-12">
-                            <div className="accompanying-carousel-block">
-                                <h2 className="seal-lead block-with-icon icon-eye">Недавно просмотренные товары:</h2>
-                                {
-                                    relatedCarouseData &&
-                                    (
+                                    </div>
+                                </div>
+                            )
+                        }
+                        {
+                            recentlyCarouseData &&
+                            (
+                                <div className="col-md-12">
+                                    <div className="accompanying-carousel-block">
+                                        <h2 className="seal-lead block-with-icon icon-eye">Недавно просмотренные
+                                            товары:</h2>
                                         <SlickCarousel
-                                            carouselData={relatedCarouseData}
+                                            carouselData={recentlyCarouseData}
                                         />
-                                    )
-                                }
-                            </div>
-                        </div>
+                                    </div>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </div>

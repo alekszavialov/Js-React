@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import ProductPageComponent from './components';
 
-import { addToCart } from '../../data/Store/actions';
+import { addToCart, addToRecently } from '../../data/Store/actions';
 
 import './styles.css';
 import { getData } from '../../data/Data/actions';
@@ -15,8 +15,10 @@ class ProductPage extends Component {
 
     static propTypes = {
         data: PropTypes.object,
+        recently: PropTypes.array,
         match: PropTypes.object,
         onAddToCart: PropTypes.func,
+        onAddToRecently: PropTypes.func,
         onGetData: PropTypes.func
     };
 
@@ -26,6 +28,7 @@ class ProductPage extends Component {
             productData: null,
             breadCrumbs: null,
             relatedCarouseData: null,
+            recentlyCarouseData: null,
             specifications: null,
             comments: null
         };
@@ -41,13 +44,13 @@ class ProductPage extends Component {
         this.addToCart = this.addToCart.bind(this);
         this.toggleAddComment = this.toggleAddComment.bind(this);
         this.changeFormField = this.changeFormField.bind(this);
+        this.addToRecently = this.addToRecently.bind(this);
 
     }
 
     componentDidMount() {
         window.scrollTo(0, 0);
         const id = this.props.match.url.match(/\d+/)[0];
-        console.log(id, '123231213 id');
         this.loadDataAPI(id);
         if (this.props.data[id]) {
             const productData = this.props.data[id].productData[0];
@@ -66,6 +69,7 @@ class ProductPage extends Component {
                 productData: null,
                 breadCrumbs: null,
                 relatedCarouseData: null,
+                recentlyCarouseData: null,
                 specifications: null,
                 comments: null
             });
@@ -95,6 +99,10 @@ class ProductPage extends Component {
             if (loaded.length === related.length) {
                 this.loadRelatedProducts(loaded);
             }
+        }
+
+        if (nextProps.recently.length !== this.props.recently.length) {
+            this.loadRecentlyProducts(nextProps.recently);
         }
         if (!nextState.breadCrumbs) {
             this.loadBreadCrumbs(productData);
@@ -182,6 +190,7 @@ class ProductPage extends Component {
                 this.props.data[item] || this.props.onGetData(item, `http://api.vct1.com/product/${item}`, `productData`)
             );
         }
+        this.addToRecently(data);
         this.setState(
             {
                 productData: data
@@ -277,6 +286,39 @@ class ProductPage extends Component {
         });
     }
 
+    loadRecentlyProducts(data) {
+        this.setState({
+            recentlyCarouseData: {
+                'params': {
+                    'dots': false,
+                    'infinite': true,
+                    'speed': 500,
+                    'autoplay': true,
+                    'autoplaySpeed': 6000,
+                    'slidesToShow': data.length < 6 ? data.length : 6,
+                    'slidesToScroll': 1,
+                    'pauseOnHover': true,
+                    'responsive': [
+                        {
+                            'breakpoint': 1024,
+                            'settings': {
+                                'slidesToShow': 4
+                            }
+                        },
+                        {
+                            'breakpoint': 992,
+                            'settings': {
+                                'slidesToShow': 2
+                            }
+                        }
+                    ]
+                },
+                'items': data,
+                onAddToCart: this.addToCart
+            }
+        });
+    }
+
     toggleAddComment() {
         this.setState({
             isVisibleCommentForm: !this.state.isVisibleCommentForm
@@ -287,11 +329,26 @@ class ProductPage extends Component {
         this.props.onAddToCart(item);
     }
 
+    addToRecently(data){
+        if (this.props.recently.filter(cartItem => cartItem.article === data.id)[0] === undefined){
+            this.props.onAddToRecently({
+                name: data.title,
+                description: data.description,
+                href: `/product${this.props.match.params.productName}`,
+                src: data.img,
+                price: data.price,
+                article: data.id
+            });
+        }
+        this.loadRecentlyProducts(this.props.recently);
+    }
+
     render() {
         const { subPage, productName } = this.props.match.params;
         const {
             breadCrumbs,
             relatedCarouseData,
+            recentlyCarouseData,
             productData,
             comments,
             specifications
@@ -303,11 +360,13 @@ class ProductPage extends Component {
         ) {
             return (<h1>Load</h1>);
         }
+        console.log(recentlyCarouseData, '123312312 ressen');
         return (
             <ProductPageComponent
                 breadCrumbs={breadCrumbs}
                 productData={productData}
                 relatedCarouseData={relatedCarouseData}
+                recentlyCarouseData={recentlyCarouseData}
                 comments={comments}
                 specifications={specifications}
                 url={productName}
@@ -320,13 +379,15 @@ class ProductPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        data: state.Data
+        data: state.Data,
+        recently: state.Store.recently
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onAddToCart: (item) => dispatch(addToCart(item)),
+        onAddToRecently: (item) => dispatch(addToRecently(item)),
         onGetData: (id, url, name) => dispatch(getData(id, url, name)),
         onChangeField: (name, value) => dispatch(change('commentForm', name, value))
     };

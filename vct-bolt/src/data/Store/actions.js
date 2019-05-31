@@ -6,6 +6,13 @@ export function addToCart(item, value) {
     };
 }
 
+export function addToRecently(item) {
+    return {
+        type: 'ADD_TO_RECENTLY',
+        item
+    };
+}
+
 export function decreaseInCart(item, value) {
     return {
         type: 'DECREASE_IN_CART',

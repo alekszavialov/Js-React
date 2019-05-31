@@ -1,3 +1,5 @@
+import { REHYDRATE } from 'redux-persist';
+
 const cartWithoutItem = (cart, item) => cart.filter(cartItem => cartItem.article !== item.article);
 const itemInCart = (cart, item) => cart.filter(cartItem => cartItem.article === item.article)[0];
 
@@ -22,17 +24,36 @@ const sortCart = (cart) => {
     return cart.sort((a, b) => a.article - b.article);
 };
 
-const initialState = [];
+const initialState = {
+    recently: [],
+    cart: []
+};
 
 export default function Store(state = initialState, action) {
     switch (action.type) {
-    case 'ADD_TO_CART':
-        return sortCart(addToCart(state, action.item, action.value));
-    case 'REMOVE_FROM_CART':
-        return sortCart(removeFromCart(state, action.item));
-    case 'DECREASE_IN_CART':
-        return sortCart(decreaseInCart(state, action.item, action.value));
-    default:
-        return state;
+        case REHYDRATE:
+            return state;
+        case 'ADD_TO_CART':
+            return {
+                ...state,
+                cart: sortCart(addToCart(state.cart, action.item, action.value))
+            };
+        case 'REMOVE_FROM_CART':
+            return {
+                ...state,
+                cart: sortCart(removeFromCart(state.cart, action.item))
+            };
+        case 'DECREASE_IN_CART':
+            return {
+                ...state,
+                cart: sortCart(decreaseInCart(state.cart, action.item, action.value))
+            };
+        case 'ADD_TO_RECENTLY':
+            return {
+                ...state,
+                recently: [...state.recently, action.item]
+            };
+        default:
+            return state;
     }
 }

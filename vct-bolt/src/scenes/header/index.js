@@ -190,7 +190,7 @@ class Header extends Component {
         const { bucketIsOpen } = this.state;
         const { catalogListFixed } = this.state;
         const { mobileListIsOpen } = this.state;
-
+        console.log(cart, 'cart!!!!');
         return (
             <HeaderComponent
                 navigationList={list}
@@ -215,7 +215,7 @@ class Header extends Component {
 const mapStateToProps = (state) => {
     return {
         data: state.Data['headNavigation'],
-        cart: state.Store,
+        cart: state.Store.cart,
         cartOrderForm: getFormValues('submitOrder')(state)
     };
 };
