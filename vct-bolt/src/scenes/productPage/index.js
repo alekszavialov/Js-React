@@ -142,7 +142,11 @@ class ProductPage extends Component {
         const stateBreadCrumbs = [
             { 'href': '/', 'name': 'Главная' },
             {
-                'href': `/catalog-${productData.brand.toLowerCase()}`,
+                'href': `/catalog-${productData.category.toLowerCase()}`,
+                'name': productData.category
+            },
+            {
+                'href': `/catalog-${productData.category.toLowerCase()}/${productData.brand.toLowerCase()}`,
                 'name': productData.brand
             },
             { 'href': '', 'name': productData.title }
@@ -156,6 +160,9 @@ class ProductPage extends Component {
             data: comments,
             changeFormField: this.changeFormField
         };
+        if (this.props.recently.length > 0) {
+            this.loadRecentlyProducts(this.props.recently);
+        }
         this.setState(
             {
                 productData: productData,
@@ -171,7 +178,11 @@ class ProductPage extends Component {
         const breadCrumbs = [
             { 'href': '/', 'name': 'Главная' },
             {
-                'href': `/catalog-${data.brand.toLowerCase()}`,
+                'href': `/catalog-${data.category.toLowerCase()}`,
+                'name': data.category
+            },
+            {
+                'href': `/catalog-${data.category.toLowerCase()}/${data.brand.toLowerCase()}`,
                 'name': data.brand
             },
             { 'href': '', 'name': data.title }

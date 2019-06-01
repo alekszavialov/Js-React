@@ -41,48 +41,111 @@ class Catalog extends Component {
         this.loadMoreProducts = this.loadMoreProducts.bind(this);
         this.addToCart = this.addToCart.bind(this);
 
+        this.loadDataAPI = this.loadDataAPI.bind(this);
         this.changeFormField = this.changeFormField.bind(this);
     }
 
     componentDidMount() {
-        (this.props.data && this.props.data.test) ||
-        this.props.onGetData('test', 'http://api.vct1.com/catalog/', 'test', {"brand": "Epson", "category": "Принтер"});
-        Promise.all([
-            // this.props.onGetData('catalogItems', 'catalogItems'),
-            // this.props.onGetData('productOptionsData', 'productOptionsData'),
-            // this.props.onGetData('catalogBreadCrumbs', 'catalogBreadCrumbs'),
-            // this.props.onGetData('carouselOneItemData', 'carouselOneItemData'),
-            // this.props.onGetData('catalogShopTags', 'catalogShopTags'),
-            // this.props.onGetData('catalogPageTabsData', 'catalogPageTabsData'),
-            // this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData'),
-            // this.loadCarouselData(),
-            // this.loadPopularItemsData(),
-            // this.loadCatalogItemsData(),
-            // this.loadCarouselItems(),
-            // this.loadPageTabItems()
-        ]).then(
-            () => {
-                // this.loadProductList();
-                this.loadProductOptions();
-                // this.loadBreadCrumbs();
-                // this.loadCarouselData();
-                // this.loadShopTags();
-                // this.loadTabsData();
-                // this.loadCarouselItems();
+        // (this.props.data && this.props.data.test) ||
+        // this.props.onGetData('test', 'http://api.vct1.com/catalog/', 'test', {"brand": "Epson", "category": "Принтер"});
+        window.scrollTo(0, 0);
+        const category = this.props.match.params.categoryName.substring(1);
+        const brand = this.props.match.params.brandName;
+        console.log(this.props.match.params.categoryName.substring(1), 'match');
+        if (this.props.data && !this.props.data[category]) {
+            let params = {
+             'category': category
+            };
+            if (brand){
+                params = {
+                    ...params,
+                    brand
+                }
             }
-        );
+            this.props.onGetData(
+                'catalogData',
+                'http://api.vct1.com/catalog/',
+                'catalogData',
+                params
+            );
+            console.log('ye[');
+        } else {
+            console.log(brand);
+        }
+
+        // const id = this.props.match.url.match(/\d+/)[0];
+        // this.loadDataAPI(id);
+        // if (this.props.data[id]) {
+        //     const productData = this.props.data[id].productData[0];
+        //     const { comments, specifications } = this.props.data[id];
+        //     if (productData && specifications && comments) {
+        //         document.title = productData.title;
+        //         this.fillPageState(productData, specifications, comments);
+        //     }
+        // }
     }
 
     componentWillUpdate(nextProps, nextState) {
+        console.log(nextProps.match.url);
+        // if (nextProps.match.url !== this.props.match.url) {
+        //     window.scrollTo(0, 0);
+        //     this.setState({
+        //         productData: null,
+        //         breadCrumbs: null,
+        //         relatedCarouseData: null,
+        //         recentlyCarouseData: null,
+        //         specifications: null,
+        //         comments: null
+        //     });
+        //     this.loadDataAPI(nextProps.match.url.match(/\d+/)[0]);
+        //     return;
+        // }
+        // const id = this.props.match.url.match(/\d+/)[0];
+        // const data = nextProps.data[id];
+        // if (!data) {
+        //     return;
+        // }
+        // const productData = data.productData && data.productData[0];
+        // if (!productData) {
+        //     return;
+        // }
+        // if (!nextState.productData) {
+        //     document.title = productData.title;
+        //     this.loadProductData(productData);
+        // }
+        // if (productData['related-products'] && !nextState.relatedCarouseData) {
+        //     const related = productData['related-products'].split(',').filter(item => item);
+        //     const loaded = related.map(
+        //         item => {
+        //             return nextProps.data[item];
+        //         }
+        //     ).filter(item => item);
+        //     if (loaded.length === related.length) {
+        //         this.loadRelatedProducts(loaded);
+        //     }
+        // }
+        //
+        // if (nextProps.recently.length !== this.props.recently.length) {
+        //     this.loadRecentlyProducts(nextProps.recently);
+        // }
+        // if (!nextState.breadCrumbs) {
+        //     this.loadBreadCrumbs(productData);
+        // }
+        //
+        // const { comments } = data;
+        // if (!nextState.comments && comments) {
+        //     this.loadComments(productData, comments);
+        // }
+        // const { specifications } = data;
+        // if (!nextState.specifications && specifications) {
+        //     this.loadSpecifications(productData, specifications);
+        // }
+    }
 
-        if (nextProps.data.test && !nextState.test) {
-            console.log(nextProps.data.test, 'data form api');
-            this.setState(
-                {
-                    test: nextProps.data.test
-                }
-            );
-        }
+    loadDataAPI(id) {
+        (this.props.data[id] && this.props.data[id].productData) || this.props.onGetData(id, `http://api.vct1.com/product/${id}`, `productData`);
+        (this.props.data[id] && this.props.data[id].specifications) || this.props.onGetData(id, `http://api.vct1.com/specifications/${id}`, `specifications`);
+        (this.props.data[id] && this.props.data[id].comments) || this.props.onGetData(id, `http://api.vct1.com/comments/${id}`, `comments`);
     }
 
     changeFormField(data) {
@@ -274,6 +337,10 @@ class Catalog extends Component {
     }
 
     render() {
+        console.log(this.props);
+        return (
+            <h1>load</h1>
+        );
         const {
             productOptions,
             breadCrumbs,
