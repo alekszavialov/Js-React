@@ -34,16 +34,33 @@ export function requireFiles(url) {
 }
 
 const mutateSales = (data) => data.map(item => {
-        return { ...item, url: `/product-${item.id}-${cyrillicToTranslit().transform(item.title.replace(/\//g, ''), '_').toLowerCase()}` };
+        console.log(data, 'asffasdfasd 2314 2134 4123');
+        return {
+            ...item,
+            url: `/product-${item.id}-${cyrillicToTranslit().transform(item.title.replace(/\//g, ''), '_').toLowerCase()}`,
+            img: item.img === "" ? 'https://vct1.com/img/nophoto.jpg' : item.img
+        };
+    }
+);
+
+const mutateProductData = (data) => data.map(item => {
+        return {
+            ...item,
+            img: item.img === "" ? 'https://vct1.com/img/nophoto.jpg' : item.img
+        };
     }
 );
 
 const mutateSpecifications = (data) => data.filter(item => item.description && item.value);
 
 export function mutateData(name, data) {
+    console.log(name, 'mutate');
     switch (name) {
         case 'productItemsData':
+        case 'catalogData':
             return mutateSales(data);
+        case 'productData':
+            return mutateProductData(data);
         case 'specifications':
             return mutateSpecifications(data);
         default:

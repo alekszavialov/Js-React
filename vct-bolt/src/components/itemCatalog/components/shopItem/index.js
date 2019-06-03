@@ -36,7 +36,7 @@ export default class ShopItem extends Component {
         return (
             <div className="shop-block">
                 <div className="shop-block-container">
-                    <img src={src} alt="123"/>
+                    <img src={src} alt={name}/>
                     <NavLink className="shop-block-name" to={url}>{name}</NavLink>
                     <p className="shop-block-descr">{description}</p>
                     <div className="shop-block-price">

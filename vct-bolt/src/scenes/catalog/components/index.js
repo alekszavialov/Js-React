@@ -12,7 +12,7 @@ export default class CatalogComponent extends Component {
     static propTypes = {
         productOptions: PropTypes.object,
         breadCrumbs: PropTypes.array,
-        carouselAdData: PropTypes.object,
+        recentlyCarouseData: PropTypes.object,
         shopTags: PropTypes.array,
         catalogItems: PropTypes.array,
         tabsData: PropTypes.object,
@@ -46,7 +46,7 @@ export default class CatalogComponent extends Component {
         const {
             productOptions,
             breadCrumbs,
-            carouselAdData,
+            recentlyCarouseData,
             shopTags,
             catalogItems,
             tabsData,
@@ -70,12 +70,6 @@ export default class CatalogComponent extends Component {
                             {
                                 breadCrumbs &&
                                 <BreadCrumbs items={breadCrumbs}/>
-                            }
-                            {
-                                carouselAdData &&
-                                <SlickCarousel
-                                    carouselData={carouselAdData}
-                                />
                             }
                             {
                                 shopTags &&
@@ -119,12 +113,12 @@ export default class CatalogComponent extends Component {
                         <div className="col-md-12">
                             <div className="accompanying-carousel-block">
                                 {
-                                    carouselProductsData &&
+                                    recentlyCarouseData &&
                                     <Fragment>
                                         <h2 className="seal-lead block-with-icon icon-thumbs-up">Недавно просмотренные
                                             товары:</h2>
                                         <SlickCarousel
-                                            carouselData={carouselProductsData}
+                                            carouselData={recentlyCarouseData}
                                         />
                                     </Fragment>
                                 }

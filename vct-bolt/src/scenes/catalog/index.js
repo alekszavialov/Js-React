@@ -5,9 +5,8 @@ import PropTypes from 'prop-types';
 
 import CatalogComponent from './components';
 
-import { addToCart } from '../../data/Store/actions';
+import { addToCart  } from '../../data/Store/actions';
 import { getData } from '../../data/Data/actions';
-// import fetchApi from '../../modules/fetch-api'
 
 import './styles.css';
 
@@ -43,35 +42,45 @@ class Catalog extends Component {
 
         this.loadDataAPI = this.loadDataAPI.bind(this);
         this.changeFormField = this.changeFormField.bind(this);
+        this.loadCatalogItems = this.loadCatalogItems.bind(this);
+        this.loadRecentlyProducts = this.loadRecentlyProducts.bind(this);
     }
 
     componentDidMount() {
-        // (this.props.data && this.props.data.test) ||
-        // this.props.onGetData('test', 'http://api.vct1.com/catalog/', 'test', {"brand": "Epson", "category": "Принтер"});
         window.scrollTo(0, 0);
         const category = this.props.match.params.categoryName.substring(1);
         const brand = this.props.match.params.brandName;
-        console.log(this.props.match.params.categoryName.substring(1), 'match');
-        if (this.props.data && !this.props.data[category]) {
-            let params = {
-             'category': category
+        const id = brand ? category + brand : category;
+        let params = {
+            'category': category
+        };
+        if (brand) {
+            params = {
+                ...params,
+                brand
             };
-            if (brand){
-                params = {
-                    ...params,
-                    brand
-                }
-            }
-            this.props.onGetData(
-                'catalogData',
-                'http://api.vct1.com/catalog/',
-                'catalogData',
-                params
-            );
-            console.log('ye[');
-        } else {
-            console.log(brand);
         }
+        this.loadDataAPI(id, params);
+        // if (!this.props.data || !this.props.data[id]) {
+        //     let params = {
+        //         'category': category
+        //     };
+        //     if (brand) {
+        //         params = {
+        //             ...params,
+        //             brand
+        //         };
+        //     }
+        //     this.props.onGetData(
+        //         id,
+        //         'http://api.vct1.com/catalog/',
+        //         'catalogData',
+        //         params
+        //     );
+        //     console.log('ye[');
+        // } else {
+        //     console.log(brand);
+        // }
 
         // const id = this.props.match.url.match(/\d+/)[0];
         // this.loadDataAPI(id);
@@ -86,7 +95,6 @@ class Catalog extends Component {
     }
 
     componentWillUpdate(nextProps, nextState) {
-        console.log(nextProps.match.url);
         // if (nextProps.match.url !== this.props.match.url) {
         //     window.scrollTo(0, 0);
         //     this.setState({
@@ -100,11 +108,28 @@ class Catalog extends Component {
         //     this.loadDataAPI(nextProps.match.url.match(/\d+/)[0]);
         //     return;
         // }
-        // const id = this.props.match.url.match(/\d+/)[0];
-        // const data = nextProps.data[id];
-        // if (!data) {
-        //     return;
-        // }
+
+        const category = this.props.match.params.categoryName.substring(1);
+        // const brand = this.props.match.params.brandName;
+        // const id = brand ? category + brand : category;
+        // console.log(nextProps);
+        // console.log(id);
+        const data = nextProps.data.catalogData;
+        if (!data) {
+            return;
+        }
+        console.log(data, 'data!!!');
+        if (!nextState.catalogItems) {
+            document.title = category;
+            this.loadCatalogItems(data);
+        }
+        console.log(nextProps.recently, 'ASAFSASFSFAFFS1212312');
+        if ((nextProps.recently.length > 0 && !nextState.recentlyCarouseData) ||
+            (nextProps.recently.length !== this.props.recently.length)) {
+            this.loadRecentlyProducts(nextProps.recently);
+        }
+
+
         // const productData = data.productData && data.productData[0];
         // if (!productData) {
         //     return;
@@ -142,10 +167,17 @@ class Catalog extends Component {
         // }
     }
 
-    loadDataAPI(id) {
-        (this.props.data[id] && this.props.data[id].productData) || this.props.onGetData(id, `http://api.vct1.com/product/${id}`, `productData`);
-        (this.props.data[id] && this.props.data[id].specifications) || this.props.onGetData(id, `http://api.vct1.com/specifications/${id}`, `specifications`);
-        (this.props.data[id] && this.props.data[id].comments) || this.props.onGetData(id, `http://api.vct1.com/comments/${id}`, `comments`);
+    loadDataAPI(id, params) {
+        if (!this.props.data || !this.props.data.productData) {
+            this.props.onGetData(
+                id,
+                'http://api.vct1.com/catalog/',
+                'catalogData',
+                params
+            );
+            console.log('load');
+        }
+
     }
 
     changeFormField(data) {
@@ -158,6 +190,70 @@ class Catalog extends Component {
         }
 
     };
+
+    loadCatalogItems(data) {
+        const category = this.props.match.params.categoryName.substring(1);
+        const brand = this.props.match.params.brandName;
+        const stateBreadCrumbs = brand ? [
+                { 'href': '/', 'name': 'Главная' },
+                {
+                    'href': `/catalog-${category.toLowerCase()}`,
+                    'name': category
+                },
+                {
+                    'href': ``,
+                    'name': brand
+                }] :
+            [
+                { 'href': '/', 'name': 'Главная' },
+                {
+                    'href': ``,
+                    'name': category
+                }
+            ]
+
+        ;
+        this.setState(
+            {
+                catalogItems: data,
+                breadCrumbs: stateBreadCrumbs
+            }
+        );
+    };
+
+    loadRecentlyProducts(data) {
+        this.setState({
+            recentlyCarouseData: {
+                'params': {
+                    'dots': false,
+                    'infinite': true,
+                    'speed': 500,
+                    'autoplay': true,
+                    'autoplaySpeed': 6000,
+                    'slidesToShow': data.length < 6 ? data.length : 6,
+                    'slidesToScroll': 1,
+                    'pauseOnHover': true,
+                    'responsive': [
+                        {
+                            'breakpoint': 1024,
+                            'settings': {
+                                'slidesToShow': 4
+                            }
+                        },
+                        {
+                            'breakpoint': 992,
+                            'settings': {
+                                'slidesToShow': 2
+                            }
+                        }
+                    ]
+                },
+                'items': data,
+                onAddToCart: this.addToCart
+            }
+        });
+    }
+
 
     loadMoreProducts() {
         this.setState({
@@ -337,26 +433,30 @@ class Catalog extends Component {
     }
 
     render() {
-        console.log(this.props);
-        return (
-            <h1>load</h1>
-        );
+        // console.log(this.props);
+        // return (
+        //     <h1>load</h1>
+        // );
         const {
             productOptions,
             breadCrumbs,
-            carouselAdData,
+            recentlyCarouseData,
             shopTags,
             catalogItems,
             tabsData,
             carouselProductsData
         } = this.state;
+        console.log(catalogItems);
         return (
+            catalogItems &&
             <CatalogComponent
                 productOptions={productOptions}
-                breadCrumbs={breadCrumbs}
-                carouselAdData={carouselAdData}
-                shopTags={shopTags}
+
                 catalogItems={catalogItems}
+                breadCrumbs={breadCrumbs}
+                recentlyCarouseData={recentlyCarouseData}
+
+                shopTags={shopTags}
                 tabsData={tabsData}
                 carouselProductsData={carouselProductsData}
                 onAddToCart={this.addToCart}
@@ -368,9 +468,13 @@ class Catalog extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
+    const category = props.match.params.categoryName.substring(1);
+    const brand = props.match.params.brandName;
+    const id = brand ? category + brand : category;
     return {
-        data: state.Data
+        data: state.Data[id],
+        recently: state.Store.recently
     };
 };
 
@@ -381,7 +485,6 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-// export default connect(null, mapDispatchToProps)(Catalog);
 export default reduxForm({
     form: 'sortForm'
 })(

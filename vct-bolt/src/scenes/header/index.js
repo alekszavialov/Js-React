@@ -54,7 +54,7 @@ class Header extends Component {
     }
 
     componentWillUpdate(nextProps, nextState) {
-        if (nextProps.data.headNavigation && !nextState.catalogList) {
+        if (nextProps.data && nextProps.data.headNavigation && !nextState.catalogList) {
             this.setState(
                 {
                     catalogList: nextProps.data.headNavigation
