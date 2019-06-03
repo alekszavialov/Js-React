@@ -22,7 +22,7 @@ class Catalog extends Component {
 
         this.state = {
             catalogItems: null,
-            carouselAdData: null,
+            recentlyCarouseData: null,
             productOptions: null,
             breadCrumbs: null,
             shopTags: null,
@@ -118,12 +118,10 @@ class Catalog extends Component {
         if (!data) {
             return;
         }
-        console.log(data, 'data!!!');
         if (!nextState.catalogItems) {
             document.title = category;
             this.loadCatalogItems(data);
         }
-        console.log(nextProps.recently, 'ASAFSASFSFAFFS1212312');
         if ((nextProps.recently.length > 0 && !nextState.recentlyCarouseData) ||
             (nextProps.recently.length !== this.props.recently.length)) {
             this.loadRecentlyProducts(nextProps.recently);
@@ -168,7 +166,7 @@ class Catalog extends Component {
     }
 
     loadDataAPI(id, params) {
-        if (!this.props.data || !this.props.data.productData) {
+        if (!this.props.data || !this.props.data.catalogData) {
             this.props.onGetData(
                 id,
                 'http://api.vct1.com/catalog/',
@@ -446,7 +444,6 @@ class Catalog extends Component {
             tabsData,
             carouselProductsData
         } = this.state;
-        console.log(catalogItems);
         return (
             catalogItems &&
             <CatalogComponent
