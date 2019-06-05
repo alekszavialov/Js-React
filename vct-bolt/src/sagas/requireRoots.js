@@ -34,7 +34,6 @@ export function requireFiles(url) {
 }
 
 const mutateSales = (data) => data.map(item => {
-        console.log(data, 'asffasdfasd 2314 2134 4123');
         return {
             ...item,
             url: `/product-${item.id}-${cyrillicToTranslit().transform(item.title.replace(/\//g, ''), '_').toLowerCase()}`,
@@ -52,13 +51,30 @@ const mutateProductData = (data) => data.map(item => {
 );
 
 const mutateSpecifications = (data) => data.filter(item => item.description && item.value);
+const filterSortData = (data) => {
+    return data.map((item,index) => {
+        let parameter = "";
+        if (item.name === "Цена"){
+            parameter = "price";
+        } else if (item.name === "Бренд"){
+            parameter = "brand";
+        } else {
+            parameter = `parametr${index - 2}`;
+        }
+        return {
+            ...item,
+            parameter
+        };
+    }).filter(item => item.items.length > 0);
+};
 
 export function mutateData(name, data) {
-    console.log(name, 'mutate');
     switch (name) {
         case 'productItemsData':
         case 'catalogData':
             return mutateSales(data);
+        case 'sortData':
+            return filterSortData(data);
         case 'productData':
             return mutateProductData(data);
         case 'specifications':

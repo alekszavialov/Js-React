@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 
 import CatalogComponent from './components';
 
-import { addToCart  } from '../../data/Store/actions';
+import { addToCart } from '../../data/Store/actions';
 import { getData } from '../../data/Data/actions';
 
 import './styles.css';
+import axios from 'axios/index';
+import { mutateData } from '../../sagas/requireRoots';
 
 class Catalog extends Component {
     static propTypes = {
@@ -24,26 +26,27 @@ class Catalog extends Component {
             catalogItems: null,
             recentlyCarouseData: null,
             productOptions: null,
+            itemsShowCount: 12,
+            isMoreProducts: false,
+
             breadCrumbs: null,
             shopTags: null,
             tabsData: null,
             carouselProductsData: null
         };
 
-        this.loadProductList = this.loadProductList.bind(this);
         this.loadProductOptions = this.loadProductOptions.bind(this);
-        this.loadBreadCrumbs = this.loadBreadCrumbs.bind(this);
-        this.loadCarouselData = this.loadCarouselData.bind(this);
         this.loadShopTags = this.loadShopTags.bind(this);
         this.loadTabsData = this.loadTabsData.bind(this);
         this.loadCarouselItems = this.loadCarouselItems.bind(this);
-        this.loadMoreProducts = this.loadMoreProducts.bind(this);
+
         this.addToCart = this.addToCart.bind(this);
 
         this.loadDataAPI = this.loadDataAPI.bind(this);
         this.changeFormField = this.changeFormField.bind(this);
         this.loadCatalogItems = this.loadCatalogItems.bind(this);
         this.loadRecentlyProducts = this.loadRecentlyProducts.bind(this);
+        this.loadMoreProducts = this.loadMoreProducts.bind(this);
     }
 
     componentDidMount() {
@@ -61,72 +64,31 @@ class Catalog extends Component {
             };
         }
         this.loadDataAPI(id, params);
-        // if (!this.props.data || !this.props.data[id]) {
-        //     let params = {
-        //         'category': category
-        //     };
-        //     if (brand) {
-        //         params = {
-        //             ...params,
-        //             brand
-        //         };
-        //     }
-        //     this.props.onGetData(
-        //         id,
-        //         'http://api.vct1.com/catalog/',
-        //         'catalogData',
-        //         params
-        //     );
-        //     console.log('ye[');
-        // } else {
-        //     console.log(brand);
-        // }
-
-        // const id = this.props.match.url.match(/\d+/)[0];
-        // this.loadDataAPI(id);
-        // if (this.props.data[id]) {
-        //     const productData = this.props.data[id].productData[0];
-        //     const { comments, specifications } = this.props.data[id];
-        //     if (productData && specifications && comments) {
-        //         document.title = productData.title;
-        //         this.fillPageState(productData, specifications, comments);
-        //     }
-        // }
+        if (this.props.data && this.props.data.catalogData && this.props.recently && this.props.data.sortData) {
+            this.loadCatalogItems(this.props.data.catalogData);
+            this.loadRecentlyProducts(this.props.recently);
+            this.loadProductOptions(this.props.data.sortData);
+        }
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        // if (nextProps.match.url !== this.props.match.url) {
-        //     window.scrollTo(0, 0);
-        //     this.setState({
-        //         productData: null,
-        //         breadCrumbs: null,
-        //         relatedCarouseData: null,
-        //         recentlyCarouseData: null,
-        //         specifications: null,
-        //         comments: null
-        //     });
-        //     this.loadDataAPI(nextProps.match.url.match(/\d+/)[0]);
-        //     return;
-        // }
-
+    shouldComponentUpdate(nextProps, nextState) {
         const category = this.props.match.params.categoryName.substring(1);
-        // const brand = this.props.match.params.brandName;
-        // const id = brand ? category + brand : category;
-        // console.log(nextProps);
-        // console.log(id);
-        const data = nextProps.data.catalogData;
+        const data = nextProps.data && nextProps.data.catalogData;
         if (!data) {
-            return;
+            return false;
         }
         if (!nextState.catalogItems) {
             document.title = category;
             this.loadCatalogItems(data);
         }
+        if (!nextState.productOptions && nextProps.data.sortData) {
+            this.loadProductOptions(nextProps.data.sortData);
+        }
         if ((nextProps.recently.length > 0 && !nextState.recentlyCarouseData) ||
             (nextProps.recently.length !== this.props.recently.length)) {
             this.loadRecentlyProducts(nextProps.recently);
         }
-
+        return true;
 
         // const productData = data.productData && data.productData[0];
         // if (!productData) {
@@ -166,16 +128,20 @@ class Catalog extends Component {
     }
 
     loadDataAPI(id, params) {
-        if (!this.props.data || !this.props.data.catalogData) {
+        if (!this.props.data) {
             this.props.onGetData(
                 id,
                 'http://api.vct1.com/catalog/',
                 'catalogData',
                 params
             );
-            console.log('load');
+            this.props.onGetData(
+                id,
+                'http://api.vct1.com/parameters/',
+                'sortData',
+                { category: params.category }
+            );
         }
-
     }
 
     changeFormField(data) {
@@ -211,10 +177,16 @@ class Catalog extends Component {
             ]
 
         ;
+        let isMoreProducts = this.state.isMoreProducts;
+        if (data.length > this.state.itemsShowCount) {
+            data = data.slice(0, this.state.itemsShowCount);
+            isMoreProducts = true;
+        }
         this.setState(
             {
                 catalogItems: data,
-                breadCrumbs: stateBreadCrumbs
+                breadCrumbs: stateBreadCrumbs,
+                isMoreProducts
             }
         );
     };
@@ -252,103 +224,49 @@ class Catalog extends Component {
         });
     }
 
-
     loadMoreProducts() {
-        this.setState({
-            catalogItems:
-                [
-                    ...this.state.catalogItems,
-                    {
-                        src: 'https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg',
-                        href: '/product',
-                        name: 'Чип для картриджа Pantu21421442142142 fsdafdsafsda m PC-210E/211EV (безлимитный) (CHIP-PC-211EV)',
-                        description: 'M6500/M6607/P220safdfdsa sadfsadf0/P2207/ P2500/P2507',
-                        price: 124421
-                    },
-                    {
-                        src: 'https://vct1.com/img/sub_menu/sub_menu_proector.jpg.pagespeed.ce.gqCHhkEpSA.jpg',
-                        href: '/product',
-                        name: 'Чип для картриджа Pantum PC-210E/211EV (безлимитный) (CHIP-PC-211EV)',
-                        description: 'M6500/M6607/P2200/P2207/ P2500/P2507',
-                        price: 3212
-                    }
-                ]
-        });
+        let isMoreProducts = false;
+        let data = this.props.data.catalogData;
+        let itemsShowCount = this.state.itemsShowCount;
+        const nextStateItemsShowCount = this.state.itemsShowCount + 6;
+
+        if (this.props.data.catalogData.length > nextStateItemsShowCount) {
+            data = data.slice(0, nextStateItemsShowCount);
+            isMoreProducts = true;
+            itemsShowCount = nextStateItemsShowCount;
+        }
+        this.setState(
+            {
+                catalogItems: data,
+                itemsShowCount,
+                isMoreProducts
+            }
+        );
     }
 
-    loadProductList() {
-        // axios.get(`../../fakeAPI/catalogProductItemsData.json`)
-        //     .then(res => {
-        //         console.log(res, 'ads');
-        //     })
-        // fetchApi('../../fakeAPI/catalogProductItemsData.json')
-        //     .then(result => this.setState({
-        //         catalogItems: result
-        //     }
-        //     ));
-
-        // const result = require('../../fakeAPI/catalogProductItemsData.json');
-        this.setState(
-            {
-                catalogItems: this.props.data.catalogItems
-            }
-        );
-    };
-
-    loadCarouselData() {
-        // fetchApi('../../fakeAPI/carouselOneItemData.json')
-        //     .then(result => this.setState({
-        //             carouselData: {
-        //                 ...result, items: result.items.map(item =>
-        //                     <CarouselBigItem item={item} key={Math.random()}/>
-        //                 )
-        //             }
-        //         }
-        //     ));
-
-        // const result = require('../../fakeAPI/carouselOneItemData.json');
-        this.setState(
-            {
-                carouselAdData: this.props.data.carouselOneItemData
-            }
-        );
-    };
-
-    loadProductOptions() {
-        // fetchApi('../../fakeAPI/productOptionsData.json')
-        //     .then(result => this.setState({
-        //             productOptions: result
-        //         }
-        //     ));
-
-        const result = require('../../fakeAPI/productOptionsData.json');
-        // this.setState(
-        //     {
-        //         productOptions: this.props.data.productOptionsData
-        //     }, () => {
-        //         this.changeFormField({ ...this.props.data.productOptionsData.sliderValues });
-        //     }
-        // );
+    loadProductOptions(data) {
+        const result = {
+            sliderValues: {
+                min: Number(data[0].items[0].text),
+                max: Number(data[0].items[1].text)
+            },
+            productParameters: [
+                ...data.slice(1, data.length).map((item, index) => {
+                    return {
+                        head: `${item.name} :`,
+                        name: `parametr${index}`,
+                        options: item.items.map(item => item.text)
+                    };
+                }),
+                { head: 'В наличие', name: 'stock', options: ['Только в начилие'] }
+            ]
+        };
+        console.log(result, 'loadProductData!!!');
         this.setState(
             {
                 productOptions: result
             }, () => {
                 this.changeFormField({ ...result.sliderValues });
-            }
-        );
-    };
-
-    loadBreadCrumbs() {
-        // fetchApi('../../fakeAPI/catalogBreadCrumbs.json')
-        //     .then(result => this.setState({
-        //             breadCrumbs: result
-        //         }
-        //     ));
-
-        // const result = require('../../fakeAPI/catalogBreadCrumbs.json');
-        this.setState(
-            {
-                breadCrumbs: this.props.data.catalogBreadCrumbs
             }
         );
     };
@@ -431,27 +349,32 @@ class Catalog extends Component {
     }
 
     render() {
-        // console.log(this.props);
-        // return (
-        //     <h1>load</h1>
-        // );
         const {
-            productOptions,
+            isMoreProducts,
+            catalogItems,
             breadCrumbs,
             recentlyCarouseData,
+
+            productOptions,
+
             shopTags,
-            catalogItems,
             tabsData,
             carouselProductsData
         } = this.state;
+        if (!catalogItems) {
+            return (
+                <h1>Load</h1>
+            );
+        }
+        console.log(this.state, 'render');
         return (
-            catalogItems &&
             <CatalogComponent
                 productOptions={productOptions}
 
                 catalogItems={catalogItems}
                 breadCrumbs={breadCrumbs}
                 recentlyCarouseData={recentlyCarouseData}
+                isMoreProducts={isMoreProducts}
 
                 shopTags={shopTags}
                 tabsData={tabsData}

@@ -10,11 +10,13 @@ import ShopTags from './shopTags';
 
 export default class CatalogComponent extends Component {
     static propTypes = {
-        productOptions: PropTypes.object,
         breadCrumbs: PropTypes.array,
         recentlyCarouseData: PropTypes.object,
-        shopTags: PropTypes.array,
         catalogItems: PropTypes.array,
+        isMoreProducts: PropTypes.bool,
+        productOptions: PropTypes.object,
+
+        shopTags: PropTypes.array,
         tabsData: PropTypes.object,
         carouselProductsData: PropTypes.object,
         onAddToCart: PropTypes.func,
@@ -44,11 +46,13 @@ export default class CatalogComponent extends Component {
 
     render() {
         const {
-            productOptions,
+            isMoreProducts,
             breadCrumbs,
             recentlyCarouseData,
-            shopTags,
             catalogItems,
+            productOptions,
+
+            shopTags,
             tabsData,
             carouselProductsData
         } = this.props;
@@ -78,16 +82,15 @@ export default class CatalogComponent extends Component {
                             <div className="catalog-shop-blocks">
                                 {
                                     catalogItems &&
-                                    <Fragment>
-                                        <ItemCatalog items={catalogItems} onAddToCart={this.addToCart}/>
-                                        <div
-                                            className="shop-blocks-load-more shop-block-buy"
-                                            onClick={this.loadMoreProducts}
-                                        >
-                                            Загрузить еще
-                                        </div>
-                                    </Fragment>
+                                    <ItemCatalog items={catalogItems} onAddToCart={this.addToCart}/>
                                 }
+                                {isMoreProducts &&
+                                <div
+                                    className="shop-blocks-load-more shop-block-buy"
+                                    onClick={this.loadMoreProducts}
+                                >
+                                    Загрузить еще
+                                </div>}
                             </div>
                             <div className="product-card-tabs">
                                 {
