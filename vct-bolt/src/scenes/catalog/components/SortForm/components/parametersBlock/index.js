@@ -62,8 +62,8 @@ export default class ParametersBlock extends Component {
                             return (
                                 <li key={itemID}>
                                     <Checkbox
+                                        item={item}
                                         name={items.name}
-                                        value={item.text}
                                         changeFormField={this.changeFormField}/>
                                 </li>
                             );

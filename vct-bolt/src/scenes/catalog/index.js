@@ -74,14 +74,28 @@ class Catalog extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         console.log('new data');
-        console.log(nextProps.sortForm && !this.props.sortForm);
-        if (this.props.match.params.sortData) {
-            console.log(this.props.location.state, 'some data');
-        }
-        if (nextProps.match.url !== this.props.match.url) {
-            console.log(nextProps.match.url, 'new url');
-
-        }
+        // if (this.props.match.params.filterData !== nextProps.match.params.filterData) {
+        //     const filterData = this.props.match.params.filterData.split("&").map(item => {
+        //         const data = item.split("=");
+        //         data[1] = decodeURIComponent(data[1]);
+        //         console.log(data[0]);
+        //         console.log(data[0] !== "min");
+        //         console.log(data[0] !== "max");
+        //         if (data[0] === "stock"){
+        //             data[1] = data[1] === "1";
+        //         } else
+        //         if (data[0] !== "min" && data[0] !== "max"){
+        //             data[1] = data[1].split(",");
+        //         }
+        //         return {[data[0]]: data[1]};
+        //     });
+        //     console.log(filterData);
+        //     this.props.initialize( filterData );
+        // }
+        // if (nextProps.match.url !== this.props.match.url) {
+        //     console.log(nextProps.match.url, 'new url');
+        //
+        // }
         const category = this.props.match.params.categoryName.substring(1);
         const data = nextProps.data && nextProps.data.catalogData;
         if (!data) {
@@ -268,14 +282,19 @@ class Catalog extends Component {
     }
 
     loadProductOptions(data) {
+        console.log(data);
         console.log('loadProductOptions');
-        const result = {
+        let result = {
             sliderValues: {
-                min: Number(data[0].items[0].text),
-                max: Number(data[0].items[1].text)
+                name: data[0].parameter,
+                options:
+                    {
+                        min: Number(data[0].items[0].text),
+                        max: Number(data[0].items[1].text)
+                    }
             },
             productParameters: [
-                ...data.slice(1, data.length).map((item, index) => {
+                ...data.slice(1, data.length).map((item) => {
                     return {
                         head: `${item.name} :`,
                         name: item.parameter,
@@ -285,15 +304,50 @@ class Catalog extends Component {
                 { head: 'В наличие', name: 'stock', options: [{ text: 'Только в начилие' }] }
             ]
         };
-        console.log(result, 'loadProductData!!!');
+        let initValues = { [result.sliderValues.name]: result.sliderValues.options };
+        if (this.props.match.params.filterData) {
+            const filterData = this.props.match.params.filterData.split('&').reduce((acc, item) => {
+                const data = item.split('=');
+                data[1] = decodeURIComponent(data[1]);
+                if (data[0] === 'stock') {
+                    data[1] = data[1] === '1';
+                } else if (data[0] !== 'min' && data[0] !== 'max') {
+                    data[1] = data[1].split(',');
+                }
+                return { ...acc, [data[0]]: data[1] };
+            }, {});
+            initValues = filterData;
+            const productCheckedData = result.productParameters.map(item => {
+                return filterData[item.name] ?
+                    {
+                        ...item,
+                        options: item.options.map(option => {
+                            return Object.values(filterData[item.name]).indexOf(option.text) >= 0 ? {
+                                ...option,
+                                checked: true
+                            } : option;
+                        })
+                    } :
+                    item;
+            });
+            const priceCheckedData = {currentMin: Number(initValues.min) , currentMax: Number(initValues.max)};
+            result = {
+                sliderValues: {
+                    ...result.sliderValues, options: {...result.sliderValues.options, ...priceCheckedData}
+                },
+                productParameters: productCheckedData
+            };
+        }
         this.setState(
             {
                 productOptions: result
             }, () => {
-                this.props.initialize({ ...result.sliderValues });
+                this.props.initialize(
+                    initValues
+                );
             }
         );
-    };
+    }
 
     loadShopTags() {
         // fetchApi('../../fakeAPI/catalogShopTags.json')
@@ -373,22 +427,15 @@ class Catalog extends Component {
     }
 
     submitForm() {
-        let query = {};
-        for (let data in this.props.sortForm) {
-            if (data === 'stock') {
-                query = { ...query, [data]: 1 };
-            } else if (Array.isArray(this.props.sortForm[data])) {
-                query = { ...query, [data]: this.props.sortForm[data].join(',') };
-            } else {
-                query = { ...query, [data]: this.props.sortForm[data] };
+        const query = Object.entries(this.props.sortForm).map(item => {
+            if (item[0] === 'stock') {
+                item[1] = 1;
             }
-        }
-        console.log(JSON.stringify(this.props.sortForm));
+            return [item[0], encodeURIComponent(item[1])].join('=');
+        }).join('&');
         this.props.history.push({
-            pathname: `/catalog-детали для картриджей/epson/sort`,
-            state: { query: this.props.sortForm }
+            pathname: `/catalog-детали для картриджей/epson/${query}`
         });
-        console.log(this.props);
     }
 
     render() {
@@ -450,6 +497,7 @@ const mapDispatchToProps = (dispatch) => {
 
 export default reduxForm({
     form: 'sortForm',
+    enableReinitialize: true
 })(
     connect(
         mapStateToProps,

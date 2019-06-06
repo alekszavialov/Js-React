@@ -6,8 +6,8 @@ import './styles.css';
 export default class Checkbox extends Component {
 
     static propTypes = {
+        item: PropTypes.object,
         name: PropTypes.string,
-        value: PropTypes.string,
         changeFormField: PropTypes.func
     };
 
@@ -15,7 +15,7 @@ export default class Checkbox extends Component {
         super(props);
 
         this.state = {
-            isChecked: false
+            isChecked: props.item.checked
         };
 
         this.toggleCheck = this.toggleCheck.bind(this);
@@ -23,9 +23,9 @@ export default class Checkbox extends Component {
     }
 
     changeFormField() {
-        const {name,value} = this.props;
+        const {item,name} = this.props;
         const {isChecked} = this.state;
-        let data = {text: value, name};
+        let data = {text: item.text, name};
         if (!isChecked){
             data = {...data, remove: true};
         }
@@ -40,13 +40,13 @@ export default class Checkbox extends Component {
 
     render() {
         const {isChecked} = this.state;
-        const {name, value} = this.props;
+        const {item,name} = this.props;
         const checkboxClass = isChecked ? 'check' : 'unchecked';
         return (
             <div className="custom-checkbox-container" onClick={this.toggleCheck}>
                 <span className={`custom-checkbox-${checkboxClass}`}/>
                 <input type="checkbox" name={name} checked={isChecked} onChange={this.toggleCheck} />
-                {value}
+                {item.text}
             </div>
         );
     }

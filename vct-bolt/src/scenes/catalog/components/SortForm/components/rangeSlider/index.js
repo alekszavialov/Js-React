@@ -16,58 +16,73 @@ export default class RangeSlider extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            values: { min: this.props.values.min, max: this.props.values.max }
+            values: {
+                min: props.values.options.currentMin ? props.values.options.currentMin : props.values.options.min,
+                max: props.values.options.currentMax ? props.values.options.currentMax : props.values.options.max
+            },
+            name: props.values.name
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
         this.changeFormField = this.changeFormField.bind(this);
     }
 
-    changeFormField(){
-        this.props.changeFormField({...this.state.values});
+    changeFormField() {
+        this.props.changeFormField({ ...this.state.values });
+    }
+
+    handleBlur(event) {
+        const { values } = this.state;
+        const { options } = this.props.values;
+        let correctData = {};
+        if (values.min < options.min || values.min > options.max) {
+            correctData = { min: options.min };
+        }
+        if (values.max > options.max || values.max < options.min) {
+            correctData = { max: options.max };
+        }
+        if (Object.entries(correctData).length === 0) {
+            this.changeFormField();
+        } else {
+            this.setState({
+                values: { ...values, ...correctData }
+            });
+        }
     }
 
     handleChange(event) {
-        const value = event.target ? {[event.target.name]: Number(event.target.value.replace(/0+(?!$)/, ''))} : event;
-        if (event.target){
-            if (isNaN(value[event.target.name])){
+        const value = event.target ? { [event.target.name]: Number(event.target.value.replace(/0+(?!$)/, '')) } : event;
+        if (event.target) {
+            if (isNaN(value[event.target.name])) {
                 event.preventDefault();
                 return;
             }
-            if (value[event.target.name] < this.props.values.min || value[event.target.name] > this.props.values.max) {
-                value[event.target.name] = this.props.values[event.target.name];
-            }
         }
-        // this.setState({
-        //     values: { ...this.state.values, ...value }
-        // }, () => this.changeFormField());
         this.setState({
             values: { ...this.state.values, ...value }
         });
     }
 
-    test = () => {
-        this.changeFormField()
-    }
-
-
     render() {
-        const {values} = this.state;
+        const { values } = this.state;
         return (
             <div className="shop-sort-block">
                 <div className="priceslider-head">
                     <p>Цена</p>
                     <span>от</span>
-                    <input type="text" name="min" value={values.min} onChange={this.handleChange}/>
+                    <input type="text" name="min" value={values.min} onChange={this.handleChange}
+                           onBlur={this.handleBlur}/>
                     <span>до</span>
-                    <input type="text" name="max" value={values.max} onChange={this.handleChange}/>
+                    <input type="text" name="max" value={values.max} onChange={this.handleChange}
+                           onBlur={this.handleBlur}/>
                 </div>
                 <InputRange
-                    minValue={this.props.values.min}
-                    maxValue={this.props.values.max}
-                    value={values}
+                    minValue={this.props.values.options.min}
+                    maxValue={this.props.values.options.max}
+                    value={{ min: values.min, max: values.max }}
                     onChange={value => this.handleChange(value)}
-                    onChangeComplete={this.test}
+                    onChangeComplete={this.changeFormField}
                 />
             </div>
         );
