@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm } from 'redux-form';
+import { getFormValues, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import CatalogComponent from './components';
@@ -9,13 +9,12 @@ import { addToCart } from '../../data/Store/actions';
 import { getData } from '../../data/Data/actions';
 
 import './styles.css';
-import axios from 'axios/index';
-import { mutateData } from '../../sagas/requireRoots';
 
 class Catalog extends Component {
     static propTypes = {
         onAddToCart: PropTypes.func,
         data: PropTypes.object,
+        sortForm: PropTypes.object,
         onGetData: PropTypes.func
     };
 
@@ -39,20 +38,22 @@ class Catalog extends Component {
         this.loadShopTags = this.loadShopTags.bind(this);
         this.loadTabsData = this.loadTabsData.bind(this);
         this.loadCarouselItems = this.loadCarouselItems.bind(this);
-
-        this.addToCart = this.addToCart.bind(this);
-
-        this.loadDataAPI = this.loadDataAPI.bind(this);
-        this.changeFormField = this.changeFormField.bind(this);
         this.loadCatalogItems = this.loadCatalogItems.bind(this);
+        this.loadDataAPI = this.loadDataAPI.bind(this);
         this.loadRecentlyProducts = this.loadRecentlyProducts.bind(this);
         this.loadMoreProducts = this.loadMoreProducts.bind(this);
+
+        this.addToCart = this.addToCart.bind(this);
+        this.changeFormField = this.changeFormField.bind(this);
+        this.submitForm = this.submitForm.bind(this);
     }
 
     componentDidMount() {
         window.scrollTo(0, 0);
         const category = this.props.match.params.categoryName.substring(1);
         const brand = this.props.match.params.brandName;
+        const sort = this.props.match.params.sortData;
+        console.log(sort, 'sort URL!!!!!');
         const id = brand ? category + brand : category;
         let params = {
             'category': category
@@ -72,6 +73,15 @@ class Catalog extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
+        console.log('new data');
+        console.log(nextProps.sortForm && !this.props.sortForm);
+        if (this.props.match.params.sortData) {
+            console.log(this.props.location.state, 'some data');
+        }
+        if (nextProps.match.url !== this.props.match.url) {
+            console.log(nextProps.match.url, 'new url');
+
+        }
         const category = this.props.match.params.categoryName.substring(1);
         const data = nextProps.data && nextProps.data.catalogData;
         if (!data) {
@@ -145,12 +155,25 @@ class Catalog extends Component {
     }
 
     changeFormField(data) {
-        if (!data.remove) {
+        if (!data.name) {
             for (let key in data) {
                 this.props.change(key, data[key]);
             }
-        } else {
-            this.props.change(data.remove, '');
+        }
+        else {
+            const formField = this.props.sortForm[data.name];
+            if (!data.remove) {
+                this.props.change(
+                    data.name,
+                    formField ? [...formField, data.text] : [data.text]
+                );
+            } else {
+                const field = formField.filter(item => item !== data.text);
+                this.props.change(
+                    data.name,
+                    field.length > 0 ? field : ''
+                );
+            }
         }
 
     };
@@ -245,6 +268,7 @@ class Catalog extends Component {
     }
 
     loadProductOptions(data) {
+        console.log('loadProductOptions');
         const result = {
             sliderValues: {
                 min: Number(data[0].items[0].text),
@@ -254,11 +278,11 @@ class Catalog extends Component {
                 ...data.slice(1, data.length).map((item, index) => {
                     return {
                         head: `${item.name} :`,
-                        name: `parametr${index}`,
-                        options: item.items.map(item => item.text)
+                        name: item.parameter,
+                        options: item.items
                     };
                 }),
-                { head: 'В наличие', name: 'stock', options: ['Только в начилие'] }
+                { head: 'В наличие', name: 'stock', options: [{ text: 'Только в начилие' }] }
             ]
         };
         console.log(result, 'loadProductData!!!');
@@ -266,7 +290,7 @@ class Catalog extends Component {
             {
                 productOptions: result
             }, () => {
-                this.changeFormField({ ...result.sliderValues });
+                this.props.initialize({ ...result.sliderValues });
             }
         );
     };
@@ -348,6 +372,25 @@ class Catalog extends Component {
         this.props.onAddToCart(item);
     }
 
+    submitForm() {
+        let query = {};
+        for (let data in this.props.sortForm) {
+            if (data === 'stock') {
+                query = { ...query, [data]: 1 };
+            } else if (Array.isArray(this.props.sortForm[data])) {
+                query = { ...query, [data]: this.props.sortForm[data].join(',') };
+            } else {
+                query = { ...query, [data]: this.props.sortForm[data] };
+            }
+        }
+        console.log(JSON.stringify(this.props.sortForm));
+        this.props.history.push({
+            pathname: `/catalog-детали для картриджей/epson/sort`,
+            state: { query: this.props.sortForm }
+        });
+        console.log(this.props);
+    }
+
     render() {
         const {
             isMoreProducts,
@@ -366,23 +409,22 @@ class Catalog extends Component {
                 <h1>Load</h1>
             );
         }
-        console.log(this.state, 'render');
         return (
             <CatalogComponent
                 productOptions={productOptions}
-
                 catalogItems={catalogItems}
                 breadCrumbs={breadCrumbs}
                 recentlyCarouseData={recentlyCarouseData}
                 isMoreProducts={isMoreProducts}
+                submitForm={this.submitForm}
+                changeFormField={this.changeFormField}
+                onAddToCart={this.addToCart}
+                onLoadMoreProducts={this.loadMoreProducts}
 
                 shopTags={shopTags}
                 tabsData={tabsData}
                 carouselProductsData={carouselProductsData}
-                onAddToCart={this.addToCart}
-                onLoadMoreProducts={this.loadMoreProducts}
 
-                changeFormField={this.changeFormField}
             />
         );
     }
@@ -394,7 +436,8 @@ const mapStateToProps = (state, props) => {
     const id = brand ? category + brand : category;
     return {
         data: state.Data[id],
-        recently: state.Store.recently
+        recently: state.Store.recently,
+        sortForm: getFormValues('sortForm')(state)
     };
 };
 
@@ -406,7 +449,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default reduxForm({
-    form: 'sortForm'
+    form: 'sortForm',
 })(
     connect(
         mapStateToProps,

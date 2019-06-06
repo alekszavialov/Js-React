@@ -49,6 +49,7 @@ export default class ParametersBlock extends Component {
     render() {
         const checkboxClass = this.state.isActive ? 'active' : '';
         const { items } = this.props;
+        console.log(items, 'params!!!');
         return (
             <Fragment>
                 <span className={`parameters-block-head ${checkboxClass}`} onClick={this.toggleChange}>
@@ -57,10 +58,13 @@ export default class ParametersBlock extends Component {
                 <ul className={checkboxClass}>
                     {items.options.map(
                         (item, index) => {
-                            const itemID = `option${  items.name  }${  index}`;
+                            const itemID = `option${items.name}${index}`;
                             return (
                                 <li key={itemID}>
-                                    <Checkbox name={`${items.name}_${item}`} value={item} changeFormField={this.changeFormField}/>
+                                    <Checkbox
+                                        name={items.name}
+                                        value={item.text}
+                                        changeFormField={this.changeFormField}/>
                                 </li>
                             );
                         }
@@ -69,7 +73,6 @@ export default class ParametersBlock extends Component {
             </Fragment>
         );
     }
-
 
 
 }

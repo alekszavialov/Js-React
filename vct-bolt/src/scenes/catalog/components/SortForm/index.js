@@ -11,34 +11,36 @@ export default class SortForm extends Component {
     static propTypes = {
         sliderValues: PropTypes.object,
         productParameters: PropTypes.array,
-        changeFormField: PropTypes.func
+        changeFormField: PropTypes.func,
+        submitForm: PropTypes.func
     };
 
     constructor(props) {
         super(props);
-        console.log('construc');
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.changeFormField = this.changeFormField.bind(this);
+        this.submitForm = this.submitForm.bind(this);
     }
 
-    changeFormField(data){
+    changeFormField(data) {
         this.props.changeFormField(data);
     }
 
-    handleSubmit(e) {
+    submitForm(e) {
         e.preventDefault();
-
-        console.log();
+        this.props.submitForm();
     }
 
     render() {
         const { sliderValues, productParameters } = this.props;
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.submitForm}>
                 <RangeSlider values={sliderValues} changeFormField={this.changeFormField}/>
                 {productParameters.map((item, index) =>
-                    <div className="shop-sort-block" key={index}>
-                        <ParametersBlock items={item} onChange={this.handleChange} changeFormField={this.changeFormField}/>
+                    <div className="shop-sort-block" key={item.name + index}>
+                        <ParametersBlock
+                            items={item}
+                            onChange={this.handleChange}
+                            changeFormField={this.changeFormField}/>
                     </div>
                 )}
                 <button type="submit" className="shop-block-buy">Применить</button>

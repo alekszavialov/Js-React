@@ -52,20 +52,23 @@ const mutateProductData = (data) => data.map(item => {
 
 const mutateSpecifications = (data) => data.filter(item => item.description && item.value);
 const filterSortData = (data) => {
-    return data.map((item,index) => {
+    const test = data.map((item,index) => {
         let parameter = "";
         if (item.name === "Цена"){
             parameter = "price";
         } else if (item.name === "Бренд"){
             parameter = "brand";
         } else {
-            parameter = `parametr${index - 2}`;
+            parameter = `parametr${index - 1}`;
         }
         return {
             ...item,
+            items : item.items.filter(itemName => itemName.text !== ""),
             parameter
         };
     }).filter(item => item.items.length > 0);
+    console.log(test, 'sortDataLog');
+    return test;
 };
 
 export function mutateData(name, data) {

@@ -23,13 +23,11 @@ export default class Checkbox extends Component {
     }
 
     changeFormField() {
-        const {name} = this.props;
+        const {name,value} = this.props;
         const {isChecked} = this.state;
-        let data;
-        if (isChecked){
-            data = {[name]: isChecked};
-        } else {
-            data = {remove: name};
+        let data = {text: value, name};
+        if (!isChecked){
+            data = {...data, remove: true};
         }
         this.props.changeFormField(data);
     }
