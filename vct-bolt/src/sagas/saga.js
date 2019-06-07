@@ -4,9 +4,10 @@ import { addToData } from '../data/Data/actions';
 import { mutateData } from './requireRoots';
 
 function getData(url, name, params) {
-    console.log(params, 'params!!asasdasd');
-    console.log(name, 'name!!asasdasd');
-    console.log(url, 'url!!asasdasd');
+    if (typeof params === 'string' || params instanceof String){
+        return axios.get(url + params)
+            .then(response => mutateData(name, response.data));
+    }
     return axios.get(url, {params})
         .then(response => mutateData(name, response.data));
 }

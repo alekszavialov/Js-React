@@ -92,10 +92,17 @@ class Catalog extends Component {
         //     console.log(filterData);
         //     this.props.initialize( filterData );
         // }
-        // if (nextProps.match.url !== this.props.match.url) {
-        //     console.log(nextProps.match.url, 'new url');
-        //
-        // }
+        if (nextProps.match.url !== this.props.match.url){
+            console.log('asdadsasd newsd data', nextProps);
+        }
+        if (nextProps.match.url !== this.props.match.url && nextProps.match.params.filterData ) {
+            this.props.onGetData(
+                '123213312123213231',
+                'http://api.vct1.com/catalog/',
+                'catalogData',
+                nextProps.match.params.filterData
+            );
+        }
         const category = this.props.match.params.categoryName.substring(1);
         const data = nextProps.data && nextProps.data.catalogData;
         if (!data) {
@@ -304,7 +311,7 @@ class Catalog extends Component {
                 { head: 'В наличие', name: 'stock', options: [{ text: 'Только в начилие' }] }
             ]
         };
-        let initValues = { [result.sliderValues.name]: result.sliderValues.options };
+        let initValues = { ...result.sliderValues.options };
         if (this.props.match.params.filterData) {
             const filterData = this.props.match.params.filterData.split('&').reduce((acc, item) => {
                 const data = item.split('=');
@@ -322,6 +329,12 @@ class Catalog extends Component {
                     {
                         ...item,
                         options: item.options.map(option => {
+                            if (item.name === "stock"){
+                                return {
+                                    ...option,
+                                    checked: true
+                                };
+                            }
                             return Object.values(filterData[item.name]).indexOf(option.text) >= 0 ? {
                                 ...option,
                                 checked: true
@@ -427,14 +440,20 @@ class Catalog extends Component {
     }
 
     submitForm() {
-        const query = Object.entries(this.props.sortForm).map(item => {
+        let query = Object.entries(this.props.sortForm).map(item => {
             if (item[0] === 'stock') {
                 item[1] = 1;
             }
             return [item[0], encodeURIComponent(item[1])].join('=');
-        }).join('&');
+        }).join('&').concat(`&category=${this.props.match.params.categoryName.substring(1)}`);
+        const category = this.props.match.params.categoryName;
+        const brand = this.props.match.params.brandName;
+        if (brand && !query.includes('brand')){
+            query = query.concat(`&brand=${brand}`);
+        }
+        const url = brand ? `catalog${category}/${brand}` : `catalog${category}`;
         this.props.history.push({
-            pathname: `/catalog-детали для картриджей/epson/${query}`
+            pathname: `/${url}/${query}`
         });
     }
 
