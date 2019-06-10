@@ -67,7 +67,6 @@ const filterSortData = (data) => {
             parameter
         };
     }).filter(item => item.items.length > 0);
-    console.log(test, 'sortDataLog');
     return test;
 };
 
@@ -75,6 +74,7 @@ export function mutateData(name, data) {
     switch (name) {
         case 'productItemsData':
         case 'catalogData':
+        case 'filterData':
             return mutateSales(data);
         case 'sortData':
             return filterSortData(data);

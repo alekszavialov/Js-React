@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import CatalogComponent from './components';
 
 import { addToCart } from '../../data/Store/actions';
-import { getData } from '../../data/Data/actions';
+import { getData, clearData } from '../../data/Data/actions';
 
 import './styles.css';
 
@@ -15,7 +15,8 @@ class Catalog extends Component {
         onAddToCart: PropTypes.func,
         data: PropTypes.object,
         sortForm: PropTypes.object,
-        onGetData: PropTypes.func
+        onGetData: PropTypes.func,
+        onClearData: PropTypes.func
     };
 
     constructor(props) {
@@ -25,15 +26,17 @@ class Catalog extends Component {
             catalogItems: null,
             recentlyCarouseData: null,
             productOptions: null,
-            itemsShowCount: 12,
             isMoreProducts: false,
-
+            filterDataItems: false,
+            start: 0,
+            onpage: 6,
             breadCrumbs: null,
             shopTags: null,
             tabsData: null,
             carouselProductsData: null
         };
-
+        this.baseState = this.state;
+        this.loadNewPage = this.loadNewPage.bind(this);
         this.loadProductOptions = this.loadProductOptions.bind(this);
         this.loadShopTags = this.loadShopTags.bind(this);
         this.loadTabsData = this.loadTabsData.bind(this);
@@ -42,6 +45,7 @@ class Catalog extends Component {
         this.loadDataAPI = this.loadDataAPI.bind(this);
         this.loadRecentlyProducts = this.loadRecentlyProducts.bind(this);
         this.loadMoreProducts = this.loadMoreProducts.bind(this);
+        this.refreshCatalogItems = this.refreshCatalogItems.bind(this);
 
         this.addToCart = this.addToCart.bind(this);
         this.changeFormField = this.changeFormField.bind(this);
@@ -49,27 +53,16 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
-        window.scrollTo(0, 0);
-        const category = this.props.match.params.categoryName.substring(1);
-        const brand = this.props.match.params.brandName;
-        const sort = this.props.match.params.sortData;
-        console.log(sort, 'sort URL!!!!!');
-        const id = brand ? category + brand : category;
-        let params = {
-            'category': category
-        };
-        if (brand) {
-            params = {
-                ...params,
-                brand
-            };
-        }
-        this.loadDataAPI(id, params);
-        if (this.props.data && this.props.data.catalogData && this.props.recently && this.props.data.sortData) {
-            this.loadCatalogItems(this.props.data.catalogData);
-            this.loadRecentlyProducts(this.props.recently);
-            this.loadProductOptions(this.props.data.sortData);
-        }
+        console.log('didMount');
+        this.loadNewPage();
+        // if (this.props.data &&
+        //     this.props.data.catalogData &&
+        //     this.props.recently &&
+        //     this.props.data.sortData) {
+        //     this.loadCatalogItems(this.props.data.catalogData);
+        //     this.loadRecentlyProducts(this.props.recently);
+        //     this.loadProductOptions(this.props.data.sortData);
+        // }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -92,87 +85,108 @@ class Catalog extends Component {
         //     console.log(filterData);
         //     this.props.initialize( filterData );
         // }
-        if (nextProps.match.url !== this.props.match.url){
-            console.log('asdadsasd newsd data', nextProps);
+        console.log(nextProps.location.pathname);
+        console.log(this.props.location);
+        console.log('ur;');
+        if (nextProps.location.pathname !== this.props.location.pathname ||
+        nextProps.location.search !== this.props.location.search) {
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log('newPAge');
+            console.log(nextProps.location.search);
+            console.log(this.props.location.search);
+            const query = nextProps.location.search ? nextProps.location.search : "none";
+            this.setState(this.baseState);
+            this.loadNewPage(query);
         }
-        if (nextProps.match.url !== this.props.match.url && nextProps.match.params.filterData ) {
-            this.props.onGetData(
-                '123213312123213231',
-                'http://api.vct1.com/catalog/',
-                'catalogData',
-                nextProps.match.params.filterData
-            );
-        }
-        const category = this.props.match.params.categoryName.substring(1);
-        const data = nextProps.data && nextProps.data.catalogData;
+
+        const category = this.props.match.params.categoryName.split('?')[0].substring(1);
+        let data = nextProps.data ?
+            nextProps.data.catalogData ? nextProps.data.catalogData :
+                nextProps.data.filterData ? nextProps.data.filterData : false : false;
+        console.log(data, 'data!!!');
+        console.log(nextProps.data, 'dataprops!!!');
         if (!data) {
             return false;
         }
         if (!nextState.catalogItems) {
             document.title = category;
-            this.loadCatalogItems(data);
+            this.loadCatalogItems(data, nextProps.location.search);
+        }
+        if (nextState.catalogItems && nextProps.data.catalogData.length !== this.props.data.catalogData.length) {
+            this.refreshCatalogItems(data);
         }
         if (!nextState.productOptions && nextProps.data.sortData) {
-            this.loadProductOptions(nextProps.data.sortData);
+            this.loadProductOptions(nextProps.data.sortData, nextProps.location.search);
         }
         if ((nextProps.recently.length > 0 && !nextState.recentlyCarouseData) ||
             (nextProps.recently.length !== this.props.recently.length)) {
             this.loadRecentlyProducts(nextProps.recently);
         }
         return true;
-
-        // const productData = data.productData && data.productData[0];
-        // if (!productData) {
-        //     return;
-        // }
-        // if (!nextState.productData) {
-        //     document.title = productData.title;
-        //     this.loadProductData(productData);
-        // }
-        // if (productData['related-products'] && !nextState.relatedCarouseData) {
-        //     const related = productData['related-products'].split(',').filter(item => item);
-        //     const loaded = related.map(
-        //         item => {
-        //             return nextProps.data[item];
-        //         }
-        //     ).filter(item => item);
-        //     if (loaded.length === related.length) {
-        //         this.loadRelatedProducts(loaded);
-        //     }
-        // }
-        //
-        // if (nextProps.recently.length !== this.props.recently.length) {
-        //     this.loadRecentlyProducts(nextProps.recently);
-        // }
-        // if (!nextState.breadCrumbs) {
-        //     this.loadBreadCrumbs(productData);
-        // }
-        //
-        // const { comments } = data;
-        // if (!nextState.comments && comments) {
-        //     this.loadComments(productData, comments);
-        // }
-        // const { specifications } = data;
-        // if (!nextState.specifications && specifications) {
-        //     this.loadSpecifications(productData, specifications);
-        // }
     }
 
-    loadDataAPI(id, params) {
-        if (!this.props.data) {
+    loadNewPage(newQuery) {
+        window.scrollTo(0, 0);
+        const category = this.props.match.params.categoryName.substring(1);
+        const brand = this.props.match.params.brandName;
+        let query = this.props.location.search.substring(1);
+        if (newQuery === "none"){
+            query =  "";
+        } else if (newQuery){
+            query = newQuery;
+        }
+        const id = category;
+        this.props.onClearData(id);
+        let params = {
+            category: category,
+            start: this.state.start,
+            onpage: this.state.onpage
+        };
+        if (brand) {
+            params = {
+                ...params,
+                brand
+            };
+        }
+        this.loadDataAPI(id, params, query);
+    }
+
+    loadDataAPI(id, params, query) {
+        if (query) {
+            console.log(query, 'query');
+            this.props.onGetData(
+                id,
+                'http://api.vct1.com/catalog/',
+                'catalogData',
+                query
+            );
+        } else {
             this.props.onGetData(
                 id,
                 'http://api.vct1.com/catalog/',
                 'catalogData',
                 params
             );
-            this.props.onGetData(
-                id,
-                'http://api.vct1.com/parameters/',
-                'sortData',
-                { category: params.category }
-            );
         }
+        this.props.onGetData(
+            id,
+            'http://api.vct1.com/parameters/',
+            'sortData',
+            { category: params.category }
+        );
+
     }
 
     changeFormField(data) {
@@ -182,26 +196,36 @@ class Catalog extends Component {
             }
         }
         else {
-            const formField = this.props.sortForm[data.name];
-            if (!data.remove) {
+            if (data.name === "stock" && data.remove){
                 this.props.change(
                     data.name,
-                    formField ? [...formField, data.text] : [data.text]
+                    false
                 );
             } else {
-                const field = formField.filter(item => item !== data.text);
-                this.props.change(
-                    data.name,
-                    field.length > 0 ? field : ''
-                );
+                const formField = this.props.sortForm[data.name];
+                if (!data.remove) {
+                    this.props.change(
+                        data.name,
+                        formField ? [...formField, data.text] : [data.text]
+                    );
+                } else {
+                    const field = formField.filter(item => item !== data.text);
+                    this.props.change(
+                        data.name,
+                        field.length > 0 ? field : ''
+                    );
+                }
             }
         }
 
     };
 
-    loadCatalogItems(data) {
+    loadCatalogItems(data, query) {
         const category = this.props.match.params.categoryName.substring(1);
-        const brand = this.props.match.params.brandName;
+        let brand = this.props.match.params.brandName;
+        if (query && query.includes("brand")){
+            brand = /brand=([^&]*)/.exec(decodeURIComponent(query))[1].replace(/^,/, '');
+        }
         const stateBreadCrumbs = brand ? [
                 { 'href': '/', 'name': 'Главная' },
                 {
@@ -222,15 +246,16 @@ class Catalog extends Component {
 
         ;
         let isMoreProducts = this.state.isMoreProducts;
-        if (data.length > this.state.itemsShowCount) {
-            data = data.slice(0, this.state.itemsShowCount);
+        if (data.length % this.state.onpage === 0) {
             isMoreProducts = true;
         }
+        const start = data.length;
         this.setState(
             {
                 catalogItems: data,
                 breadCrumbs: stateBreadCrumbs,
-                isMoreProducts
+                isMoreProducts,
+                start
             }
         );
     };
@@ -269,28 +294,50 @@ class Catalog extends Component {
     }
 
     loadMoreProducts() {
-        let isMoreProducts = false;
-        let data = this.props.data.catalogData;
-        let itemsShowCount = this.state.itemsShowCount;
-        const nextStateItemsShowCount = this.state.itemsShowCount + 6;
+        const category = this.props.match.params.categoryName.substring(1);
+        const brand = this.props.match.params.brandName;
+        const id = brand ? category + brand : category;
+        let params = {
+            category: category,
+            start: this.state.start,
+            onpage: this.state.onpage
+        };
+        if (brand) {
+            params = {
+                ...params,
+                brand
+            };
+        }
+        console.log(params, 'azaza loadf');
+        this.props.onGetData(
+            id,
+            'http://api.vct1.com/catalog/',
+            'catalogData',
+            params
+        );
+    }
 
-        if (this.props.data.catalogData.length > nextStateItemsShowCount) {
-            data = data.slice(0, nextStateItemsShowCount);
+    refreshCatalogItems(data) {
+        console.log('refresh');
+        console.log(data);
+        let isMoreProducts = this.state.isMoreProducts;
+        let start = this.state.start + this.state.onpage;
+        if (data.length >= start) {
             isMoreProducts = true;
-            itemsShowCount = nextStateItemsShowCount;
+        } else {
+            isMoreProducts = false;
+            start = data.length;
         }
         this.setState(
             {
                 catalogItems: data,
-                itemsShowCount,
-                isMoreProducts
+                isMoreProducts,
+                start
             }
         );
     }
 
-    loadProductOptions(data) {
-        console.log(data);
-        console.log('loadProductOptions');
+    loadProductOptions(data, query) {
         let result = {
             sliderValues: {
                 name: data[0].parameter,
@@ -312,8 +359,8 @@ class Catalog extends Component {
             ]
         };
         let initValues = { ...result.sliderValues.options };
-        if (this.props.match.params.filterData) {
-            const filterData = this.props.match.params.filterData.split('&').reduce((acc, item) => {
+        if (query) {
+            const filterData = query.substring(1).split('&').reduce((acc, item) => {
                 const data = item.split('=');
                 data[1] = decodeURIComponent(data[1]);
                 if (data[0] === 'stock') {
@@ -329,7 +376,7 @@ class Catalog extends Component {
                     {
                         ...item,
                         options: item.options.map(option => {
-                            if (item.name === "stock"){
+                            if (item.name === 'stock') {
                                 return {
                                     ...option,
                                     checked: true
@@ -343,10 +390,10 @@ class Catalog extends Component {
                     } :
                     item;
             });
-            const priceCheckedData = {currentMin: Number(initValues.min) , currentMax: Number(initValues.max)};
+            const priceCheckedData = { currentMin: Number(initValues.min), currentMax: Number(initValues.max) };
             result = {
                 sliderValues: {
-                    ...result.sliderValues, options: {...result.sliderValues.options, ...priceCheckedData}
+                    ...result.sliderValues, options: { ...result.sliderValues.options, ...priceCheckedData }
                 },
                 productParameters: productCheckedData
             };
@@ -440,20 +487,21 @@ class Catalog extends Component {
     }
 
     submitForm() {
+        const category = this.props.match.params.categoryName.split('?')[0];
         let query = Object.entries(this.props.sortForm).map(item => {
-            if (item[0] === 'stock') {
+            if (item[0] === 'stock' && item[1] !== false) {
                 item[1] = 1;
             }
             return [item[0], encodeURIComponent(item[1])].join('=');
-        }).join('&').concat(`&category=${this.props.match.params.categoryName.substring(1)}`);
-        const category = this.props.match.params.categoryName;
+        }).join('&').concat(`&category=${category.substring(1)}`);
         const brand = this.props.match.params.brandName;
-        if (brand && !query.includes('brand')){
+        if (brand && !query.includes('brand')) {
             query = query.concat(`&brand=${brand}`);
         }
-        const url = brand ? `catalog${category}/${brand}` : `catalog${category}`;
+        const url = `/catalog${category}`;
         this.props.history.push({
-            pathname: `/${url}/${query}`
+            pathname: url,
+            search: query
         });
     }
 
@@ -470,6 +518,7 @@ class Catalog extends Component {
             tabsData,
             carouselProductsData
         } = this.state;
+        console.log(catalogItems, 'catalog items');
         if (!catalogItems) {
             return (
                 <h1>Load</h1>
@@ -498,10 +547,8 @@ class Catalog extends Component {
 
 const mapStateToProps = (state, props) => {
     const category = props.match.params.categoryName.substring(1);
-    const brand = props.match.params.brandName;
-    const id = brand ? category + brand : category;
     return {
-        data: state.Data[id],
+        data: state.Data[category],
         recently: state.Store.recently,
         sortForm: getFormValues('sortForm')(state)
     };
@@ -510,7 +557,8 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onAddToCart: (item) => dispatch(addToCart(item)),
-        onGetData: (id, url, name, params) => dispatch(getData(id, url, name, params))
+        onGetData: (id, url, name, params) => dispatch(getData(id, url, name, params)),
+        onClearData: (id) => dispatch(clearData(id))
     };
 };
 

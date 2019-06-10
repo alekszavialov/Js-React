@@ -1,3 +1,10 @@
+const addToData = (state, name, data) => {
+    const newData = state && state[name] ? state[name] : undefined ;
+    return newData === undefined
+        ? [...data]
+        : [...newData, ...data];
+};
+
 const initialState = {};
 
 export default function Data(state = initialState, action) {
@@ -5,7 +12,12 @@ export default function Data(state = initialState, action) {
         case 'ADD_TO_DATA':
             return {
                 ...state,
-                [action.id] : {...state[action.id], [action.name]: action.data}
+                [action.id]: { ...state[action.id], [action.name]: addToData(state[action.id], action.name, action.data)}
+            };
+        case 'CLEAR_DATA':
+            return {
+                ...state,
+                [action.id]: {}
             };
         default:
             return state;

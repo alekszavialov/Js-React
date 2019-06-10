@@ -7,6 +7,13 @@ export function addToData(id, name, data) {
     };
 }
 
+export function clearData(id) {
+    return {
+        type: 'CLEAR_DATA',
+        id
+    };
+}
+
 export function getData(id, url, name, params) {
     return {
         type: 'GET_DATA',
