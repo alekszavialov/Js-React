@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import RangeSlider from './components/rangeSlider';
 import ParametersBlock from './components/parametersBlock';
+import SelectField from './components/selectField';
 
 import './styles.css';
 
@@ -34,6 +35,9 @@ export default class SortForm extends Component {
         const { sliderValues, productParameters } = this.props;
         return (
             <form onSubmit={this.submitForm}>
+                <SelectField
+                    changeFormField={this.changeFormField}
+                />
                 <RangeSlider values={sliderValues} changeFormField={this.changeFormField}/>
                 {productParameters.map((item, index) =>
                     <div className="shop-sort-block" key={item.name + index}>

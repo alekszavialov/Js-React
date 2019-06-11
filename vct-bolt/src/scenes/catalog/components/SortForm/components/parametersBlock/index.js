@@ -49,7 +49,6 @@ export default class ParametersBlock extends Component {
     render() {
         const checkboxClass = this.state.isActive ? 'active' : '';
         const { items } = this.props;
-        console.log(items, 'params!!!');
         return (
             <Fragment>
                 <span className={`parameters-block-head ${checkboxClass}`} onClick={this.toggleChange}>

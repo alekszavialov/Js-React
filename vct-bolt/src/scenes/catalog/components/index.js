@@ -16,7 +16,7 @@ export default class CatalogComponent extends Component {
         onAddToCart: PropTypes.func,
         onLoadMoreProducts: PropTypes.func,
         changeFormField: PropTypes.func,
-        submitForm: PropTypes.func,
+        submitForm: PropTypes.func
     };
 
     constructor(props) {
@@ -50,8 +50,9 @@ export default class CatalogComponent extends Component {
             breadCrumbs,
             recentlyCarouseData,
             catalogItems,
-            productOptions,
+            productOptions
         } = this.props;
+        const isEmpty = catalogItems.length === 0;
         return (
             <div className="container">
                 <div className="bg-white">
@@ -74,8 +75,13 @@ export default class CatalogComponent extends Component {
                             }
                             <div className="catalog-shop-blocks">
                                 {
-                                    catalogItems &&
-                                    <ItemCatalog items={catalogItems} onAddToCart={this.addToCart}/>
+                                    isEmpty &&
+                                    <h2>По вашему запросу ничего не найдено</h2>
+                                }
+                                {
+                                    !isEmpty &&
+
+                                        <ItemCatalog items={catalogItems} onAddToCart={this.addToCart}/>
                                 }
                                 {isMoreProducts &&
                                 <div

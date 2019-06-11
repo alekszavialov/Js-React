@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFormValues, reduxForm } from 'redux-form';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import CatalogComponent from './components';
@@ -44,6 +45,7 @@ class Catalog extends Component {
         this.addToCart = this.addToCart.bind(this);
         this.changeFormField = this.changeFormField.bind(this);
         this.submitForm = this.submitForm.bind(this);
+        this.refactQuery = this.refactQuery.bind(this);
     }
 
     componentDidMount() {
@@ -87,7 +89,11 @@ class Catalog extends Component {
         const brand = this.props.match.params.brandName;
         const id = category;
         this.props.onClearData(id);
-        query = query ? `${query}&start=0&onpage=6` : '';
+        console.log(query, 'old query');
+        if (query) {
+            query = this.refactQuery(query).concat(`&start=0&onpage=6`);
+        }
+        console.log(query, 'new query');
         let params = {
             category: category,
             start: 0,
@@ -187,7 +193,7 @@ class Catalog extends Component {
 
         ;
         let isMoreProducts = this.state.isMoreProducts;
-        if (data.length % this.state.onpage === 0) {
+        if (data.length > 0 && data.length % this.state.onpage === 0) {
             isMoreProducts = true;
         }
         const start = data.length;
@@ -239,7 +245,7 @@ class Catalog extends Component {
         const brand = this.props.match.params.brandName;
         const id = brand ? category + brand : category;
         const query = this.props.location.search.substring(1) ?
-            `${this.props.location.search.substring(1)}&start=${this.state.start}&onpage=${this.state.onpage}` :
+            this.refactQuery(this.props.location.search.substring(1)).concat(`&start=${this.state.start}&onpage=${this.state.onpage}`) :
             '';
         let params = {
             category: category,
@@ -288,6 +294,10 @@ class Catalog extends Component {
     }
 
     loadProductOptions(data, query) {
+        if (data.length === 0) {
+            this.props.history.push(`/`);
+            return;
+        }
         let result = {
             sliderValues: {
                 name: data[0].parameter,
@@ -310,8 +320,12 @@ class Catalog extends Component {
         };
         let initValues = { ...result.sliderValues.options };
         if (query) {
+            const correctEntries = ['mix', 'max', 'brand', 'order', 'category', 'stock', 'parametr1', 'parametr2', 'parametr3', 'parametr4', 'parametr5'];
             const filterData = query.substring(1).split('&').reduce((acc, item) => {
                 const data = item.split('=');
+                if (!correctEntries.includes(data[0])) {
+                    return acc;
+                }
                 data[1] = decodeURIComponent(data[1]);
                 if (data[0] === 'stock') {
                     data[1] = data[1] === '1';
@@ -370,7 +384,10 @@ class Catalog extends Component {
                 item[1] = 1;
             }
             return [item[0], encodeURIComponent(item[1])].join('=');
-        }).join('&').concat(`&category=${category.substring(1)}`);
+        }).join('&');
+        if (!query.includes('category')) {
+            query = query.concat(`&category=${category.substring(1)}`);
+        }
         const brand = this.props.match.params.brandName;
         if (brand && !query.includes('brand')) {
             query = query.concat(`&brand=${brand}`);
@@ -380,6 +397,17 @@ class Catalog extends Component {
             pathname: url,
             search: query
         });
+    }
+
+    refactQuery(query) {
+        const correctEntries = ['min', 'max', 'brand', 'category', 'stock', 'order' ,'parametr1', 'parametr2', 'parametr3', 'parametr4', 'parametr5'];
+        return query.substring(1).split('&').reduce((acc, item) => {
+            const data = item.split('=');
+            if (!correctEntries.includes(data[0])) {
+                return acc;
+            }
+            return [...acc, `${[data[0]]}=${data[1]}`];
+        }, []).join('&');
     }
 
     render() {

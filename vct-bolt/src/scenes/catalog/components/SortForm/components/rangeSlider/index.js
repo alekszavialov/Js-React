@@ -32,7 +32,7 @@ export default class RangeSlider extends Component {
         this.props.changeFormField({ ...this.state.values });
     }
 
-    handleBlur(event) {
+    handleBlur() {
         const { values } = this.state;
         const { options } = this.props.values;
         let correctData = {};
