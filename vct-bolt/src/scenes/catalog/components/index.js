@@ -1,12 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-import SiteTabs from '../../../components/tabs';
 import BreadCrumbs from '../../../components/breadCrumbs';
 import SlickCarousel from '../../../components/slickCarousel';
 import ItemCatalog from '../../../components/itemCatalog';
 import SortForm from './SortForm';
-import ShopTags from './shopTags';
 
 export default class CatalogComponent extends Component {
     static propTypes = {
@@ -19,11 +17,6 @@ export default class CatalogComponent extends Component {
         onLoadMoreProducts: PropTypes.func,
         changeFormField: PropTypes.func,
         submitForm: PropTypes.func,
-
-        shopTags: PropTypes.array,
-        tabsData: PropTypes.object,
-        carouselProductsData: PropTypes.object,
-
     };
 
     constructor(props) {
@@ -58,10 +51,6 @@ export default class CatalogComponent extends Component {
             recentlyCarouseData,
             catalogItems,
             productOptions,
-
-            shopTags,
-            tabsData,
-            carouselProductsData
         } = this.props;
         return (
             <div className="container">
@@ -83,10 +72,6 @@ export default class CatalogComponent extends Component {
                                 breadCrumbs &&
                                 <BreadCrumbs items={breadCrumbs}/>
                             }
-                            {
-                                shopTags &&
-                                <ShopTags items={shopTags}/>
-                            }
                             <div className="catalog-shop-blocks">
                                 {
                                     catalogItems &&
@@ -99,26 +84,6 @@ export default class CatalogComponent extends Component {
                                 >
                                     Загрузить еще
                                 </div>}
-                            </div>
-                            <div className="product-card-tabs">
-                                {
-                                    tabsData &&
-                                    <SiteTabs items={tabsData}/>
-                                }
-                            </div>
-                        </div>
-                        <div className="col-md-12">
-                            <div className="accompanying-carousel-block">
-                                {
-                                    carouselProductsData &&
-                                    <Fragment>
-                                        <h2 className="seal-lead block-with-icon icon-thumbs-up">Популярные позиции в
-                                            категории:</h2>
-                                        <SlickCarousel
-                                            carouselData={carouselProductsData}
-                                        />
-                                    </Fragment>
-                                }
                             </div>
                         </div>
                         <div className="col-md-12">

@@ -30,17 +30,11 @@ class Catalog extends Component {
             filterDataItems: false,
             start: 0,
             onpage: 6,
-            breadCrumbs: null,
-            shopTags: null,
-            tabsData: null,
-            carouselProductsData: null
+            breadCrumbs: null
         };
         this.baseState = this.state;
         this.loadNewPage = this.loadNewPage.bind(this);
         this.loadProductOptions = this.loadProductOptions.bind(this);
-        this.loadShopTags = this.loadShopTags.bind(this);
-        this.loadTabsData = this.loadTabsData.bind(this);
-        this.loadCarouselItems = this.loadCarouselItems.bind(this);
         this.loadCatalogItems = this.loadCatalogItems.bind(this);
         this.loadDataAPI = this.loadDataAPI.bind(this);
         this.loadRecentlyProducts = this.loadRecentlyProducts.bind(this);
@@ -53,70 +47,20 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
-        console.log('didMount');
-        this.loadNewPage();
-        // if (this.props.data &&
-        //     this.props.data.catalogData &&
-        //     this.props.recently &&
-        //     this.props.data.sortData) {
-        //     this.loadCatalogItems(this.props.data.catalogData);
-        //     this.loadRecentlyProducts(this.props.recently);
-        //     this.loadProductOptions(this.props.data.sortData);
-        // }
+        this.loadNewPage(this.props.location.search.substring(1));
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log('new data');
-        // if (this.props.match.params.filterData !== nextProps.match.params.filterData) {
-        //     const filterData = this.props.match.params.filterData.split("&").map(item => {
-        //         const data = item.split("=");
-        //         data[1] = decodeURIComponent(data[1]);
-        //         console.log(data[0]);
-        //         console.log(data[0] !== "min");
-        //         console.log(data[0] !== "max");
-        //         if (data[0] === "stock"){
-        //             data[1] = data[1] === "1";
-        //         } else
-        //         if (data[0] !== "min" && data[0] !== "max"){
-        //             data[1] = data[1].split(",");
-        //         }
-        //         return {[data[0]]: data[1]};
-        //     });
-        //     console.log(filterData);
-        //     this.props.initialize( filterData );
-        // }
-        console.log(nextProps.location.pathname);
-        console.log(this.props.location);
-        console.log('ur;');
         if (nextProps.location.pathname !== this.props.location.pathname ||
-        nextProps.location.search !== this.props.location.search) {
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log('newPAge');
-            console.log(nextProps.location.search);
-            console.log(this.props.location.search);
-            const query = nextProps.location.search ? nextProps.location.search : "none";
+            nextProps.location.search !== this.props.location.search) {
             this.setState(this.baseState);
-            this.loadNewPage(query);
+            this.loadNewPage(nextProps.location.search);
         }
 
         const category = this.props.match.params.categoryName.split('?')[0].substring(1);
         let data = nextProps.data ?
             nextProps.data.catalogData ? nextProps.data.catalogData :
                 nextProps.data.filterData ? nextProps.data.filterData : false : false;
-        console.log(data, 'data!!!');
-        console.log(nextProps.data, 'dataprops!!!');
         if (!data) {
             return false;
         }
@@ -137,21 +81,16 @@ class Catalog extends Component {
         return true;
     }
 
-    loadNewPage(newQuery) {
+    loadNewPage(query) {
         window.scrollTo(0, 0);
         const category = this.props.match.params.categoryName.substring(1);
         const brand = this.props.match.params.brandName;
-        let query = this.props.location.search.substring(1);
-        if (newQuery === "none"){
-            query =  "";
-        } else if (newQuery){
-            query = newQuery;
-        }
         const id = category;
         this.props.onClearData(id);
+        query = query ? `${query}&start=0&onpage=6` : '';
         let params = {
             category: category,
-            start: this.state.start,
+            start: 0,
             onpage: this.state.onpage
         };
         if (brand) {
@@ -165,7 +104,6 @@ class Catalog extends Component {
 
     loadDataAPI(id, params, query) {
         if (query) {
-            console.log(query, 'query');
             this.props.onGetData(
                 id,
                 'http://api.vct1.com/catalog/',
@@ -196,7 +134,7 @@ class Catalog extends Component {
             }
         }
         else {
-            if (data.name === "stock" && data.remove){
+            if (data.name === 'stock' && data.remove) {
                 this.props.change(
                     data.name,
                     false
@@ -221,12 +159,14 @@ class Catalog extends Component {
     };
 
     loadCatalogItems(data, query) {
-        const category = this.props.match.params.categoryName.substring(1);
-        let brand = this.props.match.params.brandName;
-        if (query && query.includes("brand")){
+        const { params } = this.props.match;
+        const category = params.categoryName.substring(1);
+        let brand = params.brandName;
+        if (query && query.includes('brand')) {
             brand = /brand=([^&]*)/.exec(decodeURIComponent(query))[1].replace(/^,/, '');
         }
-        const stateBreadCrumbs = brand ? [
+        const stateBreadCrumbs = brand ?
+            [
                 { 'href': '/', 'name': 'Главная' },
                 {
                     'href': `/catalog-${category.toLowerCase()}`,
@@ -235,7 +175,8 @@ class Catalog extends Component {
                 {
                     'href': ``,
                     'name': brand
-                }] :
+                }
+            ] :
             [
                 { 'href': '/', 'name': 'Главная' },
                 {
@@ -297,6 +238,9 @@ class Catalog extends Component {
         const category = this.props.match.params.categoryName.substring(1);
         const brand = this.props.match.params.brandName;
         const id = brand ? category + brand : category;
+        const query = this.props.location.search.substring(1) ?
+            `${this.props.location.search.substring(1)}&start=${this.state.start}&onpage=${this.state.onpage}` :
+            '';
         let params = {
             category: category,
             start: this.state.start,
@@ -308,18 +252,24 @@ class Catalog extends Component {
                 brand
             };
         }
-        console.log(params, 'azaza loadf');
-        this.props.onGetData(
-            id,
-            'http://api.vct1.com/catalog/',
-            'catalogData',
-            params
-        );
+        if (query) {
+            this.props.onGetData(
+                id,
+                'http://api.vct1.com/catalog/',
+                'catalogData',
+                query
+            );
+        } else {
+            this.props.onGetData(
+                id,
+                'http://api.vct1.com/catalog/',
+                'catalogData',
+                params
+            );
+        }
     }
 
     refreshCatalogItems(data) {
-        console.log('refresh');
-        console.log(data);
         let isMoreProducts = this.state.isMoreProducts;
         let start = this.state.start + this.state.onpage;
         if (data.length >= start) {
@@ -409,79 +359,6 @@ class Catalog extends Component {
         );
     }
 
-    loadShopTags() {
-        // fetchApi('../../fakeAPI/catalogShopTags.json')
-        //     .then(result => this.setState({
-        //             shopTags: result
-        //         }
-        //     ));
-
-        // const result = require('../../fakeAPI/catalogShopTags.json');
-        this.setState(
-            {
-                shopTags: this.props.data.catalogShopTags
-            }
-        );
-    };
-
-    loadTabsData() {
-        // fetchApi('../../fakeAPI/catalogPageTabsData.json')
-        //     .then(result => this.setState({
-        //         tabsData: {
-        //             ...result, items: result.items.map(item =>
-        //                 (item.map(item =>
-        //                         <div className="tabs-item" key={Math.random()}
-        //                              dangerouslySetInnerHTML={{ __html: item.content }}>
-        //                         </div>
-        //                     )
-        //                 )
-        //             )
-        //         }
-        //     }));
-
-        // const result = require('../../fakeAPI/catalogPageTabsData.json');
-        this.setState(
-            {
-                tabsData:
-                    {
-                        ...this.props.data.catalogPageTabsData, items: this.props.data.catalogPageTabsData.items.map
-                        (item =>
-                            (item.map
-                                (item =>
-                                    <div className="tabs-item" key={Math.random()}
-                                         dangerouslySetInnerHTML={{ __html: item.content }}>
-                                    </div>
-                                )
-                            )
-                        )
-                    }
-            }
-        );
-    };
-
-    loadCarouselItems() {
-        // fetchApi('../../fakeAPI/carouselManyItemsData.json')
-        //     .then(result => this.setState({
-        //         carouselItemsData: {
-        //             ...result,
-        //             items: result.items.map(item =>
-        //                 <CarouselSmallItem item={item} onAddToCart={this.addToCart} key={Math.random()}/>
-        //             )
-        //         }
-        //     }));
-
-        // const result = require('../../fakeAPI/carouselManyItemsData.json');
-        this.setState(
-            {
-                carouselProductsData:
-                    {
-                        ...this.props.data.carouselManyItemsData,
-                        onAddToCart: this.addToCart
-                    }
-            }
-        );
-    };
-
     addToCart(item) {
         this.props.onAddToCart(item);
     }
@@ -512,13 +389,8 @@ class Catalog extends Component {
             breadCrumbs,
             recentlyCarouseData,
 
-            productOptions,
-
-            shopTags,
-            tabsData,
-            carouselProductsData
+            productOptions
         } = this.state;
-        console.log(catalogItems, 'catalog items');
         if (!catalogItems) {
             return (
                 <h1>Load</h1>
@@ -535,11 +407,6 @@ class Catalog extends Component {
                 changeFormField={this.changeFormField}
                 onAddToCart={this.addToCart}
                 onLoadMoreProducts={this.loadMoreProducts}
-
-                shopTags={shopTags}
-                tabsData={tabsData}
-                carouselProductsData={carouselProductsData}
-
             />
         );
     }

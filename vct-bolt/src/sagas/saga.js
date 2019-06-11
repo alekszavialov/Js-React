@@ -5,7 +5,6 @@ import { mutateData } from './requireRoots';
 
 function getData(url, name, params) {
     if (typeof params === 'string' || params instanceof String){
-        console.log('string');
         return axios.get(url + params)
             .then(response => mutateData(name, response.data));
     }
