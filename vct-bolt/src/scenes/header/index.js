@@ -38,7 +38,6 @@ class Header extends Component {
         this.removeFromCart = this.removeFromCart.bind(this);
         this.handleScroll = this.handleScroll.bind(this);
         this.updateIsMobile = this.updateIsMobile.bind(this);
-        // this.loadCatalogList = this.loadCatalogList.bind(this);
         this.findProduct = this.findProduct.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -175,22 +174,11 @@ class Header extends Component {
                     pathname: '/product-30632-komplekt_zapravki_pantum_(tn-210)',
                     param1: 'Par1'
                 }
-            },
-            {
-                text: 'Вход', url: {
-                    pathname: '/product-38220-skaniruyush\'ii_modul_epson_l605_(1704031)',
-                    param1: 'Par1'
-                }
             }
         ];
 
         const { cart } = this.props;
-        const { catalogList } = this.state;
-        const { isMobile } = this.state;
-        const { bucketIsOpen } = this.state;
-        const { catalogListFixed } = this.state;
-        const { mobileListIsOpen } = this.state;
-        console.log(cart, 'cart!!!!');
+        const { catalogList, isMobile, bucketIsOpen, catalogListFixed, mobileListIsOpen } = this.state;
         return (
             <HeaderComponent
                 navigationList={list}

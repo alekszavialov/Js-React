@@ -92,7 +92,7 @@ export default class HeaderComponent extends Component {
                 }
                 <header ref={elem => this.header = elem}>
                     <div className="bg-dark">
-                        <div className="container">
+                        <div className="container-fluid max-container-width">
                             <div className="row">
                                 <div className="col-md-8 top-nav">
                                     <Navigation navList={navigationList}/>
@@ -106,13 +106,15 @@ export default class HeaderComponent extends Component {
                     </div>
                     <div className="bg-normal head-line-block">
                         <div className="head-line-default" ref={elem => this.headLine = elem}>
-                            <div className="container">
+                            <div className="container-fluid max-container-width">
                                 <div className="row">
                                     <div className="col-md-3 head-logo">
                                         <NavLink to='/'>
-                                            <img src="https://vct1.com/img/logo.png.pagespeed.ce.dMpD6YjZpM.png"
-                                                 alt="Логотип компании ВКТ Сервис"
-                                                 title="Интернет-магазин ВКТ Сервис"/>
+                                            <img
+                                                src="https://vct1.com/img/logo.png.pagespeed.ce.dMpD6YjZpM.png"
+                                                alt="Логотип компании ВКТ Сервис"
+                                                title="Интернет-магазин ВКТ Сервис"
+                                            />
                                         </NavLink>
                                     </div>
                                     <div className="col-md-3 col-md-push-4 col-sm-7 col-xs-7 head-telephones">
@@ -121,35 +123,23 @@ export default class HeaderComponent extends Component {
                                         <a href="tel:0997017001">099 70 17 001</a>
                                     </div>
                                     <div className="col-md-2 col-md-push-4  col-sm-5 col-xs-5 head-bucket">
-                                        <div>
-                                            <img
-                                                src="https://vct1.com/img/bucket.gif.pagespeed.ce.bEDFj2GcQE.gif"
-                                                alt="ВКТ"
-                                                title="ВКТ"
-                                                onClick={this.toggleModalMenu}
-                                            />
-                                            <span>{itemsCart.reduce((acc, item) => acc + item.quantity, 0)} шт.</span>
-                                        </div>
+                                        <img
+                                            src="https://vct1.com/img/bucket.gif.pagespeed.ce.bEDFj2GcQE.gif"
+                                            alt="ВКТ"
+                                            title="ВКТ"
+                                            onClick={this.toggleModalMenu}
+                                        />
+                                        <span>{itemsCart.reduce((acc, item) => acc + item.quantity, 0)} шт.</span>
                                     </div>
                                     <div className="col-md-4 col-md-pull-5 col-sm-12 col-xs-12 head-search">
                                         <HeadSearch/>
-                                        {(catalogListFixed && catalogList !== null) && (
-                                            <div className="shop-navigation-mobile">
-                                                <ul className={mobileListIsOpen ? 'shop-navigation-mobile-open' : null}>
-                                                    <li onClick={this.toggleMobileList}>
-                                                        <span>Каталог</span>
-                                                    </li>
-                                                    <Catalog list={catalogList} mobileList/>
-                                                </ul>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="bg-shop">
-                        <div className="container">
+                        <div className="container-fluid max-container-width">
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="product-card-tabs">
@@ -163,22 +153,8 @@ export default class HeaderComponent extends Component {
                                                         )}
                                                     </li>
                                                 )}
-                                                <li key='actions'><NavLink to='/page/actions'>Акции</NavLink></li>
-                                                <li key='service'><NavLink to='/page/service'>Сервис</NavLink></li>
-                                                <li key='sale'><NavLink to='/page/sale'>Распродажа</NavLink></li>
                                             </ul>
                                         </div>
-                                        {(isMobile && catalogList !== null) &&
-                                        (
-                                            <div className="shop-navigation-mobile">
-                                                <ul className={mobileListIsOpen ? 'shop-navigation-mobile-open' : null}>
-                                                    <li onClick={this.toggleMobileList}>
-                                                        <span>Каталог</span>
-                                                    </li>
-                                                    <Catalog list={catalogList} mobileList/>
-                                                </ul>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -189,3 +165,6 @@ export default class HeaderComponent extends Component {
         );
     }
 }
+
+
+
