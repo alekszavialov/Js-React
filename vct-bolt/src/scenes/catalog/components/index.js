@@ -10,6 +10,7 @@ export default class CatalogComponent extends Component {
     static propTypes = {
         breadCrumbs: PropTypes.array,
         recentlyCarouseData: PropTypes.object,
+        newCarouseData: PropTypes.object,
         catalogItems: PropTypes.array,
         isMoreProducts: PropTypes.bool,
         productOptions: PropTypes.object,
@@ -49,6 +50,7 @@ export default class CatalogComponent extends Component {
             isMoreProducts,
             breadCrumbs,
             recentlyCarouseData,
+            newCarouseData,
             catalogItems,
             productOptions
         } = this.props;
@@ -63,6 +65,7 @@ export default class CatalogComponent extends Component {
                                 <SortForm
                                     sliderValues={productOptions.sliderValues}
                                     productParameters={productOptions.productParameters}
+                                    orderValues={productOptions.order}
                                     changeFormField={this.changeFormField}
                                     submitForm={this.submitForm}
                                 />
@@ -81,7 +84,7 @@ export default class CatalogComponent extends Component {
                                 {
                                     !isEmpty &&
 
-                                        <ItemCatalog items={catalogItems} onAddToCart={this.addToCart}/>
+                                    <ItemCatalog items={catalogItems} onAddToCart={this.addToCart}/>
                                 }
                                 {isMoreProducts &&
                                 <div
@@ -92,10 +95,24 @@ export default class CatalogComponent extends Component {
                                 </div>}
                             </div>
                         </div>
-                        <div className="col-md-12">
-                            <div className="accompanying-carousel-block">
-                                {
-                                    recentlyCarouseData &&
+                        {
+                            newCarouseData &&
+                            <div className="col-md-12">
+                                <div className="accompanying-carousel-block">
+                                    <Fragment>
+                                        <h2 className="seal-lead block-with-icon icon-thumbs-up">Новые
+                                            товары:</h2>
+                                        <SlickCarousel
+                                            carouselData={newCarouseData}
+                                        />
+                                    </Fragment>
+                                </div>
+                            </div>
+                        }
+                        {
+                            recentlyCarouseData &&
+                            <div className="col-md-12">
+                                <div className="accompanying-carousel-block">
                                     <Fragment>
                                         <h2 className="seal-lead block-with-icon icon-thumbs-up">Недавно просмотренные
                                             товары:</h2>
@@ -103,9 +120,9 @@ export default class CatalogComponent extends Component {
                                             carouselData={recentlyCarouseData}
                                         />
                                     </Fragment>
-                                }
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
             </div>

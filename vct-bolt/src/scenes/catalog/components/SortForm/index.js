@@ -11,6 +11,7 @@ export default class SortForm extends Component {
 
     static propTypes = {
         sliderValues: PropTypes.object,
+        orderValues: PropTypes.object,
         productParameters: PropTypes.array,
         changeFormField: PropTypes.func,
         submitForm: PropTypes.func
@@ -18,6 +19,18 @@ export default class SortForm extends Component {
 
     constructor(props) {
         super(props);
+
+        this.options = [
+            { order: 'title ASC', label: 'Название (а-я)' },
+            { order: 'title DESC', label: 'Название (я-а)' },
+            { order: 'views ASC', label: 'Просмотры (а-я)' },
+            { order: 'views DESC', label: 'Просмотры (я-а)' },
+            { order: 'sales ASC', label: 'Количество продаж (а-я)' },
+            { order: 'sales DESC', label: 'Количество продаж (я-а)' },
+            { order: 'nds ASC', label: 'Цене (а-я)' },
+            { order: 'nds DESC', label: 'Цене (я-а)' },
+        ];
+
         this.changeFormField = this.changeFormField.bind(this);
         this.submitForm = this.submitForm.bind(this);
     }
@@ -32,10 +45,14 @@ export default class SortForm extends Component {
     }
 
     render() {
-        const { sliderValues, productParameters } = this.props;
+        const { sliderValues, productParameters, orderValues } = this.props;
+        const selectActiveValue = orderValues ?
+            this.options.filter(item => item.order === orderValues.order) : null;
         return (
             <form onSubmit={this.submitForm}>
                 <SelectField
+                    orderValues={selectActiveValue}
+                    options={this.options}
                     changeFormField={this.changeFormField}
                 />
                 <RangeSlider values={sliderValues} changeFormField={this.changeFormField}/>

@@ -26,6 +26,7 @@ class Catalog extends Component {
         this.state = {
             catalogItems: null,
             recentlyCarouseData: null,
+            newCarouseData: null,
             productOptions: null,
             isMoreProducts: false,
             filterDataItems: false,
@@ -38,7 +39,7 @@ class Catalog extends Component {
         this.loadProductOptions = this.loadProductOptions.bind(this);
         this.loadCatalogItems = this.loadCatalogItems.bind(this);
         this.loadDataAPI = this.loadDataAPI.bind(this);
-        this.loadRecentlyProducts = this.loadRecentlyProducts.bind(this);
+        this.loadCarouselProducts = this.loadCarouselProducts.bind(this);
         this.loadMoreProducts = this.loadMoreProducts.bind(this);
         this.refreshCatalogItems = this.refreshCatalogItems.bind(this);
 
@@ -49,14 +50,14 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
-        this.loadNewPage(this.props.location.search.substring(1));
+        this.loadNewPage(this.props.match.params, this.props.location.search.substring(1));
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.location.pathname !== this.props.location.pathname ||
             nextProps.location.search !== this.props.location.search) {
             this.setState(this.baseState);
-            this.loadNewPage(nextProps.location.search);
+            this.loadNewPage(nextProps.match.params, nextProps.location.search);
         }
 
         const category = this.props.match.params.categoryName.split('?')[0].substring(1);
@@ -76,24 +77,25 @@ class Catalog extends Component {
         if (!nextState.productOptions && nextProps.data.sortData) {
             this.loadProductOptions(nextProps.data.sortData, nextProps.location.search);
         }
+        if (nextProps.data.newProducts && !nextState.newCarouseData) {
+            this.loadCarouselProducts('newCarouseData', nextProps.data.newProducts);
+        }
         if ((nextProps.recently.length > 0 && !nextState.recentlyCarouseData) ||
             (nextProps.recently.length !== this.props.recently.length)) {
-            this.loadRecentlyProducts(nextProps.recently);
+            this.loadCarouselProducts('recentlyCarouseData', nextProps.recently);
         }
         return true;
     }
 
-    loadNewPage(query) {
+    loadNewPage(matchParams, query) {
         window.scrollTo(0, 0);
-        const category = this.props.match.params.categoryName.substring(1);
-        const brand = this.props.match.params.brandName;
+        const category = matchParams.categoryName.substring(1);
+        const brand = matchParams.brandName;
         const id = category;
         this.props.onClearData(id);
-        console.log(query, 'old query');
         if (query) {
             query = this.refactQuery(query).concat(`&start=0&onpage=6`);
         }
-        console.log(query, 'new query');
         let params = {
             category: category,
             start: 0,
@@ -112,7 +114,7 @@ class Catalog extends Component {
         if (query) {
             this.props.onGetData(
                 id,
-                'http://api.vct1.com/catalog/',
+                'http://api.vct1.com/catalog/?',
                 'catalogData',
                 query
             );
@@ -130,7 +132,12 @@ class Catalog extends Component {
             'sortData',
             { category: params.category }
         );
-
+        this.props.onGetData(
+            id,
+            'http://api.vct1.com/catalog/',
+            'newProducts',
+            '?order=id%20desc&onpage=10'
+        );
     }
 
     changeFormField(data) {
@@ -207,9 +214,9 @@ class Catalog extends Component {
         );
     };
 
-    loadRecentlyProducts(data) {
+    loadCarouselProducts(name, data) {
         this.setState({
-            recentlyCarouseData: {
+            [name]: {
                 'params': {
                     'dots': false,
                     'infinite': true,
@@ -261,7 +268,7 @@ class Catalog extends Component {
         if (query) {
             this.props.onGetData(
                 id,
-                'http://api.vct1.com/catalog/',
+                'http://api.vct1.com/catalog/?',
                 'catalogData',
                 query
             );
@@ -320,7 +327,7 @@ class Catalog extends Component {
         };
         let initValues = { ...result.sliderValues.options };
         if (query) {
-            const correctEntries = ['mix', 'max', 'brand', 'order', 'category', 'stock', 'parametr1', 'parametr2', 'parametr3', 'parametr4', 'parametr5'];
+            const correctEntries = ['min', 'max', 'brand', 'order', 'category', 'stock', 'parametr1', 'parametr2', 'parametr3', 'parametr4', 'parametr5'];
             const filterData = query.substring(1).split('&').reduce((acc, item) => {
                 const data = item.split('=');
                 if (!correctEntries.includes(data[0])) {
@@ -329,7 +336,7 @@ class Catalog extends Component {
                 data[1] = decodeURIComponent(data[1]);
                 if (data[0] === 'stock') {
                     data[1] = data[1] === '1';
-                } else if (data[0] !== 'min' && data[0] !== 'max') {
+                } else if (data[0] !== 'min' && data[0] !== 'max' && data[0] !== 'order') {
                     data[1] = data[1].split(',');
                 }
                 return { ...acc, [data[0]]: data[1] };
@@ -354,12 +361,14 @@ class Catalog extends Component {
                     } :
                     item;
             });
+            const selectData = initValues.order ? initValues.order : null;
             const priceCheckedData = { currentMin: Number(initValues.min), currentMax: Number(initValues.max) };
             result = {
                 sliderValues: {
                     ...result.sliderValues, options: { ...result.sliderValues.options, ...priceCheckedData }
                 },
-                productParameters: productCheckedData
+                productParameters: productCheckedData,
+                order: { order: selectData }
             };
         }
         this.setState(
@@ -400,7 +409,7 @@ class Catalog extends Component {
     }
 
     refactQuery(query) {
-        const correctEntries = ['min', 'max', 'brand', 'category', 'stock', 'order' ,'parametr1', 'parametr2', 'parametr3', 'parametr4', 'parametr5'];
+        const correctEntries = ['min', 'max', 'brand', 'category', 'stock', 'order', 'parametr1', 'parametr2', 'parametr3', 'parametr4', 'parametr5'];
         return query.substring(1).split('&').reduce((acc, item) => {
             const data = item.split('=');
             if (!correctEntries.includes(data[0])) {
@@ -416,7 +425,7 @@ class Catalog extends Component {
             catalogItems,
             breadCrumbs,
             recentlyCarouseData,
-
+            newCarouseData,
             productOptions
         } = this.state;
         if (!catalogItems) {
@@ -424,11 +433,14 @@ class Catalog extends Component {
                 <h1>Load</h1>
             );
         }
+        console.log(recentlyCarouseData);
+        console.log(newCarouseData);
         return (
             <CatalogComponent
                 productOptions={productOptions}
                 catalogItems={catalogItems}
                 breadCrumbs={breadCrumbs}
+                newCarouseData={newCarouseData}
                 recentlyCarouseData={recentlyCarouseData}
                 isMoreProducts={isMoreProducts}
                 submitForm={this.submitForm}

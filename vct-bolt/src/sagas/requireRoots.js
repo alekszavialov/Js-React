@@ -17,9 +17,21 @@ const mutateProductData = (data) => data.map(item => {
     }
 );
 
+const mutateSliderData = (data) => data.map(item => {
+        return {
+            article: item.id,
+            description: item.configuration,
+            href: `/product-${item.id}-${cyrillicToTranslit().transform(item.title.replace(/\//g, ''), '_').toLowerCase()}`,
+            name: item.title,
+            price: item.price,
+            src: item.img === "" ? 'https://vct1.com/img/nophoto.jpg' : item.img
+        };
+    }
+);
+
 const mutateSpecifications = (data) => data.filter(item => item.description && item.value);
 const filterSortData = (data) => {
-    const test = data.map((item,index) => {
+    return data.map((item,index) => {
         let parameter = "";
         if (item.name === "Цена"){
             parameter = "price";
@@ -34,7 +46,6 @@ const filterSortData = (data) => {
             parameter
         };
     }).filter(item => item.items.length > 0);
-    return test;
 };
 
 export function mutateData(name, data) {
@@ -43,6 +54,8 @@ export function mutateData(name, data) {
         case 'catalogData':
         case 'filterData':
             return mutateSales(data);
+        case 'newProducts':
+            return mutateSliderData(data);
         case 'sortData':
             return filterSortData(data);
         case 'productData':

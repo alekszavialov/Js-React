@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 export default class SelectField extends Component {
 
     static propTypes = {
+        orderValues: PropTypes.object,
+        options: PropTypes.array,
         changeFormField: PropTypes.func
     };
 
@@ -12,16 +14,10 @@ export default class SelectField extends Component {
         super(props);
 
         this.state = {
-            selectedOption: null
+            selectedOption: props.orderValues,
+            options: props.options
         };
-        this.options = [
-            { order: 'title', label: 'Название' },
-            { order: 'nds', label: 'Цена' },
-            { order: 'views', label: 'Просмотры' },
-            { order: 'sales', label: 'Продажи' },
-            { ASCDESC: 'ASC', label: 'Возрастанию цены' },
-            { ASCDESC: 'DESC', label: 'Убыванию цены' }
-        ];
+
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -32,7 +28,7 @@ export default class SelectField extends Component {
     };
 
     render() {
-        const { selectedOption } = this.state;
+        const { selectedOption, options } = this.state;
         return (
             <div className="shop-sort-block" style={{ overflow: 'visible' }}>
                 <div className="priceslider-head">
@@ -41,7 +37,7 @@ export default class SelectField extends Component {
                 <Select
                     value={selectedOption}
                     onChange={this.handleChange}
-                    options={this.options}
+                    options={options}
                     placeholder="Выберите тип"
                 />
             </div>
