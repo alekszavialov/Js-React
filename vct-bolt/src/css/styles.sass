@@ -12,7 +12,7 @@ a
   outline: none
   transition: all 0.3s ease
   &:hover, &:focus, &:active
-    color: #FFF
+    color: #2a67aa
     text-decoration: underline
 
 ul, li
@@ -46,6 +46,9 @@ a, p, span
 .max-container-width
   max-width: 1600px
 
+.bm-burger-button
+  display: none
+
 .shop-block-buy
   display: flex
   width: 210px
@@ -53,8 +56,7 @@ a, p, span
   height: 40px
   opacity: 0.9
   border-radius: 6px
-  background: -webkit-linear-gradient(top, #a361bd 0%, #9354bc 50%, #945fc7 100%)
-  background: linear-gradient(to bottom, #a361bd 0%, #9354bc 50%, #945fc7 100%)
+  background: linear-gradient(to bottom, #2a67aa 0%, #4d7eb3 50%, #6297d2 100%)
   align-items: center
   flex-direction: row
   justify-content: center
@@ -66,8 +68,7 @@ a, p, span
   user-select: none
   &:hover
     opacity: 1
-    background: -webkit-linear-gradient(top, #945fc7 0%, #9354bc 50%, #a361bd 100%)
-    background: linear-gradient(to bottom, #945fc7 0%, #9354bc 50%, #a361bd 100%)
+    background: linear-gradient(to bottom, #6297d2 0%, #4d7eb3 50%, #2a67aa 100%)
     &:before
       background: url(../public/icons/cart-plus-solid.svg) no-repeat top left
   &:before

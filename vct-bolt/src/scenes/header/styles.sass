@@ -9,6 +9,10 @@
   display: flex
   flex-direction: column
 
+.head-bucket
+  img
+    cursor: pointer
+
 .head-telephones
   p
     margin: 10px 0 0 54px
@@ -23,8 +27,6 @@
     letter-spacing: 0
     line-height: 24px
     align-self: baseline
-    &:hover
-      color: #995bb8
 
 .callback-block
   display: flex
@@ -65,16 +67,28 @@
 .shop-navigation
   > ul
     > li
+      padding: 5px
       > span
         color: #fff
   li
     cursor: pointer
-    padding: 5px
     position: relative
     outline: none
     justify-content: center
     align-items: stretch
     &:hover
+      .head-catalog-hamburger
+        div
+          &:nth-child(1), &:nth-child(3)
+            position: absolute
+            top: 50%
+            left: 50%
+          &:nth-child(1)
+            transform: translateX(-50%) translateY(-50%) rotate(-45deg)
+          &:nth-child(2)
+            left: 100%
+          &:nth-child(3)
+            transform: translateX(-50%) translateY(-50%) rotate(45deg)
       > span
         text-decoration: underline
       > ul
@@ -88,13 +102,14 @@
       text-align: center
       height: 100%
       line-height: 20px
-
+      padding: 5px
   ul
     display: flex
     flex-direction: row
     justify-content: center
   .head-catalog
     flex: 0 0 100%
+    display: flex
   .toggle-menu, .toggle-menu ul
     display: none
     position: absolute
@@ -117,46 +132,46 @@
     &:after
       right: 0
     > li
+      &:first-child
+        span
+          &:before
+            display: none
       span
         position: relative
-        &:before
+        &:after
           content: ""
           display: none
           position: absolute
-          bottom: -7px
-          left: -5px
-          width: calc(100% + 10px)
+          bottom: -2px
+          width: 100%
           height: 2px
           background: #ecf0f1
           z-index: 10000
       &:hover
         span
           &:before
+            display: none
+          &:after
             display: block
+    li:hover + li
+      span
+        &:before
+          display: none
     li
       position: initial
       border-radius: 5px 5px 0 0
-      span, a
-        &:after
+      a, span
+        &:before
           content: ""
           display: block
           height: 100%
           width: 1px
-          right: -2px
+          position: absolute
+          left: 0
           top: 0
           background: rgba(42, 103, 170, 0.5)
-          position: absolute
       &:hover
         box-shadow: 0 0 1px 1px rgba(42, 103, 170, 0.5)
-        span
-          &:after
-            display: none
-      &:last-child
-        span
-          &:after
-            display: none
-      span
-        font-size: 14px
     ul
       box-shadow: inset 0 0 0 2px rgba(42, 103, 170, 0.5)
       border-radius: 0 0 8px 8px
@@ -172,11 +187,30 @@
         position: relative
         font-size: 14px
         padding: 4px
+        margin: 5px 0
         color: #2a3039
-        &:last-child
-          &:after
+        &:first-child
+          &:before
             display: none
 
+.head-catalog-hamburger
+  display: flex
+  flex-direction: column
+  width: 20px
+  justify-content: space-evenly
+  align-items: center
+  margin: 0 10px
+  position: relative
+  overflow: hidden
+  div
+    transition: all 0.3s ease
+    display: block
+    position: relative
+    height: 2px
+    width: 100%
+    background: #fff
+    left: 0
+    top: auto
 //.shop-navigation > ul > li > a, .head-catalog > span {
 //  font-size: 14px;
 //  display: block;
@@ -474,3 +508,84 @@
 //  text-align: center;
 //}
 //}
+.open-fixed-menu
+  display: flex
+  flex-direction: row
+  cursor: pointer
+  &:hover
+    span
+      text-decoration: underline
+  span
+    display: block
+    font-size: 20px
+    color: #2a3039
+  .head-catalog-hamburger
+    width: 28px
+    div
+      background: #2a3039
+.open-fixed-menu.open-list
+  .head-catalog-hamburger
+    div
+      &:nth-child(1), &:nth-child(3)
+        position: absolute
+        top: 50%
+        left: 50%
+      &:nth-child(1)
+        transform: translateX(-50%) translateY(-50%) rotate(-45deg)
+      &:nth-child(2)
+        left: 100%
+      &:nth-child(3)
+        transform: translateX(-50%) translateY(-50%) rotate(45deg)
+  span
+    text-decoration: underline
+.fixed-menu
+  padding: 5px 0
+  display: flex
+  flex-direction: row
+  position: fixed
+  top: 0
+  z-index: 10001
+  width: 100%
+  flex-wrap: nowrap
+  justify-content: space-evenly
+  align-items: center
+  background: #ecf0f1
+  .head-search, .head-bucket
+    margin-top: 0
+
+@media only screen and (max-width: 992px)
+  .top-nav
+    ul
+      justify-content: center
+  .callback-block
+    justify-content: center
+    a
+      margin-right: 0
+  .head-telephones
+    align-items: center
+    a
+      align-self: center
+    a, p
+      margin-left: 0
+  .head-bucket
+    margin-top: 10px
+
+@media only screen and (max-width: 620px)
+  .head-logo
+    a
+      display: flex
+      img
+        max-width: 100%
+  .top-nav
+    ul
+      flex-wrap: wrap
+
+@media only screen and (max-width: 400px)
+  .head-logo
+    a
+      margin-top: 10px
+  .head-telephones
+    a
+      font-size: 16px
+    a, p
+      margin-left: 0

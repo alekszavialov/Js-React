@@ -56,7 +56,7 @@ export default class CatalogComponent extends Component {
         } = this.props;
         const isEmpty = catalogItems.length === 0;
         return (
-            <div className="container">
+            <div className="container-fluid max-container-width">
                 <div className="bg-white">
                     <div className="row">
                         <div className="col-md-3">

@@ -27,7 +27,7 @@ class Header extends Component {
         this.state = {
             bucketIsOpen: false,
             catalogList: null,
-            catalogListFixed: false,
+            fixedMenu: false,
             mobileListIsOpen: false,
             isMobile: window.innerWidth <= 992
         };
@@ -61,7 +61,6 @@ class Header extends Component {
             );
         }
     }
-
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateIsMobile);
@@ -113,44 +112,53 @@ class Header extends Component {
         });
     }
 
-    handleScroll(header, headLine) {
-        if (window.scrollY > header.clientHeight && headLine.className.includes('head-line-default')) {
-            new Promise((resolve) => {
-                headLine.classList.remove('fade-visible');
-                headLine.classList.add('fade-hidden');
-                setTimeout(() => {
-                    resolve();
-                }, 200);
-            })
-                .then(() => {
-                    this.setState({ catalogListFixed: true, mobileListIsOpen: false });
-                    header.style.height = `${header.clientHeight  }px`;
-                    headLine.classList.add('head-line-fixed');
-                    headLine.classList.remove('head-line-default');
-                }).then(() => {
-                headLine.classList.remove('fade-hidden');
-                headLine.classList.add('fade-visible');
-            });
-        } else if (window.scrollY <= header.clientHeight &&
-            headLine.className.includes('head-line-fixed')) {
-            new Promise((resolve) => {
-                headLine.classList.remove('fade-visible');
-                headLine.classList.add('fade-hidden');
-                setTimeout(() => {
-                    resolve();
-                }, 200);
-            })
-                .then(() => {
-                    headLine.classList.add('head-line-default');
-                    headLine.classList.remove('head-line-fixed');
-                    header.style.height = 'auto';
-                    this.setState({ catalogListFixed: false, mobileListIsOpen: false });
-                }).then(() => {
-                headLine.classList.remove('fade-hidden');
-                headLine.classList.add('fade-visible');
-            });
+    handleScroll(header) {
+        if (window.scrollY > header.clientHeight && !this.state.fixedMenu) {
+            this.setState({ fixedMenu: true, mobileListIsOpen: false });
+        }
+        if (window.scrollY <= header.clientHeight && this.state.fixedMenu) {
+            this.setState({ fixedMenu: false, mobileListIsOpen: false });
         }
     }
+
+    // handleScroll(header, headLine) {
+    //     if (window.scrollY > header.clientHeight && headLine.className.includes('head-line-default')) {
+    //         new Promise((resolve) => {
+    //             headLine.classList.remove('fade-visible');
+    //             headLine.classList.add('fade-hidden');
+    //             setTimeout(() => {
+    //                 resolve();
+    //             }, 200);
+    //         })
+    //             .then(() => {
+    //                 this.setState({ catalogListFixed: true, mobileListIsOpen: false });
+    //                 header.style.height = `${header.clientHeight  }px`;
+    //                 headLine.classList.add('head-line-fixed');
+    //                 headLine.classList.remove('head-line-default');
+    //             }).then(() => {
+    //             headLine.classList.remove('fade-hidden');
+    //             headLine.classList.add('fade-visible');
+    //         });
+    //     } else if (window.scrollY <= header.clientHeight &&
+    //         headLine.className.includes('head-line-fixed')) {
+    //         new Promise((resolve) => {
+    //             headLine.classList.remove('fade-visible');
+    //             headLine.classList.add('fade-hidden');
+    //             setTimeout(() => {
+    //                 resolve();
+    //             }, 200);
+    //         })
+    //             .then(() => {
+    //                 headLine.classList.add('head-line-default');
+    //                 headLine.classList.remove('head-line-fixed');
+    //                 header.style.height = 'auto';
+    //                 this.setState({ catalogListFixed: false, mobileListIsOpen: false });
+    //             }).then(() => {
+    //             headLine.classList.remove('fade-hidden');
+    //             headLine.classList.add('fade-visible');
+    //         });
+    //     }
+    // }
 
     updateIsMobile() {
         this.setState({
@@ -178,7 +186,7 @@ class Header extends Component {
         ];
 
         const { cart } = this.props;
-        const { catalogList, isMobile, bucketIsOpen, catalogListFixed, mobileListIsOpen } = this.state;
+        const { catalogList, isMobile, bucketIsOpen, fixedMenu, mobileListIsOpen } = this.state;
         return (
             <HeaderComponent
                 navigationList={list}
@@ -186,7 +194,7 @@ class Header extends Component {
                 catalogList={catalogList}
                 isMobile={isMobile}
                 bucketIsOpen={bucketIsOpen}
-                catalogListFixed={catalogListFixed}
+                fixedMenu={fixedMenu}
                 mobileListIsOpen={mobileListIsOpen}
                 handleScroll={this.handleScroll}
                 toggleModalMenu={this.toggleModalMenu}

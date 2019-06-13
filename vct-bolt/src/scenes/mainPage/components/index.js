@@ -10,10 +10,8 @@ export default class MainPageComponent extends Component {
 
     static propTypes = {
         carouselAdData: PropTypes.object,
-        popularItemsData: PropTypes.array,
         catalogItems: PropTypes.array,
-        carouselProductsData: PropTypes.object,
-        tabItems: PropTypes.object,
+        newProductsItems: PropTypes.object,
         onAddToCart: PropTypes.func
     };
 
@@ -28,56 +26,40 @@ export default class MainPageComponent extends Component {
     }
 
     render() {
-        const { carouselAdData, popularItemsData, catalogItems, carouselProductsData, tabItems } = this.props;
+        const { carouselAdData, catalogItems, newProductsItems } = this.props;
 
         return (
             <Fragment>
-                <div className="container">
+                <div className="container-fluid max-container-width">
                     <div className="bg-white">
                         <div className="row">
-                            <div className="col-md-12">
-                                {
-                                    carouselAdData &&
+                            {
+                                carouselAdData &&
+                                <div className="col-md-12">
                                     <SlickCarousel
                                         carouselData={carouselAdData}
                                     />
-                                }
-                            </div>
+                                </div>
+                            }
+                            {
+                                catalogItems &&
+                                <div className="col-md-12">
+                                    <h2 className="seal-lead">Популярные товары:</h2>
+                                    <ItemCatalog items={catalogItems} onAddToCart={this.addToCart}/>
+                                </div>
+                            }
                             <div className="col-md-12">
                                 {
-                                    popularItemsData &&
-                                    <Fragment>
-                                        <h2 className="seal-lead">Популярные категории товаров:</h2>
-                                        <PopularCategoriesItems items={popularItemsData}/>
-                                    </Fragment>
-                                }
-                            </div>
-                            <div className="col-md-12">
-                                {
-                                    catalogItems &&
-                                    <Fragment>
-                                        <h2 className="seal-lead">Популярные товары:</h2>
-                                        <ItemCatalog items={catalogItems} onAddToCart={this.addToCart}/>
-                                    </Fragment>
-                                }
-                            </div>
-                            <div className="col-md-12 accompanying-carousel-block">
-                                {
-                                    carouselProductsData &&
-                                    <Fragment>
-                                        <h2 className="seal-lead">Новые товары в интернет магазине:</h2>
-                                        <div className="accompanying-carousel-block-wrapper">
-                                            <SlickCarousel
-                                                carouselData={carouselProductsData}
-                                            />
-                                        </div>
-                                    </Fragment>
-                                }
-                            </div>
-                            <div className="col-md-12">
-                                {
-                                    tabItems &&
-                                    <SiteTabs items={tabItems}/>
+                                    newProductsItems &&
+
+                                    <div className="accompanying-carousel-block">
+                                        <h2 className="seal-lead block-with-icon icon-thumbs-up">Новые
+                                            товары:</h2>
+                                        <SlickCarousel
+                                            carouselData={newProductsItems}
+                                        />
+                                    </div>
+
                                 }
                             </div>
                         </div>

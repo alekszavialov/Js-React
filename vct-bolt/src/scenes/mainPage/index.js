@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -8,10 +7,7 @@ import MainPageComponent from './components';
 import { addToCart } from '../../data/Store/actions';
 import { getData } from '../../data/Data/actions';
 
-// import fetchApi from '../../modules/fetch-api';
-
 import './styles.css';
-import { getFormValues } from 'redux-form';
 
 class MainPage extends Component {
 
@@ -28,10 +24,12 @@ class MainPage extends Component {
         this.state = {
             dataNames: {
                 productItems: 'mainPageProductItems',
-                adSliderItems: 'mainPageAdSlider'
+                adSliderItems: 'mainPageAdSlider',
+                newProducts: 'newProducts'
             },
             productItems: null,
             adSliderItems: null,
+            newProductsItems: null,
 
             carouselProductsData: null,
             popularItemsData: null,
@@ -39,54 +37,49 @@ class MainPage extends Component {
             tabItems: null
         };
 
-
-
-        this.loadPopularItemsData = this.loadPopularItemsData.bind(this);
-        this.loadCarouselItems = this.loadCarouselItems.bind(this);
-        this.loadPageTabItems = this.loadPageTabItems.bind(this);
-
         this.setStateProductItems = this.setStateProductItems.bind(this);
         this.setStateCarouselAd = this.setStateCarouselAd.bind(this);
+        this.setStateCarouselProducts = this.setStateCarouselProducts.bind(this);
         this.loadDataAPI = this.loadDataAPI.bind(this);
 
         this.addToCart = this.addToCart.bind(this);
     }
 
-    componentWillMount() {
-        this.loadDataAPI();
-    }
-
     componentDidMount() {
         const { data } = this.props;
         if (!data) {
+            this.loadDataAPI();
             return;
         }
-        const { productItemsData, adSliderItemsData } = data;
         const { productItems, adSliderItems } = this.state;
-        if (productItemsData && !productItems) {
-            this.setStateProductItems(productItemsData);
+        if (data[this.state.dataNames.productItems] && !productItems) {
+            this.setStateProductItems(data[this.state.dataNames.productItems]);
         }
-        if (adSliderItemsData && !adSliderItems) {
-            this.setStateCarouselAd(adSliderItemsData);
+        if (data[this.state.dataNames.adSliderItems] && !adSliderItems) {
+            this.setStateCarouselAd(data[this.state.dataNames.adSliderItems]);
         }
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        const { productItemsData, adSliderItemsData } = nextProps.data;
-        const { productItems, adSliderItems } = nextState;
-        if (productItemsData && !productItems) {
-            this.setStateProductItems(productItemsData);
+    shouldComponentUpdate(nextProps, nextState) {
+        if (!nextProps.data) {
+            return false;
         }
-        if (adSliderItemsData && !adSliderItems) {
-            this.setStateCarouselAd(adSliderItemsData);
+        const { productItems, adSliderItems, newProductsItems } = nextState;
+        if (nextProps.data[this.state.dataNames.productItems] && !productItems) {
+            this.setStateProductItems(nextProps.data[this.state.dataNames.productItems]);
         }
+        if (nextProps.data[this.state.dataNames.adSliderItems] && !adSliderItems) {
+            this.setStateCarouselAd(nextProps.data[this.state.dataNames.adSliderItems]);
+        }
+        if (nextProps.data[this.state.dataNames.newProducts] && !newProductsItems) {
+            this.setStateCarouselProducts(nextProps.data[this.state.dataNames.newProducts]);
+        }
+        return true;
     }
 
     setStateProductItems(data) {
         this.setState({
-            productItems: data.map(item => {
-                return { ...item, url: `/${item.url.replace(/\//gi, '-').substring(1)}` };
-            })
+            productItems: data
         });
     }
 
@@ -103,14 +96,7 @@ class MainPage extends Component {
                 'slidesToScroll': 1,
                 'pauseOnHover': true
             },
-            'items':
-                data.map(item => {
-                    return {
-                        'url': item.url.match(/product/) ? `/product-${item.url.match(/\d+/)[0]}` : `/catalog-${item.url.match(/([^/]*)\/$/)[1]}`,
-                        'src': item.img,
-                        'text': item.url.match(/([^/]*)\/$/)[1]
-                    };
-                })
+            'items': data
 
         };
         this.setState({
@@ -118,111 +104,57 @@ class MainPage extends Component {
         });
     }
 
-    loadDataAPI() {
-        const { productItems, adSliderItems } = this.state.dataNames;
-        (this.props.data && this.props.data.productItemsData) || this.props.onGetData(productItems, 'http://api.vct1.com/topsales/', 'productItemsData');
-        (this.props.data && this.props.data.adSliderItemsData) || this.props.onGetData(adSliderItems, 'http://api.vct1.com/slider/', 'adSliderItemsData');
+    setStateCarouselProducts(data) {
+        this.setState({
+            newProductsItems: {
+                'params': {
+                    'dots': false,
+                    'infinite': true,
+                    'speed': 500,
+                    'autoplay': true,
+                    'autoplaySpeed': 6000,
+                    'slidesToShow': 6,
+                    'slidesToScroll': 1,
+                    'pauseOnHover': true,
+                    'responsive': [
+                        {
+                            'breakpoint': 1024,
+                            'settings': {
+                                'slidesToShow': 4
+                            }
+                        },
+                        {
+                            'breakpoint': 760,
+                            'settings': {
+                                'slidesToShow': 3
+                            }
+                        },
+                        {
+                            'breakpoint': 640,
+                            'settings': {
+                                'slidesToShow': 2
+                            }
+                        },
+                        {
+                            'breakpoint': 480,
+                            'settings': {
+                                'slidesToShow': 1
+                            }
+                        }
+                    ]
+                },
+                'items': data,
+                onAddToCart: this.addToCart
+            }
+        });
     }
 
-
-    loadPopularItemsData() {
-        // fetchApi('../../fakeAPI/mainPopularCategoriesItems.json')
-        //     .then(result => this.setState({
-        //             popularItemsData: result
-        //         }
-        //     ));
-
-        // const result = require('../../fakeAPI/mainPopularCategoriesItems.json');
-        this.setState(
-            {
-                popularItemsData: this.props.data.mainPopularCategoriesItems
-            }
-        );
-
-        // this.props.onGetData('mainPopularCategoriesItems', 'mainPopularCategoriesItems');
-    };
-    
-    loadCarouselItems() {
-        // fetchApi('../../fakeAPI/carouselManyItemsData.json')
-        //     .then(result => this.setState({
-        //         carouselItemsData: {
-        //             ...result,
-        //             items: result.items.map(item =>
-        //                 <CarouselSmallItem item={item} onAddToCart={this.addToCart} key={Math.random()}/>
-        //             )
-        //         }
-        //     }));
-
-        // const result = require('../../fakeAPI/carouselManyItemsData.json');
-        this.setState(
-            {
-                carouselProductsData: {
-                    ...this.props.data.carouselManyItemsData,
-                    onAddToCart: this.addToCart
-                }
-            }
-        );
-
-        // this.props.onGetData('carouselManyItemsData', 'carouselManyItemsData');
-    };
-
-    loadPageTabItems() {
-        // fetchApi('../../fakeAPI/mainPageTabsData.json')
-        //     .then(result => this.setState({
-        //             tabItems: {
-        //                 ...result, items: result.items.map(item =>
-        //                     (item.map(item =>
-        //                         <div className="tabs-item" key={Math.random()}>
-        //                             <div className="tabs-item-image">
-        //                                 <NavLink to={item.href}>
-        //                                     <img src={item.src} alt=""/>
-        //                                 </NavLink>
-        //                             </div>
-        //                             <div className="tabs-item-content">
-        //                                 <h3>
-        //                                     <NavLink to={item.href}>
-        //                                         {item.name}
-        //                                     </NavLink>
-        //                                 </h3>
-        //                                 <span>{item.date}</span>
-        //                                 <p>{item.text}</p>
-        //                             </div>
-        //                         </div>
-        //                     ))
-        //                 )
-        //             }
-        //         }
-        //     ));
-
-        // const result = require('../../fakeAPI/mainPageTabsData.json');
-        console.log(this.props.data.mainPageTabsData, 'asd');
-        this.setState({
-                tabItems: {
-                    ...this.props.data.mainPageTabsData, items: this.props.data.mainPageTabsData.items.map(item =>
-                        (item.map(item =>
-                            <div className="tabs-item" key={Math.random()}>
-                                <div className="tabs-item-image">
-                                    <NavLink to={item.href}>
-                                        <img src={item.src} alt=""/>
-                                    </NavLink>
-                                </div>
-                                <div className="tabs-item-content">
-                                    <h3>
-                                        <NavLink to={item.href}>
-                                            {item.name}
-                                        </NavLink>
-                                    </h3>
-                                    <span>{item.date}</span>
-                                    <p>{item.text}</p>
-                                </div>
-                            </div>
-                        ))
-                    )
-                }
-            }
-        );
-        // this.props.onGetData('mainPageTabsData', 'mainPageTabsData');
-    };
+    loadDataAPI() {
+        const { productItems, adSliderItems, newProducts } = this.state.dataNames;
+        this.props.onGetData('mainPage', 'http://api.vct1.com/topsales/', productItems);
+        this.props.onGetData('mainPage', 'http://api.vct1.com/slider/', adSliderItems);
+        this.props.onGetData('mainPage', 'http://api.vct1.com/catalog/', newProducts, '?order=id%20desc&onpage=10');
+    }
 
     addToCart(item) {
         this.props.onAddToCart(item);
@@ -231,32 +163,24 @@ class MainPage extends Component {
     render() {
         const {
             productItems,
-            adSliderItems
+            adSliderItems,
+            newProductsItems
         } = this.state;
         return (
             productItems &&
             <MainPageComponent
                 catalogItems={productItems}
                 carouselAdData={adSliderItems}
-
-
+                newProductsItems={newProductsItems}
                 onAddToCart={this.addToCart}
             />
         );
     }
 }
 
-//
-// popularItemsData={popularItemsData}
-// carouselProductsData={carouselProductsData}
-// tabItems={tabItems}
-
 const mapStateToProps = (state) => {
     return {
-        data: {
-            ...state.Data['mainPageProductItems'],
-            ...state.Data['mainPageAdSlider']
-        }
+        data: state.Data.mainPage
     };
 };
 

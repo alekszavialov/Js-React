@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import './styles.css';
-
 export default class CarouselProduct extends Component {
 
     static propTypes = {

@@ -433,8 +433,6 @@ class Catalog extends Component {
                 <h1>Load</h1>
             );
         }
-        console.log(recentlyCarouseData);
-        console.log(newCarouseData);
         return (
             <CatalogComponent
                 productOptions={productOptions}
