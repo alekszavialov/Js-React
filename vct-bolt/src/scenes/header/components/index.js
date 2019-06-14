@@ -55,8 +55,8 @@ export default class HeaderComponent extends Component {
         this.props.toggleModalMenu();
     }
 
-    toggleMobileList() {
-        this.props.toggleMobileList();
+    toggleMobileList(state) {
+        this.props.toggleMobileList(state);
     }
 
     changeQuantityInCart(item) {

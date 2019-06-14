@@ -87,28 +87,15 @@ class Header extends Component {
         product && this.props.onRemoveFromCart(product);
     }
 
-    // loadCatalogList() {
-    //     // fetchApi('/fakeAPI/headerItemNavigationItems.json')
-    //     //     .then(result => this.setState({
-    //     //             catalogList: result
-    //     //         }
-    //     //     ));
-    //
-    //     this.setState({
-    //         catalogList: require('../../fakeAPI/headerItemNavigationItems.json')
-    //     }
-    //     );
-    // };
-
     toggleModalMenu() {
         this.setState({
             bucketIsOpen: !this.state.bucketIsOpen
         });
     }
 
-    toggleMobileList() {
+    toggleMobileList(state) {
         this.setState({
-            mobileListIsOpen: !this.state.mobileListIsOpen
+            mobileListIsOpen: state
         });
     }
 

@@ -17,7 +17,8 @@ export default class BurgerMenu extends Component {
         super(props);
 
         this.state = {
-            isOpen: false
+            isOpen: false,
+            list: props.list.map(item => {return {...item, active: false}})
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -34,32 +35,33 @@ export default class BurgerMenu extends Component {
     }
 
     handleChange(state) {
-        console.log('state change');
-        console.log(state);
-        if (!state.isOpen) {
-        //    this.props.toggleMobileList();
-        }
+        this.props.toggleMobileList(state.isOpen);
     };
 
     handleClose() {
         this.props.toggleMobileList();
     };
 
-    handleActiveItem(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        console.log(e.target.parentNode.classList.toggle('active'));
+    handleActiveItem(e, index) {
+        const newList = this.state.list.map((item, itemIndex) => {
+            return itemIndex === index && !item.active ? {...item, active: true} : {...item, active: false};
+        });
+        this.setState({
+            list: newList
+        });
     };
 
     render() {
-        console.log(this.state.isOpen);
-        console.log('isOpem');
         return (
             <Menu isOpen={this.state.isOpen} onStateChange={this.handleChange}>
                 <ul>
-                    {this.props.list.map((item, index) => {
+                    {this.state.list.map((item, index) => {
                         return (
-                            <li key={item.name + index} onClick={this.handleActiveItem}>
+                            <li
+                                className={item.active ? `active` : ''}
+                                key={item.name + index}
+                                onClick={(e) => this.handleActiveItem(e, index)}
+                            >
                                 <span>{item.name}</span>
                                 <ul>
                                     {item.items.map((object, objectIndex) => {

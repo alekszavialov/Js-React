@@ -15,11 +15,12 @@
 
 /* Position and sizing of clickable cross button */
 .bm-cross-button
-  height: 24px
-  width: 24px
-/* Color/shape of close button cross */
+  height: 30px !important
+  right: 16px !important
+
 .bm-cross
   background: #bdc3c7
+  height: 20px !important
 .bm-menu-wrap
   position: fixed
   height: 100%
@@ -45,7 +46,34 @@
   flex-direction: column
   &:focus
     outline: none
+  >li
+    margin-bottom: 10px
+    >span
+      padding-bottom: 5px
+      border-bottom: 2px solid transparent
+      font-size: 16px
+      display: flex !important
+      flex-direction: row
+      flex-wrap: nowrap
+      justify-content: space-between
+      align-items: center
+      &:after
+        content: ""
+        font-size: 16px
+        color: #334150
+        position: relative
+        flex: 0 0 20px
+        width: 18px
+        height: 19px
+        -webkit-mask: url(../../../../public/icons/minus-square-regular.svg) no-repeat 50% 50%
+        mask: url(../../../../public/icons/minus-square-regular.svg) no-repeat 50% 50%
+        -webkit-mask-size: cover
+        mask-size: cover
+        background-color: #fff
+        display: block
   li
+    padding: 5px
+    border: 2px solid transparent
     cursor: pointer
     span,a
       display: block
@@ -54,8 +82,32 @@
       span
         text-decoration: underline
   li.active
+    border: 2px solid #fff
+    >span
+      margin-bottom: 5px
+      border-bottom: 2px solid #fff
+      &:after
+        height: 23px
+        -webkit-mask: url(../../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%
+        mask: url(../../../../public/icons/plus-square-regular.svg) no-repeat 50% 50%
     ul
       display: flex
+      a
+        font-size: 14px
+        display: flex
+        flex-direction: row
+        align-items: center
+        margin-bottom: 5px
+        position: relative
+        &:before
+          content: ""
+          display: block
+          width: 6px
+          height: 6px
+          background: #fff
+          margin-right: 5px
+          border-radius: 50%
+
   ul
     display: none
     flex-direction: column
