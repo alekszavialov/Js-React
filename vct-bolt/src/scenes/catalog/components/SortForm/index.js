@@ -21,14 +21,14 @@ export default class SortForm extends Component {
         super(props);
 
         this.options = [
-            { order: 'title ASC', label: 'Название (а-я)' },
-            { order: 'title DESC', label: 'Название (я-а)' },
-            { order: 'views ASC', label: 'Просмотры (а-я)' },
-            { order: 'views DESC', label: 'Просмотры (я-а)' },
-            { order: 'sales ASC', label: 'Количество продаж (а-я)' },
-            { order: 'sales DESC', label: 'Количество продаж (я-а)' },
-            { order: 'nds ASC', label: 'Цене (а-я)' },
-            { order: 'nds DESC', label: 'Цене (я-а)' },
+            { value: 'title ASC', label: 'Название (а-я)' },
+            { value: 'title DESC', label: 'Название (я-а)' },
+            { value: 'views ASC', label: 'Просмотры (а-я)' },
+            { value: 'views DESC', label: 'Просмотры (я-а)' },
+            { value: 'sales ASC', label: 'Количество продаж (а-я)' },
+            { value: 'sales DESC', label: 'Количество продаж (я-а)' },
+            { value: 'nds ASC', label: 'Цене (а-я)' },
+            { value: 'nds DESC', label: 'Цене (я-а)' },
         ];
 
         this.changeFormField = this.changeFormField.bind(this);
@@ -47,7 +47,7 @@ export default class SortForm extends Component {
     render() {
         const { sliderValues, productParameters, orderValues } = this.props;
         const selectActiveValue = orderValues ?
-            this.options.filter(item => item.order === orderValues.order) : null;
+            this.options.filter(item => item.value === orderValues.value) : null;
         return (
             <form onSubmit={this.submitForm}>
                 <SelectField

@@ -14,11 +14,11 @@
 }
 
 .parameters-block-head:hover{
-  color: #9b59b6;
+  color: #337ab7;
 }
 
 .parameters-block-head:hover:after{
-  background: #9b59b6;
+  background: #337ab7;
 }
 
 .parameters-block-head.active:after{

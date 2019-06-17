@@ -14,6 +14,7 @@ export default class HeaderComponent extends Component {
         navigationList: PropTypes.array,
         itemsCart: PropTypes.array,
         catalogList: PropTypes.array,
+        searchList: PropTypes.array,
         isMobile: PropTypes.bool,
         bucketIsOpen: PropTypes.bool,
         fixedMenu: PropTypes.bool,
@@ -25,7 +26,9 @@ export default class HeaderComponent extends Component {
 
         changeQuantityInCart: PropTypes.func,
         removeFromCart: PropTypes.func,
-        handleSubmit: PropTypes.func
+        handleSubmit: PropTypes.func,
+        scrollToTop: PropTypes.func,
+        handleChangeSearch: PropTypes.func
     };
 
     constructor(props) {
@@ -37,6 +40,8 @@ export default class HeaderComponent extends Component {
         this.changeQuantityInCart = this.changeQuantityInCart.bind(this);
         this.removeFromCart = this.removeFromCart.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.scrollToTop = this.scrollToTop.bind(this);
+        this.handleChangeSearch = this.handleChangeSearch.bind(this);
     }
 
     componentDidMount() {
@@ -71,6 +76,14 @@ export default class HeaderComponent extends Component {
         this.props.handleSubmit();
     }
 
+    scrollToTop() {
+        this.props.scrollToTop();
+    }
+
+    handleChangeSearch(text) {
+        this.props.handleChangeSearch(text);
+    }
+
     render() {
         const {
             bucketIsOpen,
@@ -78,10 +91,11 @@ export default class HeaderComponent extends Component {
             navigationList,
             fixedMenu,
             catalogList,
+            searchList,
             isMobile,
             mobileListIsOpen
         } = this.props;
-        const hamburgerOpen = mobileListIsOpen ? 'open-list' : "";
+        const hamburgerOpen = mobileListIsOpen ? 'open-list' : '';
         return (
             <Fragment>
                 {
@@ -96,11 +110,11 @@ export default class HeaderComponent extends Component {
                 }
                 {
                     catalogList &&
-                        <BurgerMenu
-                            list={catalogList}
-                            isOpen={mobileListIsOpen}
-                            toggleMobileList={this.toggleMobileList}
-                        />
+                    <BurgerMenu
+                        list={catalogList}
+                        isOpen={mobileListIsOpen}
+                        toggleMobileList={this.toggleMobileList}
+                    />
                 }
                 {
                     fixedMenu &&
@@ -114,7 +128,10 @@ export default class HeaderComponent extends Component {
                             <span>Каталог</span>
                         </div>
                         <div className="head-search">
-                            <HeadSearch/>
+                            <HeadSearch
+                                list={searchList}
+                                handleChangeSearch={this.handleChangeSearch}
+                            />
                         </div>
                         <div className="head-bucket">
                             <img
@@ -125,6 +142,12 @@ export default class HeaderComponent extends Component {
                             />
                             <span>{itemsCart.reduce((acc, item) => acc + item.quantity, 0)} шт.</span>
                         </div>
+                    </div>
+                }
+                {
+                    fixedMenu &&
+                    <div className="up-button">
+                        <button onClick={this.scrollToTop}>{`>`}</button>
                     </div>
                 }
                 <header ref={elem => this.header = elem}>
@@ -159,7 +182,7 @@ export default class HeaderComponent extends Component {
                                         <a href="tel:0522320575">0522 32 05 75</a>
                                         <a href="tel:0997017001">099 70 17 001</a>
                                     </div>
-                                    <div className="col-md-2 col-md-push-4  col-sm-4 col-xs-4 hidden-xs head-bucket">
+                                    <div className="col-md-2 col-md-push-4  col-sm-4 col-xs-12 head-bucket">
                                         <img
                                             src="https://vct1.com/img/bucket.gif.pagespeed.ce.bEDFj2GcQE.gif"
                                             alt="ВКТ"
@@ -169,30 +192,10 @@ export default class HeaderComponent extends Component {
                                         <span>{itemsCart.reduce((acc, item) => acc + item.quantity, 0)} шт.</span>
                                     </div>
                                     <div className="col-md-4 col-md-pull-5 col-sm-12 col-xs-12 head-search">
-                                        {
-                                            isMobile &&
-                                            <li key='catalog' className="head-catalog">
-                                                <div className="head-catalog-hamburger">
-                                                    <div/>
-                                                    <div/>
-                                                    <div/>
-                                                </div>
-                                                <span>Каталог</span>
-                                            </li>
-                                        }
-                                        <HeadSearch/>
-                                        {
-                                            isMobile &&
-                                            <div className="hidden-sm head-bucket">
-                                                <img
-                                                    src="https://vct1.com/img/bucket.gif.pagespeed.ce.bEDFj2GcQE.gif"
-                                                    alt="ВКТ"
-                                                    title="ВКТ"
-                                                    onClick={this.toggleModalMenu}
-                                                />
-                                                <span>{itemsCart.reduce((acc, item) => acc + item.quantity, 0)} шт.</span>
-                                            </div>
-                                        }
+                                        <HeadSearch
+                                            list={searchList}
+                                            handleChangeSearch={this.handleChangeSearch}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -221,6 +224,18 @@ export default class HeaderComponent extends Component {
                                                 </ul>
                                             </div>
                                         </div>
+                                    </div>
+                                }
+                                {
+                                    isMobile &&
+                                    <div className={`top-menu open-fixed-menu ${hamburgerOpen}`}
+                                         onClick={this.toggleMobileList}>
+                                        <div className={`head-catalog-hamburger`}>
+                                            <div/>
+                                            <div/>
+                                            <div/>
+                                        </div>
+                                        <span>Каталог</span>
                                     </div>
                                 }
                             </div>

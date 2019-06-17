@@ -17,6 +17,21 @@ const mutateProductData = (data) => data.map(item => {
     }
 );
 
+const mutatePage = (data) => data.map(item => {
+        if (typeof item.description !== 'string'){
+            return item;
+        }
+        return {
+            id: item.id,
+            title: item.title,
+            img: item.img === '' ? 'https://vct1.com/img/nophoto.jpg' : item.img.includes('http') ? item.img : `https://vct1.com/${item.img}`,
+            date: item.date,
+            description: item.description,
+            url: `/page-${item.id}-${cyrillicToTranslit().transform(item.title.replace(/\//g, ''), '_').toLowerCase()}`,
+        };
+    }
+);
+
 const mutateAdSliderData = (data) => data.map(item => {
         return {
             'url': item.url.match(/product/) ? `/product-${item.url.match(/\d+/)[0]}` : `/catalog-${item.url.match(/([^/]*)\/$/)[1]}`,
@@ -63,6 +78,7 @@ export function mutateData(name, data) {
         case 'catalogData':
         case 'filterData':
         case 'mainPageProductItems':
+        case 'search':
             return mutateSales(data);
         case 'newProducts':
             return mutateSliderData(data);
@@ -74,6 +90,8 @@ export function mutateData(name, data) {
             return mutateSpecifications(data);
         case 'mainPageAdSlider':
             return mutateAdSliderData(data);
+        case 'page':
+            return mutatePage(data);
         default:
             return data;
     }

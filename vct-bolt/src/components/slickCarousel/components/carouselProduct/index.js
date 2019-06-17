@@ -31,7 +31,12 @@ export default class CarouselProduct extends Component {
         return (
             <div>
                 <div className="accompanying-product-item">
-                    <div className="accompanying-product-item-img-wrapper"><img src={this.state.src} alt=""/></div>
+
+                    <div className="accompanying-product-item-img-wrapper">
+                        <NavLink to={this.props.item.href}>
+                            <img src={this.state.src} alt=""/>
+                        </NavLink>
+                    </div>
                     <NavLink to={this.props.item.href}>{this.state.name}</NavLink>
                     <div className="accompanying-product-item-bottom">
                         <div className="accompanying-product-item-price">

@@ -32,7 +32,7 @@ class ProductPage extends Component {
             specifications: null,
             comments: null
         };
-
+        this.baseState = this.state;
         this.loadDataAPI = this.loadDataAPI.bind(this);
         this.fillPageState = this.fillPageState.bind(this);
         this.loadProductData = this.loadProductData.bind(this);
@@ -62,28 +62,21 @@ class ProductPage extends Component {
         }
     }
 
-    componentWillUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.match.url !== this.props.match.url) {
             window.scrollTo(0, 0);
-            this.setState({
-                productData: null,
-                breadCrumbs: null,
-                relatedCarouseData: null,
-                recentlyCarouseData: null,
-                specifications: null,
-                comments: null
-            });
+            this.setState(this.baseState);
             this.loadDataAPI(nextProps.match.url.match(/\d+/)[0]);
-            return;
+            return false;
         }
         const id = this.props.match.url.match(/\d+/)[0];
         const data = nextProps.data[id];
         if (!data) {
-            return;
+            return false;
         }
         const productData = data.productData && data.productData[0];
         if (!productData) {
-            return;
+            return false;
         }
         if (!nextState.productData) {
             document.title = productData.title;
@@ -116,6 +109,7 @@ class ProductPage extends Component {
         if (!nextState.specifications && specifications) {
             this.loadSpecifications(productData, specifications);
         }
+        return true;
     }
 
     loadDataAPI(id) {
@@ -284,9 +278,21 @@ class ProductPage extends Component {
                             }
                         },
                         {
-                            'breakpoint': 992,
+                            'breakpoint': 760,
+                            'settings': {
+                                'slidesToShow': 3
+                            }
+                        },
+                        {
+                            'breakpoint': 640,
                             'settings': {
                                 'slidesToShow': 2
+                            }
+                        },
+                        {
+                            'breakpoint': 480,
+                            'settings': {
+                                'slidesToShow': 1
                             }
                         }
                     ]
@@ -317,9 +323,21 @@ class ProductPage extends Component {
                             }
                         },
                         {
-                            'breakpoint': 992,
+                            'breakpoint': 760,
+                            'settings': {
+                                'slidesToShow': 3
+                            }
+                        },
+                        {
+                            'breakpoint': 640,
                             'settings': {
                                 'slidesToShow': 2
+                            }
+                        },
+                        {
+                            'breakpoint': 480,
+                            'settings': {
+                                'slidesToShow': 1
                             }
                         }
                     ]

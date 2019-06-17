@@ -553,6 +553,34 @@
   .head-search, .head-bucket
     margin-top: 0
 
+.top-menu
+  justify-content: center
+
+
+.up-button
+  position: fixed
+  bottom: 10px
+  right: 10px
+  background: #292929
+  opacity: 0.6
+  width: 80px
+  height: 80px
+  border-radius: 50%
+  z-index: 10002
+  transition: all 0.3s ease
+  cursor: pointer
+  overflow: hidden
+  &:hover
+    opacity: 1
+  button
+    background: none
+    border: none
+    color: #8f8f8f
+    font-size: 80px
+    transform: rotate(-90deg)
+    position: absolute
+    left: 13px
+    top: -18px
 @media only screen and (max-width: 992px)
   .top-nav
     ul
@@ -569,8 +597,36 @@
       margin-left: 0
   .head-bucket
     margin-top: 10px
+    margin-bottom: 10px
+  .head-search
+    margin: 0 0 10px 0
+  .bm-menu
+    padding: 5px 8px
+  .bm-cross-button
+    right: 4px!important
+  .bm-item
+    li
+      margin-bottom: 5px
+      padding: 2px
+      border: 1px solid transparent
+    >li
+      >span
+        padding-bottom: 2px
+        font-size: 14px
+    li.active
+      >span
+        margin-bottom: 2px
+        border-bottom: 1px solid #fff
+      ul
+        a
+          font-size: 12px
+          margin-bottom: 2px
 
 @media only screen and (max-width: 620px)
+  .fixed-menu
+    .head-search
+      input
+        width: 186px
   .head-logo
     a
       display: flex

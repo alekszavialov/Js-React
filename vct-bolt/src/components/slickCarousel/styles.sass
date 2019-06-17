@@ -22,7 +22,7 @@
     border-radius: 0
     background: rgba(42, 48, 57, 0.7)
     position: relative
-    border: 1px solid rgba(160, 122, 176, 0.7)
+    border: 1px solid rgba(42, 103, 170, 0.7)
     box-shadow: none
     outline: none
     cursor: pointer
@@ -56,14 +56,14 @@
   display: block
   width: 35px
   height: 60px
-  opacity: 0.2
+  opacity: 0.4
   background-color: #bdc3c7
   border: none
   outline: none
   transition: all 0.3s ease
   z-index: 1
   &:hover
-    background-color: #9b59b6
+    background-color: #2a67aa
     opacity: 1
 
 .slick-prev
@@ -97,8 +97,17 @@
       color: #2a67aa
   .accompanying-product-item-img-wrapper
     display: block
-    max-width: 140px
-    max-height: 140px
+    margin-bottom: 5px
+    a
+      flex-direction: row
+      justify-content: center
+      align-items: center
+      width: 140px
+      height: 140px
+      margin: 0 auto
+      img
+        max-width: 100%
+        max-height: 100%
 
 .accompanying-product-item-bottom
   display: flex

@@ -65,7 +65,7 @@ export default class CatalogComponent extends Component {
                                 <SortForm
                                     sliderValues={productOptions.sliderValues}
                                     productParameters={productOptions.productParameters}
-                                    orderValues={productOptions.order}
+                                    orderValues={productOptions.value}
                                     changeFormField={this.changeFormField}
                                     submitForm={this.submitForm}
                                 />

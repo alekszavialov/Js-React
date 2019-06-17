@@ -38,7 +38,7 @@ export default class ProductPageComponent extends Component {
     render() {
         const { breadCrumbs, productData, relatedCarouseData, recentlyCarouseData, comments, specifications, url, subPage } = this.props;
         return (
-            <div className="container">
+            <div className="container-fluid max-container-width">
                 <div className="bg-white">
                     <div className="product-info-head">
                         <div className="row">

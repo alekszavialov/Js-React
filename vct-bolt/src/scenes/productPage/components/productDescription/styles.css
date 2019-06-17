@@ -95,7 +95,7 @@
   font-size: 51px;
   letter-spacing: -1px;
   font-family: "Vegur-Bold",sans-serif;
-  color: #9b59b6;
+  color: #2a67aa;
   display: flex;
   flex-direction: row;
   align-items: baseline;
@@ -104,7 +104,7 @@
 .product-description-price p {
   font-size: 30px;
   margin: 0;
-  color: #9b59b6;
+  color: #2a67aa;
 }
 
 .product-description .shop-block-buy {

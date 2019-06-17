@@ -15,7 +15,9 @@ export default class Checkbox extends Component {
         super(props);
 
         this.state = {
-            isChecked: props.item.checked
+            isChecked: props.item.checked || false,
+            name: props.name,
+            item: props.item
         };
 
         this.toggleCheck = this.toggleCheck.bind(this);
@@ -39,8 +41,7 @@ export default class Checkbox extends Component {
     }
 
     render() {
-        const {isChecked} = this.state;
-        const {item,name} = this.props;
+        const {isChecked, name, item} = this.state;
         const checkboxClass = isChecked ? 'check' : 'unchecked';
         return (
             <div className="custom-checkbox-container" onClick={this.toggleCheck}>

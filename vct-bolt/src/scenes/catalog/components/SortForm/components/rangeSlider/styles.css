@@ -42,10 +42,10 @@
   width: 18px;
   height: 16px;
   border-radius: 50%;
-  border: 1px solid #752c9c;
+  border: 1px solid #3886dc;
   box-shadow: none;
-  background-image: -webkit-linear-gradient( top , #ead9f2 0%, #9b59b6 70%, #9b59b6 100%);
-  background-image: linear-gradient(to bottom, #ead9f2 0%, #9b59b6 70%, #9b59b6 100%);
+  background-image: -webkit-linear-gradient(to bottom, #3886dc 0%, #3174bf 50%, #2a67aa 100%);
+  background-image: linear-gradient(to bottom, #3886dc 0%, #3174bf 50%, #2a67aa 100%)
 }
 
 .priceslider-head{
@@ -56,7 +56,7 @@
 }
 
 .priceslider-head span{
-  color: #995bb8;
+  color: #3886dc;
   margin: 0 6px;
 }
 
@@ -67,10 +67,10 @@
 .priceslider-head input{
   width: 50px;
   text-align: center;
-  color: #995bb8;
+  color: #3886dc;
   border-radius: 5px;
-  border: 1px solid #dedddd;
-  margin: 0px 2px 0 4px;
+  border: 1px solid #334150;
+  margin: 0 2px 0 4px;
   height: 21px;
   font-size: 12px;
   outline: none;

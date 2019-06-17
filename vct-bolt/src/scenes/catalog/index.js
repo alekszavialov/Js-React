@@ -29,9 +29,8 @@ class Catalog extends Component {
             newCarouseData: null,
             productOptions: null,
             isMoreProducts: false,
-            filterDataItems: false,
             start: 0,
-            onpage: 6,
+            onpage: 8,
             breadCrumbs: null
         };
         this.baseState = this.state;
@@ -47,6 +46,7 @@ class Catalog extends Component {
         this.changeFormField = this.changeFormField.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.refactQuery = this.refactQuery.bind(this);
+        this.convertQuery = this.convertQuery.bind(this);
     }
 
     componentDidMount() {
@@ -94,7 +94,7 @@ class Catalog extends Component {
         const id = category;
         this.props.onClearData(id);
         if (query) {
-            query = this.refactQuery(query).concat(`&start=0&onpage=6`);
+            query = this.refactQuery(query).concat(`&start=0&onpage=8`);
         }
         let params = {
             category: category,
@@ -234,9 +234,21 @@ class Catalog extends Component {
                             }
                         },
                         {
-                            'breakpoint': 992,
+                            'breakpoint': 760,
+                            'settings': {
+                                'slidesToShow': 3
+                            }
+                        },
+                        {
+                            'breakpoint': 640,
                             'settings': {
                                 'slidesToShow': 2
+                            }
+                        },
+                        {
+                            'breakpoint': 480,
+                            'settings': {
+                                'slidesToShow': 1
                             }
                         }
                     ]
@@ -327,49 +339,9 @@ class Catalog extends Component {
         };
         let initValues = { ...result.sliderValues.options };
         if (query) {
-            const correctEntries = ['min', 'max', 'brand', 'order', 'category', 'stock', 'parametr1', 'parametr2', 'parametr3', 'parametr4', 'parametr5'];
-            const filterData = query.substring(1).split('&').reduce((acc, item) => {
-                const data = item.split('=');
-                if (!correctEntries.includes(data[0])) {
-                    return acc;
-                }
-                data[1] = decodeURIComponent(data[1]);
-                if (data[0] === 'stock') {
-                    data[1] = data[1] === '1';
-                } else if (data[0] !== 'min' && data[0] !== 'max' && data[0] !== 'order') {
-                    data[1] = data[1].split(',');
-                }
-                return { ...acc, [data[0]]: data[1] };
-            }, {});
-            initValues = filterData;
-            const productCheckedData = result.productParameters.map(item => {
-                return filterData[item.name] ?
-                    {
-                        ...item,
-                        options: item.options.map(option => {
-                            if (item.name === 'stock') {
-                                return {
-                                    ...option,
-                                    checked: true
-                                };
-                            }
-                            return Object.values(filterData[item.name]).indexOf(option.text) >= 0 ? {
-                                ...option,
-                                checked: true
-                            } : option;
-                        })
-                    } :
-                    item;
-            });
-            const selectData = initValues.order ? initValues.order : null;
-            const priceCheckedData = { currentMin: Number(initValues.min), currentMax: Number(initValues.max) };
-            result = {
-                sliderValues: {
-                    ...result.sliderValues, options: { ...result.sliderValues.options, ...priceCheckedData }
-                },
-                productParameters: productCheckedData,
-                order: { order: selectData }
-            };
+            const convertedQuery = this.convertQuery(query, initValues, result);
+            initValues = convertedQuery.initValues;
+            result = convertedQuery.result;
         }
         this.setState(
             {
@@ -417,6 +389,53 @@ class Catalog extends Component {
             }
             return [...acc, `${[data[0]]}=${data[1]}`];
         }, []).join('&');
+    }
+
+    convertQuery(query, initValues, result) {
+        const correctEntries = ['min', 'max', 'brand', 'order', 'category', 'stock', 'parametr1', 'parametr2', 'parametr3', 'parametr4', 'parametr5'];
+        const filterData = query.substring(1).split('&').reduce((acc, item) => {
+            const data = item.split('=');
+            if (!correctEntries.includes(data[0])) {
+                return acc;
+            }
+            data[1] = decodeURIComponent(data[1]);
+            if (data[0] === 'stock') {
+                data[1] = data[1] === '1';
+            } else if (data[0] !== 'min' && data[0] !== 'max' && data[0] !== 'order') {
+                data[1] = data[1].split(',');
+            }
+            return { ...acc, [data[0]]: data[1] };
+        }, {});
+        initValues = filterData;
+        const productCheckedData = result.productParameters.map(item => {
+            return filterData[item.name] ?
+                {
+                    ...item,
+                    options: item.options.map(option => {
+                        if (item.name === 'stock') {
+                            return {
+                                ...option,
+                                checked: true
+                            };
+                        }
+                        return Object.values(filterData[item.name]).indexOf(option.text) >= 0 ? {
+                            ...option,
+                            checked: true
+                        } : option;
+                    })
+                } :
+                item;
+        });
+        const selectData = initValues.order ? initValues.order : {};
+        const priceCheckedData = { currentMin: Number(initValues.min), currentMax: Number(initValues.max) };
+        result = {
+            sliderValues: {
+                ...result.sliderValues, options: { ...result.sliderValues.options, ...priceCheckedData }
+            },
+            productParameters: productCheckedData,
+            value: { value: selectData }
+        };
+        return {result,initValues};
     }
 
     render() {
