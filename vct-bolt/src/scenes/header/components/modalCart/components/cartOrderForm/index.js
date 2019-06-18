@@ -112,7 +112,8 @@ class CartOrderForm extends Component {
                             'Оплата по безналичному расчету (без НДС)',
                             'Оплата по безналичному расчету (с НДС)',
                             'Оплата на месте в магазине (только для Кропивницкого)'
-                        ]
+                        ],
+                        required: true
                     }}
                     validate={cartOrderFormValidator}
                 />
@@ -133,6 +134,13 @@ class CartOrderForm extends Component {
                     validate={cartOrderFormValidator}
                 />
                 <Field
+                    name="deliveryAddress"
+                    type="text"
+                    component={RenderField}
+                    params={{ name: 'deliveryAddress', placeholder: 'Адресс или номер отделения', required: true, object: 'input', type: 'text' }}
+                    validate={cartOrderFormValidator}
+                />
+                <Field
                     name="comment"
                     component={RenderField}
                     params={{
@@ -140,13 +148,6 @@ class CartOrderForm extends Component {
                         placeholder: 'Комментарий к заказу, реквизиты доставки НП и т д...',
                         object: 'textarea'
                     }}
-                    validate={cartOrderFormValidator}
-                />
-                <Field
-                    name="promo"
-                    type="text"
-                    component={RenderField}
-                    params={{ name: 'promo', placeholder: 'Промокод', object: 'input', type: 'text' }}
                     validate={cartOrderFormValidator}
                 />
                 <p>Важно! Необходимо указать и проверить все заполненные данные, что бы менеджер связался с

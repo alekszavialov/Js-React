@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
-import { addToCart, removeFromCart, decreaseInCart } from '../../data/Store/actions';
+import { addToCart, removeFromCart, decreaseInCart, removeAllFromCart } from '../../data/Store/actions';
 import { clearData, getData } from '../../data/Data/actions';
 
 import HeaderComponent from './components/index';
@@ -20,6 +21,7 @@ class Header extends Component {
         onAddToCart: PropTypes.func,
         onDecreaseInCart: PropTypes.func,
         onRemoveFromCart: PropTypes.func,
+        onRemoveAllFromCart: PropTypes.func,
         onClearData: PropTypes.func
     };
 
@@ -28,6 +30,8 @@ class Header extends Component {
 
         this.state = {
             bucketIsOpen: false,
+            alertIsOpen: false,
+            alertText: '',
             catalogList: null,
             searchList: null,
             fixedMenu: false,
@@ -36,6 +40,7 @@ class Header extends Component {
         };
 
         this.toggleModalMenu = this.toggleModalMenu.bind(this);
+        this.toggleModalAlert = this.toggleModalAlert.bind(this);
         this.toggleMobileList = this.toggleMobileList.bind(this);
         this.changeQuantityInCart = this.changeQuantityInCart.bind(this);
         this.removeFromCart = this.removeFromCart.bind(this);
@@ -49,14 +54,14 @@ class Header extends Component {
     }
 
     componentDidMount() {
-        if (!this.props.data){
+        if (!this.props.data) {
             this.loadAPI('headNavigation', 'http://api.vct1.com/menu/', 'headNavigation');
         }
         window.addEventListener('resize', this.updateIsMobile);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!nextProps.data){
+        if (!nextProps.data) {
             return false;
         }
         if (nextProps.data.headNavigation && !nextState.catalogList) {
@@ -94,7 +99,24 @@ class Header extends Component {
     }
 
     handleSubmit() {
-        console.log(JSON.stringify(this.props.cartOrderForm));
+        const query = {
+            ...this.props.cartOrderForm,
+            bucket: this.props.cart.map(item => `${item.article},${item.quantity}`).join(';')
+        };
+        let makeQuery = Object.entries(query).map(item => {
+            return [item[0], encodeURIComponent(item[1])].join('=');
+        }).join('&');
+        axios.get(`http://api.vct1.com/order.php?${makeQuery}`)
+            .then(res => {
+                if (res.id) {
+                    this.setState({
+                        alertText: res.id
+                    });
+                    this.props.onRemoveAllFromCart();
+                    this.toggleMobileList(false);
+                }
+                this.toggleModalAlert();
+            });
     }
 
     handleChangeSearch(text) {
@@ -103,9 +125,11 @@ class Header extends Component {
             '<': '&lt;',
             '>': '&gt;',
             '"': '&quot;',
-            "'": '&#039;'
+            '\'': '&#039;'
         };
-        const correctText = text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        const correctText = text.replace(/[&<>"']/g, function(m) {
+            return map[m];
+        });
         this.props.onClearData('search');
         this.loadAPI('search', 'http://api.vct1.com/catalog/', 'search', `?search=${correctText}&onpage=5`);
     }
@@ -133,6 +157,12 @@ class Header extends Component {
         });
     }
 
+    toggleModalAlert() {
+        this.setState({
+            alertIsOpen: !this.state.alertIsOpen
+        });
+    }
+
     toggleMobileList(state) {
         this.setState({
             mobileListIsOpen: state
@@ -140,6 +170,10 @@ class Header extends Component {
     }
 
     handleScroll(header) {
+        if (this.state.searchList) {
+            this.props.onClearData('search');
+            this.setState({ searchList: null });
+        }
         if (window.scrollY > header.clientHeight && !this.state.fixedMenu) {
             this.setState({ fixedMenu: true, mobileListIsOpen: false });
         }
@@ -164,11 +198,20 @@ class Header extends Component {
             { text: 'О нас', url: '/page-2' },
             { text: 'Новости', url: '/news' },
             { text: 'Магазин', url: '/page-4' },
-            { text: 'Контакты', url: '/page-1' },
+            { text: 'Контакты', url: '/page-1' }
         ];
 
         const { cart } = this.props;
-        const { catalogList, searchList,  isMobile, bucketIsOpen, fixedMenu, mobileListIsOpen } = this.state;
+        const {
+            catalogList,
+            searchList,
+            isMobile,
+            bucketIsOpen,
+            alertIsOpen,
+            alertText,
+            fixedMenu,
+            mobileListIsOpen
+        } = this.state;
         return (
             <HeaderComponent
                 navigationList={list}
@@ -177,10 +220,13 @@ class Header extends Component {
                 searchList={searchList}
                 isMobile={isMobile}
                 bucketIsOpen={bucketIsOpen}
+                alertIsOpen={alertIsOpen}
+                alertText={alertText}
                 fixedMenu={fixedMenu}
                 mobileListIsOpen={mobileListIsOpen}
                 handleScroll={this.handleScroll}
                 toggleModalMenu={this.toggleModalMenu}
+                toggleModalAlert={this.toggleModalAlert}
                 toggleMobileList={this.toggleMobileList}
                 changeQuantityInCart={this.changeQuantityInCart}
                 removeFromCart={this.removeFromCart}
@@ -207,6 +253,7 @@ const mapDispatchToProps = (dispatch) => {
         onAddToCart: (item, value) => dispatch(addToCart(item, value)),
         onDecreaseInCart: (item, value) => dispatch(decreaseInCart(item, value)),
         onRemoveFromCart: (item) => dispatch(removeFromCart(item)),
+        onRemoveAllFromCart: () => dispatch(removeAllFromCart()),
         onGetApiData: (id, url, name, params) => dispatch(getData(id, url, name, params)),
         onClearData: (id) => dispatch(clearData(id))
     };

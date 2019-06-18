@@ -53,6 +53,11 @@ export default function Store(state = initialState, action) {
                 ...state,
                 recently: [...state.recently, action.item]
             };
+        case 'REMOVE_ALL_FROM_CART':
+            return {
+                ...state,
+                cart: initialState.cart
+            };
         default:
             return state;
     }

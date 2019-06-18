@@ -36,6 +36,7 @@ export default class RenderField extends Component {
                         className={
                             (touched && (error || warning)) ? "errorField" : ""
                         }
+                        required={this.props.params.required}
                     >
                         {this.props.params.options.map(item => <option key={Math.random()}>{item}</option>)}
                     </select>

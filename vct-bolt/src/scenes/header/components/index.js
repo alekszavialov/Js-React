@@ -6,6 +6,7 @@ import Navigation from './Navigation/index';
 import HeadSearch from './HeadSearch/index';
 import Catalog from './ItemsNavigation/index';
 import ModalCart from './modalCart/index';
+import ModalAlert from './modalAlert/index';
 import BurgerMenu from './burgerMenu';
 
 export default class HeaderComponent extends Component {
@@ -20,8 +21,11 @@ export default class HeaderComponent extends Component {
         fixedMenu: PropTypes.bool,
 
         mobileListIsOpen: PropTypes.bool,
+        alertIsOpen: PropTypes.bool,
+        alertText: PropTypes.string,
         handleScroll: PropTypes.func,
         toggleModalMenu: PropTypes.func,
+        toggleModalAlert: PropTypes.func,
         toggleMobileList: PropTypes.func,
 
         changeQuantityInCart: PropTypes.func,
@@ -36,6 +40,7 @@ export default class HeaderComponent extends Component {
 
         this.handleScroll = this.handleScroll.bind(this);
         this.toggleModalMenu = this.toggleModalMenu.bind(this);
+        this.toggleAlert = this.toggleAlert.bind(this);
         this.toggleMobileList = this.toggleMobileList.bind(this);
         this.changeQuantityInCart = this.changeQuantityInCart.bind(this);
         this.removeFromCart = this.removeFromCart.bind(this);
@@ -58,6 +63,10 @@ export default class HeaderComponent extends Component {
 
     toggleModalMenu() {
         this.props.toggleModalMenu();
+    }
+
+    toggleAlert() {
+        this.props.toggleModalAlert();
     }
 
     toggleMobileList(state) {
@@ -87,6 +96,8 @@ export default class HeaderComponent extends Component {
     render() {
         const {
             bucketIsOpen,
+            alertIsOpen,
+            alertText,
             itemsCart,
             navigationList,
             fixedMenu,
@@ -98,6 +109,13 @@ export default class HeaderComponent extends Component {
         const hamburgerOpen = mobileListIsOpen ? 'open-list' : '';
         return (
             <Fragment>
+                {
+                    alertIsOpen &&
+                    <ModalAlert
+                        text={alertText}
+                        onClose={this.toggleAlert}
+                    />
+                }
                 {
                     bucketIsOpen &&
                     <ModalCart
