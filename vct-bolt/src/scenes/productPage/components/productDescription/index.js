@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import ImageCarousel from './components/imageCarousel';
@@ -30,7 +30,7 @@ export default class ProductDescription extends Component {
 
     render() {
         return (
-            <Fragment>
+            <div itemScope itemType="http://schema.org/Product">
                 <div className="col-md-5">
                     <div className="product-img-wrapper">
                         {
@@ -47,7 +47,7 @@ export default class ProductDescription extends Component {
                                 </div>
                                 :
                                 <div className="product-img-block">
-                                    <img src={this.props.data.img} alt={this.props.data.title}/>
+                                    <img itemProp="image" src={this.props.data.img} alt={this.props.data.title}/>
                                 </div>
                         }
                         <div className="products-in-stockroom">
@@ -58,11 +58,14 @@ export default class ProductDescription extends Component {
                     </div>
                 </div>
                 <div className="col-md-7">
-                    <h1 className="product-info-name">{this.props.data.title}</h1>
+                    <h1 className="product-info-name" itemProp="name">{this.props.data.title}</h1>
                     <div className="product-info-wrapper">
                         <div className="product-description">
-                            <p>{this.props.data.description}</p>
-                            <div className="product-description-price">{this.props.data.price} <p>грн</p></div>
+                            <p itemProp="description">{this.props.data.description}</p>
+                            <div className="product-description-price" itemProp="offers" itemScope itemType="http://schema.org/Offer">
+                                <div itemProp="price" content="29965">{this.props.data.price}</div>
+                                <p itemProp="priceCurrency" content="UAH"> грн</p>
+                            </div>
                             <div className="shop-block-buy" onClick={this.addToCart}>Купить</div>
                         </div>
                         <div className="product-info">
@@ -88,8 +91,7 @@ export default class ProductDescription extends Component {
                         </div>
                     </div>
                 </div>
-
-            </Fragment>
+            </div>
         );
     }
 

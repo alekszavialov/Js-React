@@ -36,7 +36,7 @@ export default class ImageCarousel extends Component {
         return (
 
             <Slider {...settings} {...this.state.params}>
-                {images.map(item => <img key={item} src={item} alt=""/>)}
+                {images.map(item => <img itemProp="image" key={item} src={item} alt=""/>)}
             </Slider>
         );
     }

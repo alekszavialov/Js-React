@@ -35,13 +35,19 @@ export default class ShopItem extends Component {
         const {url} = this.props.item;
         return (
             <div className="shop-block">
-                <div className="shop-block-container">
-                    <NavLink className="shop-block-image-wrapper" to={url}><img src={src} alt={name}/></NavLink>
+                <div className="shop-block-container" itemScope itemType="http://schema.org/Product">
+                    <NavLink className="shop-block-image-wrapper" to={url}>
+                        <img
+                            itemProp="image"
+                            src={src}
+                            alt={name}
+                        />
+                    </NavLink>
                     <NavLink className="shop-block-name" to={url}>{name}</NavLink>
-                    <p className="shop-block-descr">{description}</p>
-                    <div className="shop-block-price">
-                        {price}
-                        <p>грн</p>
+                    <p itemProp="description" className="shop-block-descr">{description}</p>
+                    <div className="shop-block-price" itemProp="offers" itemScope itemType="http://schema.org/Offer">
+                        <div itemProp="price" content={price}>{price}</div>
+                        <p itemProp="priceCurrency" content="UAH">грн</p>
                     </div>
                     <div className="shop-block-buy not-selected-text" onClick={this.addToCart}>
                         <span>Купить</span>

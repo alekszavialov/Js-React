@@ -18,7 +18,6 @@ export default class ItemCatalog extends Component {
     }
 
     onAddToCart(item) {
-        console.log(item);
         this.props.onAddToCart(item);
     }
 

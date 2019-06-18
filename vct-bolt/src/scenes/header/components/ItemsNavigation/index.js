@@ -36,7 +36,7 @@ export default class Catalog extends Component {
 
     render() {
         return (
-            <ul className="toggle-menu">
+            <ul className="toggle-menu" itemScope itemType="http://schema.org/SiteNavigationElement">
                 {this.state.listItems.map((item, index) => {
                     return <CatalogItem
                         item={item}

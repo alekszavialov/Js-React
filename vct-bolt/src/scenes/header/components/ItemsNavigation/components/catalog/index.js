@@ -27,7 +27,7 @@ export default class CatalogItem extends Component {
 
     fillEmptySpace = () => {
         return this.props.item.items.map((item, index) =>
-            <NavLink key={item.text + index} to={`/catalog-${item.text}`}>{item.text}</NavLink>
+            <NavLink itemProp="url" key={item.text + index} to={`/catalog-${item.text}`}>{item.text}</NavLink>
         );
     };
 

@@ -109,6 +109,24 @@ export default class HeaderComponent extends Component {
         const hamburgerOpen = mobileListIsOpen ? 'open-list' : '';
         return (
             <Fragment>
+                <div itemScope="" itemType="http://schema.org/Organization">
+                    <span itemProp="name" content="ВКТ Сервис"/>
+                    <span itemProp="url" content="http://vct1.com"/>
+                    <span itemProp="logo" content="http://vct1.com/img/logo.png"/>
+                    <div itemProp="address" itemScope="" itemType="http://schema.org/PostalAddress">
+                        <span itemProp="addressLocality" content="Ukraine, Kropivnickij"/>
+                        <span itemProp="streetAddress" content="Kievskaya 3"/>
+                        <span itemProp="postalCode" content="25002"/>
+                        <span itemProp="telephone" content="+30522320575"/>
+                        <span itemProp="telephone" content="+3099701700"/>
+                    </div>
+                    <div itemProp="location" itemScope="" itemType="http://schema.org/Place">
+                        <div itemProp="geo" itemScope="" itemType="http://schema.org/GeoCoordinates">
+                            <meta itemProp="latitude" content="48.5186603"/>
+                            <meta itemProp="longitude" content="32.2606395"/>
+                        </div>
+                    </div>
+                </div>
                 {
                     alertIsOpen &&
                     <ModalAlert
