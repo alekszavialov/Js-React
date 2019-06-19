@@ -1,19 +1,16 @@
-@mixin font($font-family, $font-file)
+@mixin font($name, $path)
   @font-face
-    font-family: $font-family
-    src: url($font-file+ '.eot')
-    src: url($font-file+ '.eot?#iefix') format('embedded-opentype'),
-  url($font-file+'.woff') format('woff'),
-  url($font-file+'.ttf') format('truetype'),
-  url($font-file+'.svg#aller') format('svg')
+    font-family: $name
+    src: url($path + ".eot")
+    src: url($path + ".eot?#iefix") format("embedded-opentype"), url($path + ".woff") format("woff"), url($path + ".ttf") format("truetype")
     font-weight: normal
     font-style: normal
 
 @include font("Lato-Heavy", "../public/fonts/Lato/Lato-Heavy")
 @include font("MyriadProRegular", "../public/fonts/MyriadPro/MyriadPro-Regular")
-@include font("Lato-MyriadProSemibold", "../public/fonts/MyriadPro/MyriadPro-Semibold")
+@include font("MyriadProSemibold", "../public/fonts/MyriadPro/MyriadPro-Semibold")
 @include font("SegoeUiBold", "../public/fonts/SegoeUIRegular/SegoeUiBold")
-@include font("SegoeUiRegulat", "../public/fonts/SegoeUIRegular/SegoeUiRegular")
+@include font("SegoeUiRegular", "../public/fonts/SegoeUIRegular/SegoeUiRegular")
 @include font("SolomonSansBook", "../public/fonts/SolomonSans/Solomon-Sans-Book")
 @include font("SolomonSansBook", "../public/fonts/Vegur/Vegur-Bold")
 

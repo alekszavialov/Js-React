@@ -129,7 +129,8 @@ class CartOrderForm extends Component {
                             'Доставка в регионы другой службой доставки (от 500грн)',
                             'Самовывоз из точки выдачи',
                             'Доставка курьером по городу Кропивницкий (от 250грн)'
-                        ]
+                        ],
+                        required: true
                     }}
                     validate={cartOrderFormValidator}
                 />

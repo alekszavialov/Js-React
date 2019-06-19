@@ -36,7 +36,15 @@ export default class ProductPageComponent extends Component {
     }
 
     render() {
-        const { breadCrumbs, productData, relatedCarouseData, recentlyCarouseData, comments, specifications, url, subPage } = this.props;
+        const {
+            breadCrumbs,
+            productData,
+            relatedCarouseData,
+            recentlyCarouseData,
+            comments,
+            specifications,
+            url,
+            subPage } = this.props;
         return (
             <div className="container-fluid max-container-width">
                 <div className="bg-white">
@@ -55,6 +63,7 @@ export default class ProductPageComponent extends Component {
                                     url={url}
                                     images={productData.img2}
                                     relatedProducts={relatedCarouseData && relatedCarouseData.items}
+                                    specifications={specifications}
                                 />
                             </div>
                             {
@@ -132,7 +141,7 @@ export default class ProductPageComponent extends Component {
                         </div>
                         <div className="col-md-12">
                             {
-                                !subPage && specifications &&
+                                !subPage && specifications &&  specifications.data.length > 0 &&
                                 (
                                     <ProductSpecification {...specifications}/>
                                 )

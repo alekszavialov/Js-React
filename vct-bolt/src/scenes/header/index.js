@@ -89,7 +89,6 @@ class Header extends Component {
     }
 
     loadAPI(id, url, name, query) {
-        console.log(query);
         this.props.onGetApiData(
             id,
             url,
@@ -108,9 +107,9 @@ class Header extends Component {
         }).join('&');
         axios.get(`http://api.vct1.com/order.php?${makeQuery}`)
             .then(res => {
-                if (res.id) {
+                if (res.data.id) {
                     this.setState({
-                        alertText: res.id
+                        alertText: res.data.id
                     });
                     this.props.onRemoveAllFromCart();
                     this.toggleMobileList(false);

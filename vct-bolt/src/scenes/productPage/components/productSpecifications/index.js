@@ -6,7 +6,6 @@ export default class ProductSpecification extends Component {
 
     constructor(props) {
         super(props);
-        console.log('ProductSpecification');
     }
 
     render() {

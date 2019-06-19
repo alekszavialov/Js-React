@@ -9,7 +9,8 @@ export default class ProductPageNavigation extends Component {
     static propTypes = {
         url: PropTypes.string,
         images: PropTypes.string,
-        relatedProducts: PropTypes.array
+        relatedProducts: PropTypes.array,
+        specifications: PropTypes.object
     };
 
     constructor(props) {
@@ -17,15 +18,17 @@ export default class ProductPageNavigation extends Component {
     }
 
     render() {
-        const { url, images, relatedProducts } = this.props;
+        const { url, images, relatedProducts, specifications } = this.props;
         return (
             <ul className="product-page-navigation">
                 <li key="mainPage">
                     <NavLink exact to={`/product${url}`}>Полное описание</NavLink>
                 </li>
-                <li key="specifications">
-                    <NavLink to={`/product${url}/specifications`}>Характеристики</NavLink>
-                </li>
+                {specifications && specifications.data.length > 0 &&
+                    <li key="specifications">
+                        <NavLink to={`/product${url}/specifications`}>Характеристики</NavLink>
+                    </li>
+                }
                 {images &&
                 <li key="images">
                     <NavLink to={`/product${url}/images`}>Изображения</NavLink>

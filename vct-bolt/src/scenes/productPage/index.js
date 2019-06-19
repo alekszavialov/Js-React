@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import ProductPageComponent from './components';
 
 import { addToCart, addToRecently } from '../../data/Store/actions';
+import fillMetaData from '../../modules/fillMetaData';
 
 import './styles.css';
 import { getData } from '../../data/Data/actions';
@@ -56,8 +57,11 @@ class ProductPage extends Component {
             const productData = this.props.data[id].productData[0];
             const { comments, specifications } = this.props.data[id];
             if (productData && specifications && comments) {
-                document.title = productData.title;
+                fillMetaData('productPage', productData.title, productData.price);
+                // document.title = `${productData.title} купить за ${productData.price} грн в интернет магазине krop.com.ua`;
+                // document.getElementsByTagName("META").filter(item => item.name === "description")[0].content = `${productData.title} – купить на ➦ krop.com.ua. ☎: (099) 70-17-001. Быстрая доставка ✈ Гарантия качества ☑ Отличная цена $`;
                 this.fillPageState(productData, specifications, comments);
+                console.log(Array.from(document.getElementsByTagName('META')));
             }
         }
     }
@@ -79,7 +83,9 @@ class ProductPage extends Component {
             return false;
         }
         if (!nextState.productData) {
-            document.title = productData.title;
+            // console.log(Array.from(document.getElementsByTagName('META')));
+            fillMetaData('productPage', productData.title, productData.price);
+            // document.getElementsByTagName("META").filter(item => item.name === "description")[0].content = `${productData.title} – купить на ➦ krop.com.ua. ☎: (099) 70-17-001. Быстрая доставка ✈ Гарантия качества ☑ Отличная цена $`;
             this.loadProductData(productData);
         }
         if (productData['related-products'] && !nextState.relatedCarouseData) {
@@ -229,17 +235,7 @@ class ProductPage extends Component {
     };
 
     changeFormField(data) {
-        // if (!data.remove) {
-        //     console.log(data, 'asaas log');
-        //
-        // } else {
-        //     console.log('else');
-        //     this.props.change(data.remove, '');
-        // }
-        console.log(data, 'asaas log');
         for (const key in data) {
-            // this.props.change(key, data[key]);
-            // dispatch(change("form name", "foo", response.data.foo))
             this.props.onChangeField(key, data[key]);
             break;
         }
@@ -248,7 +244,7 @@ class ProductPage extends Component {
     loadRelatedProducts(data) {
         const filterData = data.map(
             item => {
-                const newItem = {
+                return {
                     src: item.productData[0].img,
                     href: `/product-${item.productData[0].id}-${cyrillicToTranslit().transform(item.productData[0].title.replace(/\//g, ''), '_').toLowerCase()}`,
                     name: item.productData[0].title,
@@ -256,7 +252,6 @@ class ProductPage extends Component {
                     article: item.productData[0].id,
                     description: item.productData[0].description
                 };
-                return newItem;
             }
         );
         this.setState({
@@ -387,9 +382,10 @@ class ProductPage extends Component {
             subPage === 'comments' && !comments ||
             subPage === 'related' && !relatedCarouseData
         ) {
-            return (<h1>Load</h1>);
+            return (
+                <div className="loader"/>
+            );
         }
-        console.log(recentlyCarouseData, '123312312 ressen');
         return (
             <ProductPageComponent
                 breadCrumbs={breadCrumbs}

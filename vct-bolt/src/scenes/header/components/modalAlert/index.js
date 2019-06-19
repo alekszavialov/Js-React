@@ -25,8 +25,7 @@ export default class ModalAlert extends Component {
             <div className="modal-alert-bg closeCard" onClick={this.onClose}>
                 <div className="modal-alert">
                     {this.props.text.length > 0 &&
-                    <h2>Ваш заказ принят. Номер вашего заказа {this.props.text}. Ожидайте пока с вами свяжется
-                        менеджер.</h2>
+                    <h2>Ваш заказ принят. Номер вашего заказа {this.props.text}. Реквизиты для оплаты отправлены на почту.</h2>
                     }
                     {this.props.text.length === 0 &&
                     <h2>Произошла ошибка. Попробуйте еще раз.</h2>

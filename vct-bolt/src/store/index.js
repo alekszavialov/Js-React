@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -11,7 +10,7 @@ import rootReducer from '../reducers';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const middleware = applyMiddleware(thunk, logger, sagaMiddleware);
+const middleware = applyMiddleware(thunk, sagaMiddleware);
 
 const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

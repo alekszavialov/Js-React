@@ -110,9 +110,9 @@ export default class HeaderComponent extends Component {
         return (
             <Fragment>
                 <div itemScope="" itemType="http://schema.org/Organization">
-                    <span itemProp="name" content="ВКТ Сервис"/>
-                    <span itemProp="url" content="http://vct1.com"/>
-                    <span itemProp="logo" content="http://vct1.com/img/logo.png"/>
+                    <span itemProp="name" content="krop"/>
+                    <span itemProp="url" content="http://krop.com.ua"/>
+                    <span itemProp="logo" content="http://vct1.com/img/logo-header.png"/>
                     <div itemProp="address" itemScope="" itemType="http://schema.org/PostalAddress">
                         <span itemProp="addressLocality" content="Ukraine, Kropivnickij"/>
                         <span itemProp="streetAddress" content="Kievskaya 3"/>
@@ -172,8 +172,8 @@ export default class HeaderComponent extends Component {
                         <div className="head-bucket">
                             <img
                                 src="https://vct1.com/img/bucket.gif.pagespeed.ce.bEDFj2GcQE.gif"
-                                alt="ВКТ"
-                                title="ВКТ"
+                                alt="krop"
+                                title="krop"
                                 onClick={this.toggleModalMenu}
                             />
                             <span>{itemsCart.reduce((acc, item) => acc + item.quantity, 0)} шт.</span>
@@ -183,7 +183,7 @@ export default class HeaderComponent extends Component {
                 {
                     fixedMenu &&
                     <div className="up-button">
-                        <button onClick={this.scrollToTop}>{`>`}</button>
+                        <button className="block-with-icon icon-arrow-up" onClick={this.scrollToTop}/>
                     </div>
                 }
                 <header ref={elem => this.header = elem}>
@@ -195,7 +195,7 @@ export default class HeaderComponent extends Component {
                                 </div>
                                 <div className="col-md-4 callback-block">
                                     <p>Напиши Нам : </p>
-                                    <a href="">Обратная связь</a>
+                                    <a href="tel:0522320575">Обратная связь</a>
                                 </div>
                             </div>
                         </div>
@@ -207,9 +207,9 @@ export default class HeaderComponent extends Component {
                                     <div className="col-md-3 col-sm-4 col-xs-6 head-logo">
                                         <NavLink to='/'>
                                             <img
-                                                src="https://vct1.com/img/logo.png.pagespeed.ce.dMpD6YjZpM.png"
-                                                alt="Логотип компании ВКТ Сервис"
-                                                title="Интернет-магазин ВКТ Сервис"
+                                                src={require('../../../public/image/logoHead.png')}
+                                                alt="Логотип компании krop.com.ua"
+                                                title="Интернет-магазин krop.com.ua"
                                             />
                                         </NavLink>
                                     </div>
@@ -221,8 +221,8 @@ export default class HeaderComponent extends Component {
                                     <div className="col-md-2 col-md-push-4  col-sm-4 col-xs-12 head-bucket">
                                         <img
                                             src="https://vct1.com/img/bucket.gif.pagespeed.ce.bEDFj2GcQE.gif"
-                                            alt="ВКТ"
-                                            title="ВКТ"
+                                            alt="krop"
+                                            title="krop"
                                             onClick={this.toggleModalMenu}
                                         />
                                         <span>{itemsCart.reduce((acc, item) => acc + item.quantity, 0)} шт.</span>

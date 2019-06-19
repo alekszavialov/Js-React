@@ -2,8 +2,6 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import ItemCatalog from '../../../components/itemCatalog';
-import SiteTabs from '../../../components/tabs';
-import PopularCategoriesItems from './popularCategoriesItems';
 import SlickCarousel from '../../../components/slickCarousel';
 
 export default class MainPageComponent extends Component {

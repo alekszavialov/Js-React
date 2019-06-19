@@ -37,7 +37,6 @@ class InfoPage extends Component {
 
     shouldComponentUpdate(nextProps) {
         if (nextProps.location.pathname !== this.props.location.pathname) {
-            console.log('newProps');
             this.setState(this.baseState);
             this.props.onClearData('page');
             const params = nextProps.match.params.pageName;
@@ -77,6 +76,11 @@ class InfoPage extends Component {
 
     render() {
         const { singlePage, newList } = this.state;
+        if (!singlePage && !newList){
+            return(
+                <div className="loader"/>
+            );
+        }
         return (
             <PageComponent
                 singlePage={singlePage}

@@ -20,7 +20,7 @@ export default class Footer extends Component {
                     <div className="row">
                         <div className="col-md-3">
                             <NavLink to="/" className="footer-logo">
-                                <img src="https://vct1.com/img/logo_footer.png.pagespeed.ce.HTy2SE8LEQ.png" alt=""/>
+                                <img src={require('../../public/image/logo-footer.png')} alt=""/>
                             </NavLink>
                         </div>
                         <div className="col-md-9">

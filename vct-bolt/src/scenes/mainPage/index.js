@@ -166,6 +166,11 @@ class MainPage extends Component {
             adSliderItems,
             newProductsItems
         } = this.state;
+        if (!productItems){
+            return(
+                <div className="loader"/>
+            );
+        }
         return (
             productItems &&
             <MainPageComponent

@@ -13,10 +13,6 @@ export default class PageComponent extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            test: '123'
-        };
     }
 
     render() {

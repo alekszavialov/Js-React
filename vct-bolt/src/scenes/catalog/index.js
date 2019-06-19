@@ -449,7 +449,7 @@ class Catalog extends Component {
         } = this.state;
         if (!catalogItems) {
             return (
-                <h1>Load</h1>
+                <div className="loader"/>
             );
         }
         return (
