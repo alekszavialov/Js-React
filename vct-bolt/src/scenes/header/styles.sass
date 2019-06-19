@@ -595,6 +595,9 @@
       margin: 0
 
 @media only screen and (max-width: 992px)
+  .product-page-navigation
+    flex-wrap: wrap
+    justify-content: space-around
   .top-nav
     ul
       justify-content: center
@@ -636,10 +639,25 @@
           margin-bottom: 2px
 
 @media only screen and (max-width: 620px)
+  .product-img-wrapper
+    .product-img-block
+      width: auto
+  .head-bucket
+    margin-bottom: 0
+    img
+      width: 40px
+  .head-search
+    margin-bottom: 0
+  .open-fixed-menu
+    span
+      font-size: 16px
+    .head-catalog-hamburger
+      width: 22px
+      margin: 0 5px
   .fixed-menu
     .head-search
       input
-        width: 186px
+        width: 120px
   .head-logo
     a
       display: flex
@@ -648,7 +666,10 @@
   .top-nav
     ul
       flex-wrap: wrap
-
+  .footer-text
+    p
+      text-align: center
+      margin: 0 0 20px 0
 @media only screen and (max-width: 400px)
   .head-logo
     a
