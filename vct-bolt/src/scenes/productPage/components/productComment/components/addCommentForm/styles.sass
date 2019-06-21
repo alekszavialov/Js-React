@@ -2,7 +2,6 @@
   margin: 10px auto 10px
   border: 1px solid #ccc
   text-align: center
-  flex: 0 0 510px
   padding: 5px
   display: flex
   flex-direction: column
@@ -87,4 +86,10 @@
     top: 50%
     left: 50%
     transform: translateY(-50%) translateX(-50%)
+
+@media only screen and (max-width: 560px)
+  .product-comments-head-addComment-item
+    flex-direction: column
+    input[type="text"], textarea
+      width: 260px
 

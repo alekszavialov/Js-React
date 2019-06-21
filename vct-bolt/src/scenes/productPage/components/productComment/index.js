@@ -46,10 +46,11 @@ export default class ProductCommentBlock extends Component {
                         title={`Оставить отзыв о ${title}`}
                         onClick={this.toggleAddComment}
                     />
-                    {this.state.isVisibleCommentForm &&
-                    <AddCommentBlock changeFormField={this.changeFormField}/>
-                    }
+
                 </div>
+                {this.state.isVisibleCommentForm &&
+                <AddCommentBlock changeFormField={this.changeFormField}/>
+                }
                 {data.length > 0 ?
                     data.map(item =>
                         <div className="product-comments-item"
